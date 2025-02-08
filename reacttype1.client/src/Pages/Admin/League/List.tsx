@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
-import Menu from "../../../components/Menu.tsx";
+import Menu from "#components/Menu.tsx";
 
 
 function League() {

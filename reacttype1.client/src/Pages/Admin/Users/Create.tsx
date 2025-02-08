@@ -4,8 +4,8 @@ import axios from "axios";
 import { FormData, FormDataSchema } from "./FormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput, Select, } from "flowbite-react";
-import Menu from "../../../components/Menu.tsx";
-import SubmitButton from '../../../components/Buttons.tsx';
+import Menu from "#components/Menu.tsx";
+import SubmitButton from '#components/Buttons.tsx';
 
 const UserCreate = () => {
 

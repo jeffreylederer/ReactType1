@@ -6,7 +6,7 @@ import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
 import { Button } from "flowbite-react";
-import Menu from "../../../components/Menu.tsx";
+import Menu from "#components/Menu.tsx";
 
 
 

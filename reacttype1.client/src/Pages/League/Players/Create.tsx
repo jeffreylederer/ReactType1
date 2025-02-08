@@ -5,9 +5,9 @@ import { PlayerFormData, PlayerFormDataSchema } from "./FormData.tsx";
 import { UpdateFormData } from "../../Membership/UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
-import { league } from "../../../components/leagueObject.tsx";
-import SubmitButton from '../../../components/Buttons.tsx';
-import Menu from "../../../components/Menu.tsx";
+import { league } from "#components/leagueObject.tsx";
+import SubmitButton from '#components/Buttons.tsx';
+import Menu from "#components/Menu.tsx";
 
 
 const PlayersCreate = () => {
