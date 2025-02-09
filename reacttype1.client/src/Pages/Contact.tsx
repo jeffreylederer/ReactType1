@@ -1,4 +1,4 @@
-import Layout from "@layouts/Layout.tsx";
+import Layout from "layouts/Layout.tsx";
 
 const Contact = () => {
     return (

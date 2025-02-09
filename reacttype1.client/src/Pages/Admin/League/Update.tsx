@@ -6,7 +6,7 @@ import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
 import { Button } from "flowbite-react";
-import Layout from "@layouts/Layout.tsx";
+import Layout from "layouts/Layout.tsx";
 
 
 

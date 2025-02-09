@@ -6,8 +6,8 @@ import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextInput } from "flowbite-react";
 import { MatchFormData } from "./MatchFormData.tsx";
-import { ReturnButton } from '@components/Buttons.tsx';
-import Menu from "@components/Menu.tsx";
+import { ReturnButton } from 'components/Buttons.tsx';
+import Menu from "components/Menu.tsx";
 
 
 

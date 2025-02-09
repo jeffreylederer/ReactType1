@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
-import { league, user} from "@components/leagueObject.tsx";;
-import Menu from "@components/Menu.tsx";
+import { league, user} from "components/leagueObject.tsx";;
+import Menu from "components/Menu.tsx";
 
 
 function Schedule() {

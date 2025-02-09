@@ -5,14 +5,13 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
+    "baseUrl": "./src",
     "paths": {
-      "#/*": [ "./src/*" ],
-      "@components/*": [ "./src/components/*" ],
-      "@images/*": [ "./src/images/*" ],
-      "@layouts/*": [ "./src/Layouts/*" ]
+      "components/*": [ "components/*" ],
+      "images/*": [ "images/*" ],
+      "layouts/*": [ "Layouts/*" ],
+      "pages/*": [ "pages/*" ]
 
     }
-  },
-
-  "include": [ "./src/**/*.ts", "./src/**/*.tsx" ]
+  }
 }

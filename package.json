@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "vite": "^6.1.0",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite": "^6.1.0"
   }
 }
