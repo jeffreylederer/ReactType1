@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { TeamMember } from "./TeamMember.tsx";
-import { user, league } from "#components/leagueObject.tsx";;
-import Menu from "#components/Menu.tsx";
+import { user, league } from "@components/leagueObject.tsx";;
+import Menu from "@components/Menu.tsx";
 
 
 

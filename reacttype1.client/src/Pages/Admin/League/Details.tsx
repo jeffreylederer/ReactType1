@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import { FormData } from "./FormData.tsx";
 import { useNavigate } from "react-router-dom";
-import Layout from "#layouts/Layout.tsx";
+import Layout from "@layouts/Layout.tsx";
 import { Button } from "flowbite-react";
 
 

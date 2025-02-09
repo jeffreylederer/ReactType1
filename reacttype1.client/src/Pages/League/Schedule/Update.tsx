@@ -5,9 +5,9 @@ import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
-import { league } from "#components/leagueObject.tsx";;
-import SubmitButton from '#components/Buttons.tsx';
-import Menu from "#components/Menu.tsx";
+import { league } from "@components/leagueObject.tsx";;
+import SubmitButton from '@components/Buttons.tsx';
+import Menu from "@components/Menu.tsx";
 
 
 const ScheduleUpdate = () => {
