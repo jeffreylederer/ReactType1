@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
-import Menu from "#components/Menu.tsx";
-
+import Layout from "#layouts/Layout.tsx";
 
 function League() {
     const [league, setleague] = useState<UpdateFormData[]>();
@@ -46,12 +45,12 @@ function League() {
         </table>;
 
     return (
-        <div>
-        <Menu/>
+        <Layout>
+
             <h3 id="tableLabel">Leagues</h3>
             <Link to="/Admin/League/Create">Add</Link>
             {contents}
-        </div>
+        </Layout>
     );
 
     async function GetData() {

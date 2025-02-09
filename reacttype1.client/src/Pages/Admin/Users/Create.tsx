@@ -4,7 +4,7 @@ import axios from "axios";
 import { FormData, FormDataSchema } from "./FormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput, Select, } from "flowbite-react";
-import Menu from "#components/Menu.tsx";
+import Layout from "#layouts/Layout.tsx";
 import SubmitButton from '#components/Buttons.tsx';
 
 const UserCreate = () => {
@@ -34,8 +34,7 @@ const UserCreate = () => {
     }
 
     return (
-        <>
-        <Menu/>
+        <Layout>
         <h3>Add new user</h3>
             <form onSubmit={handleSubmit(onSubmit)} >
                  <table>
@@ -100,7 +99,7 @@ const UserCreate = () => {
                 </table>
             </form>
 
-        </>
+        </Layout>
     );
 
 

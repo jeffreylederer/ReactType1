@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import { FormData } from "./FormData.tsx";
 import {DeleteButton} from '#components/Buttons.tsx';
-import Menu from "#components/Menu.tsx";
+import Layout from "#layouts/Layout.tsx";
 
 
 
@@ -24,7 +24,7 @@ const LeagueDelete = () => {
     const contents = league === undefined
         ? <p><em>Loading ...</em></p> :
 
-        <table>
+        <table className="toLeft">
             
             <tr>
                 <td className="Label">Active:</td>
@@ -80,12 +80,11 @@ const LeagueDelete = () => {
         </table>
 
     return (
-        <div>
-        <Menu/>
+        <Layout>
             <h3>Delete league {league?.leagueName}</h3>
             {contents}
             <p className="errorMessage">{errorMsg}</p>
-        </div>
+        </Layout>
     );
 
     async function GetData() {

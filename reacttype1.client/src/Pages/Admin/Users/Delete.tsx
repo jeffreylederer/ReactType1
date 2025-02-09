@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import axios from "axios";
 import { DetailsType } from "./DetailsType.tsx";
-import Menu from "#components/Menu.tsx";
+import Layout from "#layouts/Layout.tsx";
 import {DeleteButton} from '#components/Buttons.tsx';
 
 
@@ -51,11 +51,10 @@ const UsersDelete = () => {
         </table>
 
     return (
-        <div>
-        <Menu/>
-            <h3>Delete user</h3>
+        <Layout>
+             <h3>Delete user</h3>
             {contents}
-        </div>
+        </Layout>
     );
 
     async function GetData() {

@@ -6,7 +6,7 @@ import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
 import { Button } from "flowbite-react";
-import Menu from "#components/Menu.tsx";
+import Layout from "#layouts/Layout.tsx";
 
 
 
@@ -63,7 +63,7 @@ const LeagueUpdate = () => {
             <tr>
                 <td className="Label">League Name:</td>
 
-                    <td className="Field"><TextInput {...register('leagueName')}  defaultValue={league.leagueName} />
+                    <td className="Field"><TextInput {...register('leagueName')} defaultValue={league.leagueName} style={{width: "400px"} } />
                 </td>
             </tr>
 
@@ -174,13 +174,13 @@ const LeagueUpdate = () => {
         </form>
 
     return (
-        <>
-        <Menu/>
+        <Layout>
+
             <h3>Update record for league {league.leagueName}</h3>
             {contents}
 
 
-        </>
+        </Layout>
     );
 
 

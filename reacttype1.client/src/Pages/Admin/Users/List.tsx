@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { DetailsType } from "./DetailsType.tsx";
-import Menu from "#components/Menu.tsx";
+import Layout from "#layouts/Layout.tsx";
 
 
 function Users() {
@@ -44,12 +44,11 @@ function Users() {
         </table>;
 
     return (
-        <div>
-        <Menu/>
+        <Layout>
             <h3 id="tableLabel">Users</h3>
             <Link to="/Admin/Users/Create">Add</Link>
             {contents}
-        </div>
+        </Layout>
     );
 
     async function GetData() {

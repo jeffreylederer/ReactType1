@@ -5,7 +5,7 @@ import { FormData, FormDataSchema } from "./FormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
 import SubmitButton from '#components/Buttons.tsx';
-import Menu from "#components/Menu.tsx";
+import Layout from "#layouts/Layout.tsx";
 
 const LeagueCreate = () => {
 
@@ -34,8 +34,8 @@ const LeagueCreate = () => {
 
 
     return (
-        <>
-        <Menu/>
+        <Layout>
+
             <h3>Add new league</h3>
             <form onSubmit={handleSubmit(onSubmit)} >
                
@@ -153,7 +153,7 @@ const LeagueCreate = () => {
             </form>
             
 
-        </>
+        </Layout>
     );
 
 

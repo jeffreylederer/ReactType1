@@ -3,7 +3,7 @@ import axios from "axios";
 import { LeagueType } from "../components/leagueObjectTypes.tsx";
 import { setLeague, removeLeague } from "../components/leagueObject.tsx";
 import { useNavigate } from "react-router-dom";
-import Menu from "../components/Menu.tsx";
+import Layout from "#layouts/Layout.tsx";
 
 
 
@@ -61,12 +61,11 @@ function Home() {
         </table>;
 
     return (
-        <div>
+        <Layout>
             <h3 id="tableLabel">Select League</h3>
-            <Menu/>
             {contents}
            
-        </div>
+        </Layout>
     );
 
    

@@ -23,10 +23,11 @@ a {
 
 body {
     margin: 0;
-    display: flex;
-    place-items: center;
+    display: inline;
+    place-items: left;
     min-width: 320px;
     min-height: 100vh;
+    float: left;
 }
 
 h1 {
@@ -95,7 +96,7 @@ h3 {
 }
 
 .toLeft {
-    float: left;
+    text-align: left;
 }
 
 .hide {

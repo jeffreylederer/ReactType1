@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import { FormData } from "./FormData.tsx";
 import { useNavigate } from "react-router-dom";
-import Menu from "#components/Menu.tsx";
+import Layout from "#layouts/Layout.tsx";
 import { Button } from "flowbite-react";
 
 
@@ -19,7 +19,7 @@ const LeagueDetails = () => {
     const contents = league === undefined
         ? <p><em>Loading ...</em></p> :
 
-        <table>
+        <table >
             <tr>
                 <td className="Label">Active:</td>
                 <td className="Field">{league.active?"Yes":"No"}</td>
@@ -75,11 +75,10 @@ const LeagueDetails = () => {
         </table>
 
     return (
-        <div>
-        <Menu/>
+        <Layout>
             <h3>Details for league {league?.leagueName}</h3>
             {contents}
-        </div>
+        </Layout>
     );
 
     async function GetData() {
