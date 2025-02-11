@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
 import { user, league } from '../../../components/leagueObject.tsx';
 import Menu from "../../../components/Menu.tsx";
-import uparrow from 'images/uparrow.png';
+import uparrow from '../../../images/uparrow.png';
 
 
 function Matches() {
