@@ -1,4 +1,4 @@
-{
+  {
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
@@ -9,7 +9,7 @@
     "paths": {
       "components/*": [ "components/*" ],
       "images/*": [ "images/*" ],
-      "layouts/*": [ "Layouts/*" ],
+      "layouts/*": [ "layouts/*" ],
       "pages/*": [ "pages/*" ]
 
     }

@@ -3,7 +3,7 @@ import axios from "axios";
 import { LeagueType } from "../components/leagueObjectTypes.tsx";
 import { setLeague, removeLeague } from "../components/leagueObject.tsx";
 import { useNavigate } from "react-router-dom";
-import Layout from "layouts/Layout.tsx";
+import Layout from "../layouts/Layout.tsx";
 
 
 
