@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import child_process from 'child_process';
 import { env } from 'process';
-import { fileURLToPath, URL } from 'node:url';
+
 
 const baseFolder =
     env.APPDATA !== undefined && env.APPDATA !== ''
@@ -37,8 +37,11 @@ export default defineConfig({
     plugins: [plugin()],
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
-        }
+            components: "/src/components",
+            layouts: "/src/layouts",
+            pages: "/src/pages",
+            images: "/src/images",
+        },
     },
     server: {
         proxy: {

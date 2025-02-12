@@ -4,7 +4,7 @@ import axios from "axios";
 import { FormData } from "./FormData.tsx";
 import { league } from "../../../components/leagueObject.tsx";;
 import { DeleteButton } from '../../../components/Buttons.tsx';
-import Menu from "../../../components/Menu.tsx";
+import Layout from '../../../layouts/Layout.tsx';
 
 
 const ScheduleDelete = () => {
@@ -46,12 +46,11 @@ const ScheduleDelete = () => {
         </table>
         
     return (
-        <div>
-        <Menu/>
+        <Layout>
             <h3>Delete game date in league {league().leagueName}</h3>
             {contents}
             <p className="errorMessage">{errorMsg}</p>
-        </div>
+        </Layout>
     );
 
     async function GetData() {

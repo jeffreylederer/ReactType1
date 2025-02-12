@@ -6,7 +6,7 @@ import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { league } from "../../../components/leagueObject.tsx";;
 import { Membership } from "./Membership.tsx";
-import Menu from "../../../components/Menu.tsx";
+import Layout from '../../../layouts/Layout.tsx';
 import SubmitButton from '../../../components/Buttons.tsx';
 
 const TeamUpdate = () => {
@@ -146,13 +146,12 @@ const TeamUpdate = () => {
         </form>
     
     return (
-        <>
-        <Menu/>
+        <Layout>
             <h3>Update Team {team.teamNo} for league {league().leagueName}</h3>
             {contents}
             <p className="errorMessage">{errorMsg}</p>
             
-        </>
+        </Layout>
     );
 
 

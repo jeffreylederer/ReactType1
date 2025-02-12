@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 import { TeamMember } from "./TeamMember.tsx";
 import { user, league } from "../../../components/leagueObject.tsx";;
-import Menu from "../../../components/Menu.tsx";
-
+import Layout from '../../../layouts/Layout.tsx';
 
 
 function Teams() {
@@ -49,8 +48,7 @@ function Teams() {
         </table>;
 
     return (
-        <div>
-        <Menu/>
+        <Layout>
             <h3>Teams in league {league().leagueName}</h3>
             <div >
             <Link to="/League/Teams/Create" hidden={allowed}>Add</Link><br/>
@@ -59,7 +57,7 @@ function Teams() {
             {contents}
             <p>Number of Teams: {team?.length}</p>
             
-        </div>
+        </Layout>
     );
 
     async function GetData() {

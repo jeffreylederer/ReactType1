@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
-import Menu from "../../components/Menu.tsx";
 import { user } from "../../components/leagueObject.tsx";
+import  Layout  from '../../layouts/Layout.tsx';
 
 function Membership() {
     const [membership, setmembership] = useState<UpdateFormData[]>();
@@ -43,12 +43,12 @@ function Membership() {
         </table>;
 
     return (
-        <div>
-        <Menu/>
+
+            <Layout>
             <h3 id="tableLabel">Membership</h3>
             <Link to="/Membership/Create" hidden={ allowed}>Add</Link>
             {contents}
-        </div>
+            </Layout>
     );
 
     async function GetData() {

@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { league } from "../../../components/leagueObject.tsx";;
 import SubmitButton from '../../../components/Buttons.tsx';
-import Menu from "../../../components/Menu.tsx";
+import Layout from '../../../layouts/Layout.tsx';
 
 
 const TeamsCreate = () => {
@@ -81,8 +81,7 @@ const TeamsCreate = () => {
     });
 
     return (
-        <>
-        <Menu/>
+        <Layout>
             <h3>Create new Team in league {league().leagueName} </h3>
             <form onSubmit={handleSubmit(onSubmit)} >
                 <table>
@@ -163,7 +162,7 @@ const TeamsCreate = () => {
                 </table>
             </form>
             <p className="errorMessage">{errorMsg}</p>
-        </>
+        </Layout>
     );
 
 

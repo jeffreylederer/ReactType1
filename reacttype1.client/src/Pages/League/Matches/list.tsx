@@ -5,7 +5,7 @@ import { UpdateFormData } from "../Schedule/UpdateFormData.tsx";
 import { Link } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
 import { user, league } from '../../../components/leagueObject.tsx';
-import Menu from "../../../components/Menu.tsx";
+import Layout from '../../../layouts/Layout.tsx';
 import uparrow from '../../../images/uparrow.png';
 
 
@@ -143,14 +143,13 @@ function Matches() {
             </table>
         </>;   
         return(
-            <div>
-        <Menu/>
+        <Layout>
         <h3>Players in league {league().leagueName}</h3>
                 {contents}
                 {matchcontents}
                 <p style={{ color: 'red', textAlign: 'left' }} hidden={weekid==0}>Teams with wheel chair members are in red</p>
         
-    </div>
+         </Layout>
     );
    
     async function GetDates() {

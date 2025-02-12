@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { TextInput } from "flowbite-react";
 import { MatchFormData } from "./MatchFormData.tsx";
 import { ReturnButton } from '../../../components/Buttons.tsx';
-import Menu from "../../../components/Menu.tsx";
+import Layout from '../../../layouts/Layout.tsx';
 
 
 
@@ -149,13 +149,12 @@ const MatchUpdate = () => {
         </form>
 
     return (
-        <>
-        <Menu/>
+        <Layout>
             <h3>Enter scrore for match </h3>
             {contents}
 
 
-        </>
+        </Layout>
     );
 
 

@@ -4,7 +4,7 @@ import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
 import { league } from "../../../components/leagueObject.tsx";;
 import { DeleteButton } from '../../../components/Buttons.tsx';
-import Menu from "../../../components/Menu.tsx";
+import Layout from '../../../layouts/Layout.tsx';
 
 
 const PlayersDelete = () => {
@@ -37,13 +37,12 @@ const PlayersDelete = () => {
         </table>;
         
     return (
-        <div>
-        <Menu/>
+        <Layout>
             <h2>Delete player from league {league().leagueName} </h2>
             {contents}
             <p className="errorMessage">{errorMsg}</p>
            
-        </div>
+        </Layout>
     );
 
     async function GetData() {

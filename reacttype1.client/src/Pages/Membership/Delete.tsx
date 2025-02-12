@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { FormData } from "./FormData.tsx";
 import axios from "axios";
-import Menu from "../../components/Menu.tsx";
+import Layout from '../../layouts/Layout.tsx';
 import {DeleteButton} from '../../components/Buttons.tsx';
 
 
@@ -50,12 +50,11 @@ const MembershipDelete = () => {
         </table>
         
     return (
-        <div>
-        <Menu/>
+        <Layout>
         <h3>Delete Member</h3>
             {contents}
             <p className="errorMessage">{errorMsg}</p>
-        </div>
+        </Layout>
     );
 
     async function GetData() {

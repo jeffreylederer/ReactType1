@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
 import { league } from "../../../components/leagueObject.tsx";;
 import SubmitButton from '../../../components/Buttons.tsx';
-import Menu from "../../../components/Menu.tsx";
+import Layout from '../../../layouts/Layout.tsx';
 
 
 const ScheduleUpdate = () => {
@@ -90,13 +90,12 @@ const ScheduleUpdate = () => {
         </form>
     
     return (
-        <>
-        <Menu/>
+        <Layout>
             <h3>Update schedule for league {league().leagueName}</h3>
             {contents}
 
             
-        </>
+        </Layout>
     );
 
 

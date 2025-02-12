@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
 import { league } from "../../../components/leagueObject.tsx";;
-import Menu from "../../../components/Menu.tsx";
+import Layout from '../../../layouts/Layout.tsx';
 
 
 
@@ -11,11 +11,10 @@ export const CreateMatches = () => {
         GetData();
     });
     return (
-        <>
-        <Menu/>
+        <Layout>
             <h3>Create Schedule</h3>
             <p style={{ textAlign: "center" }}>{errorMsg}</p>
-        </>
+        </Layout>
     );
 
     async function GetData() {
