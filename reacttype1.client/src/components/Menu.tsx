@@ -1,14 +1,14 @@
 
-import { IsUserNull, user, IsLeagueNull  } from "../components/leagueObject.tsx";
+import { IsUserNull, User, IsLeagueNull  } from "../components/leagueObject.tsx";
 import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 
 function Menu() {
     const navigate = useNavigate();
-    const [showSiteAdmin] = useState<boolean>(!IsUserNull() && user().role == "SiteAdmin" );
-    const [showAdmin] = useState<boolean>(!IsUserNull() && (user().role == "Admin" || showSiteAdmin ));
+    const [showSiteAdmin] = useState<boolean>(!IsUserNull() && User().role == "SiteAdmin" );
+    const [showAdmin] = useState<boolean>(!IsUserNull() && (User().role == "Admin" || showSiteAdmin ));
     const [showLeague, setShowLeague] = useState<boolean>();
-    const username: string = IsUserNull() ? "" : user().username;
+    const username: string = IsUserNull() ? "" : User().username;
 
     useEffect(() => {
         if (IsUserNull()) {
@@ -16,7 +16,7 @@ function Menu() {
         }
         setShowLeague(!IsLeagueNull());
        
-    }, [navigate]);
+    }, []);
 
 
        
