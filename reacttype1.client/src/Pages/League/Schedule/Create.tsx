@@ -4,7 +4,7 @@ import axios from "axios";
 import { FormData, FormDataSchema } from "./FormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
-import { league } from "../../../components/leagueObject.tsx";;
+import { League } from "../../../components/leagueObject.tsx";;
 import SubmitButton from '../../../components/Buttons.tsx';
 import Layout from '../../../layouts/Layout.tsx';
 
@@ -35,10 +35,10 @@ const ScheduleCreate = () => {
 
     return (
         <Layout>
-            <h3>Create new game date for league {league().leagueName}</h3>
+            <h3>Create new game date for league {League().leagueName}</h3>
             <form onSubmit={handleSubmit(onSubmit)} >
                 <table>
-                    <input type="hidden" defaultValue={league().id} {...register('leagueid')} />
+                    <input type="hidden" defaultValue={League().id} {...register('leagueid')} />
                     <tr>
                         <td className="Label">Playoffs:</td>
 

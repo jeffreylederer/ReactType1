@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
 import { LeagueType } from "../components/leagueObjectTypes.tsx";
-import { setLeague, removeLeague } from "../components/leagueObject.tsx";
+import { SetLeague, RemoveLeague } from "../components/leagueObject.tsx";
 import { useNavigate } from "react-router-dom";
 import Layout from "../layouts/Layout.tsx";
 
@@ -9,7 +9,7 @@ import Layout from "../layouts/Layout.tsx";
 
 function Home() {
 
-    const [leagueList, setLeagueList] = useState<LeagueType[]>([]);
+    const [leagueList, SetLeagueList] = useState<LeagueType[]>([]);
     const navigate = useNavigate();
 
     const buttonHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -19,14 +19,14 @@ function Home() {
         const result = leagueList.filter(function (o: LeagueType) { return o.id == idValue; });
         if (result?.length == 1) {
             const data: LeagueType = result[0];
-            setLeague(data);
+            SetLeague(data);
             navigate("/Welcome")
         }
     };
 
     useEffect(() => {
         GetData();
-        removeLeague();
+        RemoveLeague();
     });
 
     const contents = leagueList === undefined
@@ -77,7 +77,7 @@ function Home() {
             .then(response => {
                 const values = response.data as LeagueType[];
                 const results = values.filter(x => x.active) as LeagueType[];
-                setLeagueList(results);
+                SetLeagueList(results);
             })
             .catch(error => {
                 console.error('Error fetching data: ', error);

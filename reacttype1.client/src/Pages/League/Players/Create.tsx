@@ -5,7 +5,7 @@ import { PlayerFormData, PlayerFormDataSchema } from "./FormData.tsx";
 import { UpdateFormData } from "../../Membership/UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
-import { league } from "../../../components/leagueObject.tsx";
+import { League } from "../../../components/leagueObject.tsx";
 import SubmitButton from '../../../components/Buttons.tsx';
 import Layout from '../../../layouts/Layout.tsx';
 
@@ -30,7 +30,7 @@ const PlayersCreate = () => {
     }
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/players/getMembers/".concat(league().id.toString());
+        const url: string = import.meta.env.VITE_SERVER_URL + "api/players/getMembers/".concat(League().id.toString());
         axios.get(url)
             .then(response => {
                 setmembership(response.data);
@@ -54,10 +54,10 @@ const PlayersCreate = () => {
 
     return (
         <Layout>
-            <h3>Create new player in league {league().leagueName} </h3>
+            <h3>Create new player in league {League().leagueName} </h3>
             <form onSubmit={handleSubmit(onSubmit)} >
                 <table>
-                    <input type="hidden" {...register("leagueid")} defaultValue={league().id }/>
+                    <input type="hidden" {...register("leagueid")} defaultValue={League().id }/>
                     <tr>
                         <td className="Label">Members:</td>
 

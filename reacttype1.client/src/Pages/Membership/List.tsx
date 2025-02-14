@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
-import { user } from "../../components/leagueObject.tsx";
+import { User } from "../../components/leagueObject.tsx";
 import  Layout  from '../../layouts/Layout.tsx';
 
 function Membership() {
     const [membership, setmembership] = useState<UpdateFormData[]>();
-      const allowed: boolean = (user().role == "SiteAdmin" || user().role == "Admin") ? false : true;
+      const allowed: boolean = (User().role == "SiteAdmin" || User().role == "Admin") ? false : true;
 
     useEffect(() => {
         GetData();

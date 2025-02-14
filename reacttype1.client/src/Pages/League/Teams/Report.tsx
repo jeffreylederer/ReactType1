@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { league } from "../../../components/leagueObject.tsx";;
+import { League } from "../../../components/leagueObject.tsx";;
 import axios from "axios";
 
 
@@ -20,7 +20,7 @@ function TeamReport() {
     );
 
     async function GetReport() {
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/Teams/TeamReport/".concat(league().id.toString());
+        const url: string = import.meta.env.VITE_SERVER_URL + "api/Teams/TeamReport/".concat(League().id.toString());
         axios.get(url)
             .then(response => {
                 const data: string = "data:application/pdf;base64,".concat(response.data);

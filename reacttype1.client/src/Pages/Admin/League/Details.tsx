@@ -11,7 +11,7 @@ const LeagueDetails = () => {
     const location = useLocation();
     const id: number = location.state;
     const navigate = useNavigate();
-    const [league, setleague] = useState<FormData>();
+    const [league, SetLeague] = useState<FormData>();
     useEffect(() => {
         GetData();
     });
@@ -87,7 +87,7 @@ const LeagueDetails = () => {
         const fullUrl = url.concat(num);
         axios.get(fullUrl)
             .then(response => {
-                setleague(response.data);
+                SetLeague(response.data);
                 console.log('Record aquired successfully: ', response.data);
             })
             .catch(error => {

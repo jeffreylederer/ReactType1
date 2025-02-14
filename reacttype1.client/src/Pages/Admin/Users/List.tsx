@@ -6,7 +6,7 @@ import Layout from "../../../layouts/Layout.tsx";
 
 
 function Users() {
-    const [Users, setUsers] = useState<DetailsType[]>();
+    const [Users, SetUsers] = useState<DetailsType[]>();
 
 
     useEffect(() => {
@@ -54,7 +54,7 @@ function Users() {
     async function GetData() {
         axios.get(import.meta.env.VITE_SERVER_URL+"api/Users")
             .then(response => {
-                setUsers(response.data);
+                SetUsers(response.data);
             })
             .catch(error => {
                 console.error('Error fetching data: ', error);

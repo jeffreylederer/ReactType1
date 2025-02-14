@@ -5,7 +5,7 @@ import { UpdateFormData } from "./UpdateFormData.tsx";
 import Layout from "../../../layouts/Layout.tsx";
 
 function League() {
-    const [league, setleague] = useState<UpdateFormData[]>();
+    const [league, SetLeague] = useState<UpdateFormData[]>();
 
 
     useEffect(() => {
@@ -56,7 +56,7 @@ function League() {
     async function GetData() {
         axios.get(import.meta.env.VITE_SERVER_URL+"api/leagues")
             .then(response => {
-                setleague(response.data);
+                SetLeague(response.data);
             })
             .catch(error => {
                 console.error('Error fetching data: ', error);

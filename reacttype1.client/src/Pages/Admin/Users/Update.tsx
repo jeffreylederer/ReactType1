@@ -13,7 +13,7 @@ import SubmitButton from '../../../components/Buttons.tsx';
 
 const UsersUpdate = () => {
 
-    const [users, setUsers] = useState(
+    const [users, SetUsers] = useState(
         {
             id: 0,
             roleId:1,
@@ -126,7 +126,7 @@ const UsersUpdate = () => {
         axios.get(fullUrl)
             .then(response => {
 
-                setUsers(response.data);
+                SetUsers(response.data);
 
 
                 console.log('Record aquired successfully: ', response.data);

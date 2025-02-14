@@ -10,7 +10,7 @@ const UsersDelete = () => {
     const location = useLocation();
     const id: number = location.state;
 
-    const [Users, setUsers] = useState<DetailsType>();
+    const [Users, SetUsers] = useState<DetailsType>();
 
 
     const navigate = useNavigate();
@@ -63,7 +63,7 @@ const UsersDelete = () => {
         const fullUrl = url.concat(num);
         axios.get(fullUrl)
             .then(response => {
-                setUsers(response.data);
+                SetUsers(response.data);
                 console.log('Record aquired successfully: ', response.data);
             })
             .catch(error => {

@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
-import { user, league } from "../../../components/leagueObject.tsx";;
+import { User, League } from "../../../components/leagueObject.tsx";;
 import Layout from '../../../layouts/Layout.tsx';
 
 function Players() {
     const [player, setplayer] = useState<UpdateFormData[]>();
-    const permission: string = user().role;
+    const permission: string = User().role;
     const allowed: boolean = (permission == "SiteAdmin" || permission == "Admin") ? false : true;
 
 
@@ -41,7 +41,7 @@ function Players() {
     return (
         <Layout>
 
-            <h3>Players in league {league().leagueName}</h3>
+            <h3>Players in league {League().leagueName}</h3>
             <Link to="/League/Players/Create" hidden={allowed}>Add</Link>
             {contents}
             <p>Number of players: {player?.length}</p>
@@ -51,7 +51,7 @@ function Players() {
     async function GetData() {
        
 
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/players/".concat(league().id.toString());
+        const url: string = import.meta.env.VITE_SERVER_URL+"api/players/".concat(League().id.toString());
         axios.get(url)
             .then(response => {
                 setplayer(response.data);

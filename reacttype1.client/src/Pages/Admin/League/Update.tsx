@@ -13,7 +13,7 @@ import Layout from "../../../layouts/Layout.tsx";
 
 const LeagueUpdate = () => {
 
-    const [league, setLeague] = useState(
+    const [league, SetLeague] = useState(
         {
             id: 0,
             leagueName: '',
@@ -191,7 +191,7 @@ const LeagueUpdate = () => {
         axios.get(fullUrl)
             .then(response => {
 
-                setLeague(response.data);
+                SetLeague(response.data);
 
 
                 console.log('Record aquired successfully: ', response.data);

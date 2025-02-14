@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from 'react';
 import { TextInput, Button } from "flowbite-react";
 import axios from "axios";
-import { setUser } from "../../../components/leagueObject.tsx";
+import { SetUser } from "../../../components/leagueObject.tsx";
 import { UserType } from "../../../components/leagueObjectTypes.tsx";;
 
 function Login() {
@@ -34,7 +34,7 @@ function Login() {
                  }
                 else {
                     const data: UserType = response.data;
-                    setUser(data);
+                    SetUser(data);
                     
                     navigate("/");
                 }

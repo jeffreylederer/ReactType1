@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import { league } from "../../../components/leagueObject.tsx";;
+import { League } from "../../../components/leagueObject.tsx";;
 import Layout from '../../../layouts/Layout.tsx';
 
 
@@ -18,7 +18,7 @@ export const ClearMatches = () => {
     );
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/Matches/ClearSchedule/".concat(league().id.toString());
+        const url: string = import.meta.env.VITE_SERVER_URL + "api/Matches/ClearSchedule/".concat(League().id.toString());
         axios.get(url)
             .then(response => {
                 setErrorMsg("Schedule cleared");

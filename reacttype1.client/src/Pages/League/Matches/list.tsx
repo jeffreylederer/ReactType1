@@ -4,14 +4,14 @@ import axios from "axios";
 import { UpdateFormData } from "../Schedule/UpdateFormData.tsx";
 import { Link } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
-import { user, league } from '../../../components/leagueObject.tsx';
+import { User, League } from '../../../components/leagueObject.tsx';
 import Layout from '../../../layouts/Layout.tsx';
 import uparrow from '../../../images/uparrow.png';
 
 
 function Matches() {
     const [match, setMatch] = useState<MatchFormData[]>();
-    const permission: string = user().role;
+    const permission: string = User().role;
     const allowed: boolean = (permission == "SiteAdmin" || permission == "Admin" || permission == "Scorer") ? false : true;
     const admin: boolean = (permission == "SiteAdmin" || permission == "Admin" )? false : true;
     
@@ -144,7 +144,7 @@ function Matches() {
         </>;   
         return(
         <Layout>
-        <h3>Players in league {league().leagueName}</h3>
+        <h3>Players in league {League().leagueName}</h3>
                 {contents}
                 {matchcontents}
                 <p style={{ color: 'red', textAlign: 'left' }} hidden={weekid==0}>Teams with wheel chair members are in red</p>
@@ -154,7 +154,7 @@ function Matches() {
    
     async function GetDates() {
         if (schedule === undefined) {
-            const url: string = import.meta.env.VITE_SERVER_URL+"api/Schedules/".concat(league().id.toString());
+            const url: string = import.meta.env.VITE_SERVER_URL+"api/Schedules/".concat(League().id.toString());
             axios.get(url)
                 .then(response => {
                     setSchedule(response.data);

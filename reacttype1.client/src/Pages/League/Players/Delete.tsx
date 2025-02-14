@@ -2,7 +2,7 @@ import { useLocation, useNavigate, } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
-import { league } from "../../../components/leagueObject.tsx";;
+import { League } from "../../../components/leagueObject.tsx";;
 import { DeleteButton } from '../../../components/Buttons.tsx';
 import Layout from '../../../layouts/Layout.tsx';
 
@@ -38,7 +38,7 @@ const PlayersDelete = () => {
         
     return (
         <Layout>
-            <h2>Delete player from league {league().leagueName} </h2>
+            <h2>Delete player from league {League().leagueName} </h2>
             {contents}
             <p className="errorMessage">{errorMsg}</p>
            

@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
-import { league, user} from "../../../components/leagueObject.tsx";;
+import { League, User} from "../../../components/leagueObject.tsx";;
 import Layout from '../../../layouts/Layout.tsx';
 
 
 function Schedule() {
     const [schedule, setschedule] = useState<UpdateFormData[]>();
     
-    const permission: string = user().role;
+    const permission: string = User().role;
     const allowed: boolean = (permission == "SiteAdmin" || permission == "Admin") ? false : true;
 
     useEffect(() => {
@@ -45,14 +45,14 @@ function Schedule() {
 
     return (
         <Layout>
-            <h3 id="tableLabel">Schedule for League {league().leagueName}</h3>
+            <h3 id="tableLabel">Schedule for League {League().leagueName}</h3>
             <Link to="/League/Schedule/Create" hidden={allowed}>Add</Link>
             {contents}
         </Layout>
     );
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/Schedules/".concat(league().id.toString());
+        const url: string = import.meta.env.VITE_SERVER_URL+"api/Schedules/".concat(League().id.toString());
         axios.get(url)
             .then(response => {
                 setschedule(response.data);

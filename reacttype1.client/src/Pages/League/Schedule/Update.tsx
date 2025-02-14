@@ -5,7 +5,7 @@ import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
-import { league } from "../../../components/leagueObject.tsx";;
+import { League } from "../../../components/leagueObject.tsx";;
 import SubmitButton from '../../../components/Buttons.tsx';
 import Layout from '../../../layouts/Layout.tsx';
 
@@ -91,7 +91,7 @@ const ScheduleUpdate = () => {
     
     return (
         <Layout>
-            <h3>Update schedule for league {league().leagueName}</h3>
+            <h3>Update schedule for league {League().leagueName}</h3>
             {contents}
 
             

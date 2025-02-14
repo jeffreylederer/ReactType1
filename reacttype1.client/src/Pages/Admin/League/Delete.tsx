@@ -12,7 +12,7 @@ const LeagueDelete = () => {
     const id: number = location.state;
     const [errorMsg, SeterrorMsg] = useState("");
 
-    const [league, setleague] = useState<FormData>();
+    const [league, SetLeague] = useState<FormData>();
 
 
     const navigate = useNavigate();
@@ -93,7 +93,7 @@ const LeagueDelete = () => {
         const fullUrl = url.concat(num);
         axios.get(fullUrl)
             .then(response => {
-                setleague(response.data);
+                SetLeague(response.data);
                 console.log('Record aquired successfully: ', response.data);
             })
             .catch(error => {
