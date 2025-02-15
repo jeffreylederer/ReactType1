@@ -7,7 +7,7 @@ import  Layout  from '../../layouts/Layout.tsx';
 
 function Membership() {
     const [membership, setmembership] = useState<UpdateFormData[]>();
-      const allowed: boolean = (User().role == "SiteAdmin" || User().role == "Admin") ? false : true;
+    const allowed: boolean = (User().role == "SiteAdmin" || User().role == "Admin") ? false : true;
 
     useEffect(() => {
         GetData();
