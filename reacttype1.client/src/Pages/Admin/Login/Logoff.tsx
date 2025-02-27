@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from 'react';
-import { RemoveAll } from '../../../components/leagueObject.tsx';
+import { RemoveAll } from '@components/leagueObject.tsx';
 
 function Logoff() {
     const navigate = useNavigate();

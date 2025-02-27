@@ -4,10 +4,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { League } from "../../../components/leagueObject.tsx";;
+import { League } from "@components/leagueObject.tsx";;
 import { Membership } from "./Membership.tsx";
-import Layout from '../../../layouts/Layout.tsx';
-import SubmitButton from '../../../components/Buttons.tsx';
+import Layout from '@layouts/Layout.tsx';
+import SubmitButton from '@components/Buttons.tsx';
 
 const TeamUpdate = () => {
 

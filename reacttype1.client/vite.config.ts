@@ -6,6 +6,7 @@ import child_process from 'child_process';
 import { env } from 'process';
 
 
+
 const baseFolder =
     env.APPDATA !== undefined && env.APPDATA !== ''
         ? `${env.APPDATA}/ASP.NET/https`
@@ -38,10 +39,10 @@ export default defineConfig({
     envDir: './environment',
     resolve: {
         alias: {
-            components: "/src/components",
-            layouts: "/src/layouts",
-            pages: "/src/pages",
-            images: "/src/images",
+            '@components': "/src/components",
+            '@images': "/src/images",
+            '@layouts': "/src/layouts",
+            '@pages': "/src/pages",
         },
     },
     server: {

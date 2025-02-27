@@ -4,9 +4,9 @@ import axios from "axios";
 import { UpdateFormData } from "../Schedule/UpdateFormData.tsx";
 import { Link } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
-import { User, League } from '../../../components/leagueObject.tsx';
-import Layout from '../../../layouts/Layout.tsx';
-import uparrow from '../../../images/uparrow.png';
+import { User, League } from '@components/leagueObject.tsx';
+import Layout from '@layouts/Layout.tsx';
+import uparrow from '@images/uparrow.png';
 
 
 function Matches() {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { League } from "../../../components/leagueObject.tsx";;
+import { League } from "@components/leagueObject.tsx";;
 import axios from "axios";
 
 

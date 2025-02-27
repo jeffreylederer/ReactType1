@@ -4,8 +4,8 @@ import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateForm.tsx"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextInput } from "flowbite-react";
-import { User } from "../../../components/leagueObject.tsx";;
-import SubmitButton from '../../../components/Buttons.tsx';
+import { User } from "@components/leagueObject.tsx";;
+import SubmitButton from '@components/Buttons.tsx';
 
 
 

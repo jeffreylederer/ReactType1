@@ -7,10 +7,10 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
-      "components/*": [ "components/*" ],
-      "images/*": [ "images/*" ],
-      "layouts/*": [ "layouts/*" ],
-      "pages/*": [ "pages/*" ]
+      "@components/*": [ "components/*" ],
+      "@images/*": [ "images/*" ],
+      "@layouts/*": [ "layouts/*" ],
+      "@pages/*": [ "pages/*" ]
 
     }
   }

@@ -1,5 +1,5 @@
-import { League, User } from "../components//leagueObject.tsx";
-import Layout from "../layouts/Layout.tsx";
+import { League, User } from "@components//leagueObject.tsx";
+import Layout from "@layouts/Layout.tsx";
 
 
 function Welcome() {

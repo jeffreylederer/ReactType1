@@ -5,8 +5,8 @@ import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput, } from "flowbite-react";
-import SubmitButton from '../../components/Buttons.tsx';
-import Layout from '../../layouts/Layout.tsx';
+import SubmitButton from '@components/Buttons.tsx';
+import Layout from '@layouts/Layout.tsx';
 
 const MembershipUpdate = () => {
     const [membership, setMembership] = useState(

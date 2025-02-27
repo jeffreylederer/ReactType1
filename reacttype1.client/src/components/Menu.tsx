@@ -1,5 +1,5 @@
 
-import { IsUserNull, User, IsLeagueNull  } from "../components/leagueObject.tsx";
+import { IsUserNull, User, IsLeagueNull  } from "@components/leagueObject.tsx";
 import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -16,7 +16,7 @@ function Menu() {
         }
         setShowLeague(!IsLeagueNull());
        
-    }, []);
+    }, [navigate]);
 
 
        

@@ -2,8 +2,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { FormData } from "./FormData.tsx";
 import axios from "axios";
-import Layout from '../../layouts/Layout.tsx';
-import {DeleteButton} from '../../components/Buttons.tsx';
+import Layout from '@layouts/Layout.tsx';
+import {DeleteButton} from '@components/Buttons.tsx';
 
 
 const MembershipDelete = () => {

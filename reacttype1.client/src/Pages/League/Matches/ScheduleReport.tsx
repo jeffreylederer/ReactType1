@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import { League } from "../../../components/leagueObject.tsx";;
+import { League } from "@components/leagueObject.tsx";;
 
 
 function ScheduleRepor() {

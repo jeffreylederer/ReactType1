@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { DetailsType } from "./DetailsType.tsx";
-import Layout from "../../../layouts/Layout.tsx";
+import Layout from "@layouts/Layout.tsx";
 
 
 function Users() {

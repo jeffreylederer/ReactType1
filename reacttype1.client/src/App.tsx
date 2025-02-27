@@ -1,5 +1,5 @@
 import { BrowserRouter } from 'react-router-dom';
-import RouteMenu from "../src/components/Routes.tsx";
+import RouteMenu from "@components/Routes.tsx";
 import './App.css';
 
 

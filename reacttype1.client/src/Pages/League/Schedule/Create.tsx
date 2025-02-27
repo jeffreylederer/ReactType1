@@ -4,9 +4,9 @@ import axios from "axios";
 import { FormData, FormDataSchema } from "./FormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
-import { League } from "../../../components/leagueObject.tsx";;
-import SubmitButton from '../../../components/Buttons.tsx';
-import Layout from '../../../layouts/Layout.tsx';
+import { League } from "@components/leagueObject.tsx";;
+import SubmitButton from '@components/Buttons.tsx';
+import Layout from '@layouts/Layout.tsx';
 
 const ScheduleCreate = () => {
    const {
