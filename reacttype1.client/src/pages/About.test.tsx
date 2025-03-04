@@ -1,15 +1,18 @@
-
 import { test, expect } from 'vitest';
-import { render  } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import About from './About';
 
 
-test('App mounts properly', async () => {
-    
+test('renders About', () => {
+    render(
+        <MemoryRouter initialEntries={['/']}>
+            <About />
+        </MemoryRouter>
+    );
 
-    const { getByText }  = render(<About />)
-    const ByRole = getByText('About');
-    expect(ByRole).toBeTruthy();
+    expect(screen.getByText(/FPLBC website/i)).toBeTruthy();
+});
 
-    
-})
+
+
