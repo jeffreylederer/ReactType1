@@ -1,65 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReactType1.Server.Models;
+using ReactType1.Server.Contracts;
+using AutoMapper;
+using ReactType1.Server.DTOs.Membership;
 
-// https://medium.com/@hassanjabbar2017/performing-crud-operations-using-react-with-net-core-a-step-by-step-guide-0176efa86934
+
+//https://geeksarray.com/blog/implement-repository-pattern-with-aspnet-core-web-api
 namespace ReactType1.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class MembershipsController : ControllerBase
     {
-        private readonly DbLeagueApp _context;
+        private readonly IMapper _mapper;
+        private readonly IMembershipRepository _membershipRepository;
 
-        public MembershipsController(DbLeagueApp context)
+        public MembershipsController(IMapper mapper,
+            IMembershipRepository membershipRepository)
         {
-            _context = context;
+            this._mapper = mapper;
+            this._membershipRepository = membershipRepository;
         }
 
         // GET: Memberships
         [HttpGet]
-        public async Task<IEnumerable<Membership>> Get()
+        public async Task<ActionResult<List<GetMembershipDetailsDto>>> Get()
         {
-            var list = await _context.Memberships.ToListAsync();
-            list.Sort((a, b) => a.LastName.CompareTo(b.LastName));
-            return list;
+            var membership = await this._membershipRepository.Get();
+            var records = _mapper.Map<List<GetMembershipDetailsDto>>(membership);
+            return Ok(records);
         }
 
         // GET: Memberships/Details/5
         [HttpGet("{id}")]
-        public async Task<Membership?> Get(int? id)
+        public async Task<ActionResult<GetMembershipDetailsDto>> Get(int id)
         {
-            if (id == null)
-            {
-                return null;
-            }
+            var membership = await this._membershipRepository.GetOne(id);
 
-            var membership = await _context.Memberships.FindAsync(id.Value);
             if (membership == null)
             {
-                return null;
+                throw new Exception($"MembershipID {id} is not found.");
             }
 
-            return membership;
+            var membershipDetailsDto = _mapper.Map<GetMembershipDetailsDto>(membership);
+
+            return Ok(membershipDetailsDto);
         }
 
 
 
-
-        
         [HttpPost]
-        public async Task Create(Membership item)
+        public async Task<ActionResult<Membership>> Create(CreateMembershipDto createMembershipDto)
         {
-            _context.Memberships.Add(item);
-            await _context.SaveChangesAsync();
+            var membership = _mapper.Map<Membership>(createMembershipDto);
 
-           
+            await this._membershipRepository.Create(membership);
+
+            return CreatedAtAction("GetMembership", new { id = membership.Id }, membership);
         }
 
 
@@ -69,34 +67,31 @@ namespace ReactType1.Server.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[ValidateAntiForgeryToken]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, Membership item)
+        public async Task<IActionResult>  Edit(int id, UpdateMembershipDto updateMembershipDto)
         {
-            if (id != item.Id)
+            if (id != updateMembershipDto.Id)
             {
-                return BadRequest();
+                return BadRequest("Invalid Membership Id");
             }
 
-            _context.Entry(item).State = EntityState.Modified;
+            var membership = await _membershipRepository.GetOne(id);
+
+            if (membership == null)
+            {
+                throw new Exception($"MembershipID {id} is not found.");
+            }
+
+            _mapper.Map(updateMembershipDto, membership);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _membershipRepository.Edit(membership);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!MembershipExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw new Exception($"Error occured while updating MembershipID {id}.");
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+
             return NoContent();
         }
 
@@ -105,32 +100,10 @@ namespace ReactType1.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var item = await _context.Memberships.FindAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            _context.Memberships.Remove(item);
-            try
-            {
-                await _context.SaveChangesAsync();
-                return NoContent();
-            }
-            catch (DbUpdateException)
-            {
-                return StatusCode(409, "Member cannot be deleted, the member is already assign to a league.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-
+            await _membershipRepository.Delete(id);
+            return NoContent();
         }
 
-        private bool MembershipExists(int id)
-        {
-            return _context.Memberships.Any(e => e.Id == id);
-        }
+        
     }
 }

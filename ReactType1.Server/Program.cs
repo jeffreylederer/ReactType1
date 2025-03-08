@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
 using ReactType1.Server.Models;
+using ReactType1.Server.Contracts;
+using ReactType1.Server.Repository;
 
 
 QuestPDF.Settings.License = LicenseType.Community;
@@ -14,6 +17,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddScoped
+    <IMembershipRepository, MembershipRepository>();
 
 var connectionString = builder.Configuration.GetConnectionString("DbLeagueApp") ?? throw new InvalidOperationException("Connection string 'DbLeagueApp' not found.");
 builder.Services.AddDbContextFactory<DbLeagueApp>(opt =>
@@ -45,5 +51,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
+
+
 
 app.Run();

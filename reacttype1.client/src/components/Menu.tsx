@@ -16,7 +16,7 @@ function Menu() {
         }
         setShowLeague(!IsLeagueNull());
        
-    }, [navigate]);
+    });
 
 
        
