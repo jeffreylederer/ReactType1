@@ -56,8 +56,7 @@ namespace ReactType1.Server.Controllers
             var membership = _mapper.Map<Membership>(createMembershipDto);
 
             await this._membershipRepository.Create(membership);
-
-            return CreatedAtAction("GetMembership", new { id = membership.Id }, membership);
+            return Ok(membership);
         }
 
 
