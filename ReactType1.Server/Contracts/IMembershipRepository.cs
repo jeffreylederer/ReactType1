@@ -12,6 +12,6 @@ namespace ReactType1.Server.Contracts
 
         Task Delete(int MembershipId);
 
-        Task Edit(Membership Membership);
+        Task<Membership> Edit(Membership Membership);
     }
 }

@@ -46,10 +46,11 @@ namespace ReactType1.Server.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task Edit(Membership membership)
+        public async Task<Membership> Edit(Membership membership)
         {
             _context.Update(membership);
             await _context.SaveChangesAsync();
+            return membership;
         }
 
     }

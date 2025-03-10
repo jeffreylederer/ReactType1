@@ -66,7 +66,7 @@ namespace ReactType1.Server.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[ValidateAntiForgeryToken]
         [HttpPut("{id}")]
-        public async Task<IActionResult>  Edit(int id, UpdateMembershipDto updateMembershipDto)
+        public async Task<ActionResult<Membership>> Edit(int id, UpdateMembershipDto updateMembershipDto)
         {
             if (id != updateMembershipDto.Id)
             {
@@ -91,7 +91,7 @@ namespace ReactType1.Server.Controllers
                 throw new Exception($"Error occured while updating MembershipID {id}.");
             }
 
-            return NoContent();
+            return Ok(membership); 
         }
 
 
