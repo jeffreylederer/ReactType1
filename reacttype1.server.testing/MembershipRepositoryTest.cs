@@ -71,6 +71,8 @@ public class MembershipRepositoryTest : IDisposable
             Assert.NotNull(data);
             Assert.Equal(4, data.Id);
         });
+
+        await Assert.ThrowsAsync<System.ArgumentException>(() => membershipRepository.Create(membership));
     }
 
     [Fact]
@@ -90,6 +92,9 @@ public class MembershipRepositoryTest : IDisposable
               Assert.NotNull(expectedData);
               Assert.Equal(expectedData, actualData);
         });
+
+        actualData.Id = 10;
+        await Assert.ThrowsAsync<System.InvalidOperationException>(() => membershipRepository.Edit(actualData));
     }
 
     [Fact]
@@ -107,6 +112,8 @@ public class MembershipRepositoryTest : IDisposable
         var item = await membershipRepository.GetOne(id);
 
         Assert.Null(item);
+
+        await Assert.ThrowsAsync<Exception>(() => membershipRepository.Delete(2));
     }
 }
 
