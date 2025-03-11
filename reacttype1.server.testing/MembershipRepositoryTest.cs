@@ -1,15 +1,29 @@
-﻿using ReactType1.Server.Models;
+﻿using ReactType1.Server.Contracts;
+using ReactType1.Server.Models;
+using ReactType1.Server.Repository;
 
-
-public class MembershipRepositoryTest
+// https://medium.com/@kaashok1993/net-6-web-api-mocking-dbcontext-dbset-using-moq-48d9e4929089
+public class MembershipRepositoryTest : IDisposable
 {
-   
+    private IMembershipRepository membershipRepository;
+    private SetupMembershipRepository service;
+
+    public MembershipRepositoryTest()
+    {
+        service = new SetupMembershipRepository();
+        membershipRepository = service.GetRepository();
+    }
+
+    public void Dispose()
+    {
+        service.Dispose();
+    }   
 
     [Fact]
     public async Task GetMemberships()
     {
         //Arrange
-        var membershipRepository = IMembershipRepositoryMock.GetMock();
+        
 
         //Act
         IList<Membership> lstData = await membershipRepository.Get();
@@ -28,8 +42,7 @@ public class MembershipRepositoryTest
     public async Task GetMembershipById()
     {
         //Arrange
-        var membershipRepository = IMembershipRepositoryMock.GetMock();
-        int id = 1;
+         int id = 1;
 
         //Act
         Membership data = await membershipRepository.GetOne(id);
@@ -46,7 +59,6 @@ public class MembershipRepositoryTest
     public async Task AddMembership()
     {
         //Arrange
-        var membershipRepository = IMembershipRepositoryMock.GetMock();
         Membership membership = new Membership() { Id = 4, FirstName = "Sam", LastName = "Doe", FullName = "John Doe", Shortname = "JD", NickName = "Johnny", Wheelchair = false };
 
         //Act
@@ -65,7 +77,6 @@ public class MembershipRepositoryTest
     public async Task UpdateMembership()
     {
         //Arrange
-        var membershipRepository = IMembershipRepositoryMock.GetMock();
         int id = 2;
         Membership actualData = await membershipRepository.GetOne(id);
         actualData.FirstName = "Fred";
@@ -85,16 +96,17 @@ public class MembershipRepositoryTest
     public async Task DeleteMembership()
     {
         //Arrange
-        var membershipRepository = IMembershipRepositoryMock.GetMock();
         int id = 2;
 
 
         //Act
         await membershipRepository.Delete(id);
-        
+
 
         //Assert
-        await Assert.ThrowsAsync<Exception>(async () => await membershipRepository.GetOne(id));
+        var item = await membershipRepository.GetOne(id);
+
+        Assert.Null(item);
     }
 }
 
