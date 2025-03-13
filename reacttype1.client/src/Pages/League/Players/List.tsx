@@ -4,6 +4,7 @@ import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
 import { User, League } from "@components/leagueObject.tsx";;
 import Layout from '@layouts/Layout.tsx';
+import Table from '@components/Pagenation/Players/Table.tsx';
 
 function Players() {
     const [player, setplayer] = useState<UpdateFormData[]>();
@@ -18,25 +19,7 @@ function Players() {
     const contents = player === undefined
         ? <p><em>Loading ...</em></p>
 
-        : <table className="table table-sm table-striped"  >
-            <thead>
-                <tr style={{textAlign: 'left'} }>
-                    <th>Name</th>
-                    <td hidden={allowed}></td>
-                </tr>
-            </thead>
-            <tbody>
-                {player.map(item =>
-                    <tr key={item.id} style={{ textAlign: 'left' }}>
-                        <td>{item.fullName}</td>
-                       
-                        <td hidden={allowed}><Link to="/league/players/Delete" state={item.id.toString()}>Delete</Link>
-                        </td>
-
-                    </tr>
-                )}
-            </tbody>
-        </table>;
+        : <Table data={player} rowsPerPage={15} allowed={allowed} />
 
     return (
         <Layout>

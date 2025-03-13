@@ -4,7 +4,7 @@ import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
 import { User } from "@components/leagueObject.tsx";
 import Layout from '@layouts/Layout.tsx';
-import Table from '@components/Pagenation/Table.tsx';
+import Table from '@components/Pagenation/Membership/Table.tsx';
 
 
 function Membership() {
