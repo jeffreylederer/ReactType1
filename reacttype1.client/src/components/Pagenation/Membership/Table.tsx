@@ -3,7 +3,7 @@ import { UpdateFormData } from '@pages/Membership/UpdateFormData.tsx';
 import { Link } from 'react-router-dom';
 
 import useTable from "../useTable";
-import styles from "./Table.module.css";
+import styles from "../Table.module.css";
 import TableFooter from "../TableFooter";
 
 //https://dev.to/franciscomendes10866/how-to-create-a-table-with-pagination-in-react-4lpd
