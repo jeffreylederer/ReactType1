@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import child_process from 'child_process';
 import { env } from 'process';
-
+import { CssModuleTypes } from "./watching-css-modules";
 
 
 const baseFolder =
@@ -35,7 +35,7 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [plugin()],
+    plugins: [plugin(), CssModuleTypes()],
     test: {
         globals: true,
         environment: 'happy-dom'

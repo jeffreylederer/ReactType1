@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
 import { User } from "@components/leagueObject.tsx";
-import  Layout  from '@layouts/Layout.tsx';
+import Layout from '@layouts/Layout.tsx';
+import Table from '@components/Pagenation/Table.tsx';
+
 
 function Membership() {
     const [membership, setmembership] = useState<UpdateFormData[]>();
@@ -16,31 +18,7 @@ function Membership() {
     const contents = membership === undefined
         ? <p><em>Loading ...</em></p>
      
-        : <table className="table table-striped" aria-labelledby="tableLabel">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Short Name</th>
-                    <th>Nick Name</th>
-                    <th>Wheelchair</th>
-                    <td hidden={allowed}></td>
-                </tr>
-            </thead>
-            <tbody>
-                {membership.map(item =>
-                    <tr key={item.id}>
-                        <td>{item.fullName}</td>
-                        <td>{item.shortname}</td>
-                        <td>{item.nickName}</td>
-                        <td>{item.wheelchair ? "yes" : "no"}</td>
-                        <td hidden={allowed}><Link to="/Membership/Update" state={ item.id.toString() }>Update</Link>|  
-                            <Link to="/Membership/Delete" state={ item.id.toString() }>Delete</Link>
-                        </td>
-                        
-                    </tr>
-                )}
-            </tbody>
-        </table>;
+        : <Table data={membership} rowsPerPage={15} allowed={allowed} />
 
     return (
 
