@@ -12,10 +12,10 @@ const TableFooter = ({ range, setPage, page, slice }: FooterType ) => {
             {range.map((el, index) => (
                 <button
                     key={index}
-                    className={`${styles.button} ${page === index+1 ? styles.activeButton : styles.inactiveButton}`}
+                    className={`${styles.button} ${page === el ? styles.activeButton : styles.inactiveButton}`}
                     onClick={() => setPage(index+1)}
                 >
-                    {index+1}
+                    {el}
                 </button>
             ))}
         </div>
