@@ -6,6 +6,7 @@ import selectorParse from "postcss-selector-parser";
 import prettier from "prettier";
 import { Plugin, ResolvedConfig } from "vite";
 
+// https://dev.to/rezamoosavidweb/css-module-type-vite-5hlm
 function isDir(dir:string) {
     try {
         return fs.statSync(dir).isDirectory();

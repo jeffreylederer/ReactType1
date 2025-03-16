@@ -25,7 +25,7 @@ function Menu() {
         <>
        
         
-            <nav className="navbar navbar-expand-lg bg-body-tertiary" >
+            <nav className="navbar navbar-expand-lg bg-body-tertiary" style={{backgroundColor: 'lightyellow'} }>
                 <div className="container-fluid">
                     <NavLink className="navbar-brand" to="/">League</NavLink>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,11 +70,12 @@ function Menu() {
                             <li className="nav-item">
                                 <NavLink className="nav-link " aria-current="page" to="/Contact">Contact</NavLink>
                             </li>
+                       
                             <li className="nav-item">
-                                <span className="nav-link " aria-current="page" >Hello! {username}</span>
+                                <span className="nav-link " aria-current="page" >Hello {username}!</span>
                             </li>
                             <li className="nav-item">
-                                <NavLink className="nav-link " aria-current="page" to="/Logoff">Logoff</NavLink>
+                                <NavLink className="nav-link " aria-current="page" to="/Logoff">Log off</NavLink>
                             </li>
                         </ul>
                         
