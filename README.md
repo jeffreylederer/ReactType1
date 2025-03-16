@@ -52,3 +52,20 @@ A clever thing I did was to call Stored Prcoedures on stored procedures with joi
      List<TeamMember> list = await _context.TeamMemberViews
          .FromSql($"EXEC TeamMember{id}")
          .ToListAsync();
+
+# New Features
+I have added new features to both the the client and server projects.
+
+## React
+### Absolute or Alias paths 
+This allowed import statements to use @component/Menu.tsx instead of ../../components/Menu.tsx
+### Layouts
+This creates a standard header and footer for each page. This compares to masterpage in .aspx
+### Pagination
+I have added pagination to the Membership and Players list pages
+### Unit Testing
+I have added vitest component library and created a simple unit test. It would be easy to create additional tests.
+
+## Web API
+I have altered Membership controller to use repositories and object mapping. This allowed me to create unit tests (using XUnit and Moq) for all methods in this controller. These tests mock the MS SQL connection object.
+
