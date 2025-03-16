@@ -69,3 +69,6 @@ I have added vitest component library and created a simple unit test. It would b
 ## Web API
 I have altered Membership controller to use repositories and object mapping. This allowed me to create unit tests (using XUnit and Moq) for all methods in this controller. These tests mock the MS SQL connection object.
 
+## CSS modules
+This is a way of adding
+
