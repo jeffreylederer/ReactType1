@@ -1,5 +1,6 @@
 import React, { useEffect, SetStateAction } from "react";
-import styles from "./TableFooter.module.css";
+import styles from "../TableFooter.module.css";
+import { UpdateFormData } from '@pages/League/Players/UpdateFormData.tsx';
 
 const TableFooter = ({ range, setPage, page, slice }: FooterType ) => {
     useEffect(() => {
@@ -22,11 +23,11 @@ const TableFooter = ({ range, setPage, page, slice }: FooterType ) => {
     );
 };
 
-interface FooterType {
-    range: [],
+type FooterType = {
+    range: number[],
     setPage: React.Dispatch<SetStateAction<number>>,
     page: number,
-    slice: []
+    slice: UpdateFormData[]
 }
 
 

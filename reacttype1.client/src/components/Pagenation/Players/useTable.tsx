@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
+import { UpdateFormData } from '@pages/League/Players/UpdateFormData.tsx';
 
-const useTable = ( data: [], page: number, rowsPerPage: number) => {
+const useTable = (data: UpdateFormData [], page: number, rowsPerPage: number) => {
     const [tableRange, setTableRange] = useState<number[]>([]) ;
-    const [slice, setSlice] = useState<[]>([]);
+    const [slice, setSlice] = useState<UpdateFormData[]>([]);
 
     useEffect(() => {
         const range: number[] = calculateRange(data, rowsPerPage);
         setTableRange([...range]);
 
-        const slice: [] = sliceData(data, page, rowsPerPage);
+        const slice: UpdateFormData[] = sliceData(data, page, rowsPerPage);
         setSlice([...slice]);
     }, [data, setTableRange, page, setSlice, rowsPerPage]);
 
@@ -16,7 +17,7 @@ const useTable = ( data: [], page: number, rowsPerPage: number) => {
 };
 
 
-const calculateRange = (data:[], rowsPerPage:number):number[] => {
+const calculateRange = (data: UpdateFormData[], rowsPerPage:number):number[] => {
     const range: number[] = [];
     const num:number = Math.ceil(data.length / rowsPerPage);
     for (let i = 1; i <= num; i++) {
@@ -25,7 +26,7 @@ const calculateRange = (data:[], rowsPerPage:number):number[] => {
     return range;
 };
 
-const sliceData = (data:[], page: number, rowsPerPage: number): [] => {
+const sliceData = (data: UpdateFormData[], page: number, rowsPerPage: number): UpdateFormData[] => {
     return data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 };
 

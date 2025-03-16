@@ -1,3 +1,4 @@
+
 import fs from "fs";
 import path from "path";
 import postcss from "postcss";
@@ -26,7 +27,7 @@ const changingFilePath = (config: ResolvedConfig, file: string): string =>
     path.join(config.build.outDir, path.relative(config.publicDir, file));
 
 const removeDupStrFromArray = (arr: string[]): string[] => {
-    const uniqueArray: string[] = [];
+    const uniqueArray:string[] = [];
 
     for (const str of arr) {
         if (!uniqueArray.includes(str)) {
@@ -70,7 +71,7 @@ function createUniquesClassName(fullPath:string): Promise<string[]> {
     });
 }
 async function createDecelerationFile(fullPath:string) {
-    const uniquesClassName= await createUniquesClassName(fullPath);
+    const uniquesClassName = await createUniquesClassName(fullPath);
 
     if (uniquesClassName?.length > 0) {
         const decelerationPath = fullPath?.replace(
@@ -87,7 +88,7 @@ async function createDecelerationFile(fullPath:string) {
     }
 }
 function getCssModulesFiles(pathDir:string) {
-    const directory:string = pathDir;
+    const directory = pathDir;
 
     if (isDir(directory)) {
         fs.readdirSync(directory).forEach(async (dir) => {
@@ -118,7 +119,7 @@ export function CssModuleTypes(): Plugin {
         // HMR
         async handleHotUpdate({ server: { config }, file }) {
             if (file.endsWith("module.css")) {
-                fs.readFile(changingFilePath(config, file), "utf8", (err, css: string) => {
+                fs.readFile(changingFilePath(config, file), "utf8", (err, css) => {
                     if (err) {
                         console.error(err);
                         return;
@@ -157,7 +158,7 @@ export function CssModuleTypes(): Plugin {
                                 console.log(`error in ${result.opts.from}:`, error);
                             }
                         })
-                        .catch((err) => console.log(`error in css file:`, err));
+                        
                 });
             }
         },
