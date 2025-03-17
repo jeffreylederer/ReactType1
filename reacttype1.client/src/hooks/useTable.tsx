@@ -16,7 +16,7 @@ function useTable<T>(data: T[], page: number, rowsPerPage: number) {
 };
 
 
-const calculateRange = (data: T[], rowsPerPage: number): number[] => {
+function calculateRange<T>(data: T[], rowsPerPage: number): number[] {
     const range: number[] = [];
     const num: number = Math.ceil(data.length / rowsPerPage);
     for (let i = 1; i <= num; i++) {
@@ -25,7 +25,7 @@ const calculateRange = (data: T[], rowsPerPage: number): number[] => {
     return range;
 };
 
-const sliceData = (data: T[], page: number, rowsPerPage: number): T[] => {
+function sliceData<T> (data: T[], page: number, rowsPerPage: number): T[] {
     return data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 };
 
