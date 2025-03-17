@@ -47,6 +47,8 @@ export default defineConfig({
             '@images': "/src/images",
             '@layouts': "/src/layouts",
             '@pages': "/src/pages",
+            '@hooks': "/src/hooks",
+            '@styles': "/src/styles",
         },
     },
     server: {
