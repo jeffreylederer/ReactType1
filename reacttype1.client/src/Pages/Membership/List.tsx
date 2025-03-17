@@ -15,6 +15,16 @@ function Membership() {
     if (error) 
         return <p>Error: {error}</p>;   
 
+    if(!data)
+        return (
+
+            <Layout>
+                <h3 id="tableLabel">Membership</h3>
+                <Link to="/Membership/Create" hidden={allowed}>Add</Link>
+                <p>No members</p>
+            </Layout>
+        )
+
     return (
 
             <Layout>
