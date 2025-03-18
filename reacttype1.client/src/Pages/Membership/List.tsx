@@ -3,7 +3,7 @@ import useFetch from '@hooks/useFetch.tsx';
 import { UpdateFormData } from "./UpdateFormData.tsx";
 import { User } from "@components/leagueObject.tsx";
 import Layout from '@layouts/Layout.tsx';
-import Table from '@components/Pagenation/Membership/Table.tsx';
+import Table from './Table.tsx';
 
 
 function Membership() {   
@@ -24,6 +24,9 @@ function Membership() {
                 <p>No members</p>
             </Layout>
         )
+    data.sort((a, b) => {
+        return a.lastName.localeCompare(b.lastName) || a.firstName.localeCompare(b.firstName);
+    });
 
     return (
 

@@ -1,12 +1,12 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate} from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput, } from "flowbite-react";
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 import useFetchOne from '@hooks/useFetchOne.tsx';
+import UpdateData from '@components/UpdateData.tsx';
 
 
 const MembershipUpdate = () => {
@@ -20,6 +20,7 @@ const MembershipUpdate = () => {
         wheelchair: false
     };
 
+    const navigate = useNavigate();
 
     const location = useLocation();
     const id: number = location.state;
@@ -32,7 +33,7 @@ const MembershipUpdate = () => {
         resolver: zodResolver(UpdateFormDataSchema),
     });
     const onSubmit: SubmitHandler<UpdateFormData> = (data) => updateData(data)
-    const navigate = useNavigate();
+ 
    
     const { data, loading, error } = useFetchOne<UpdateFormData>(import.meta.env.VITE_SERVER_URL + "api/Memberships", id);
 
@@ -111,22 +112,13 @@ const MembershipUpdate = () => {
         );
     }
 
-
     function updateData(data: UpdateFormData) {
-        const url: string = import.meta.env.VITE_SERVER_URL + 'api/Memberships/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        data.id = id;
-        axios.put(fullUrl, data)
-            .then(response => {
-                console.log('Record updated successfully: ', response.data);
-                navigate("/Membership");
-            })
-            .catch(error => {
-                console.error('Error updating record: ', error);
-            });
+        if (UpdateData<UpdateFormData>(data, import.meta.env.VITE_SERVER_URL + "api/Memberships/" + id.toString()))
+            navigate("/Membership");
+    }
 
-    };
+
+    
 }
 
 

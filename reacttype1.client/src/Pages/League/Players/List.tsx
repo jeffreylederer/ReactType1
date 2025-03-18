@@ -1,48 +1,47 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
 import { User, League } from "@components/leagueObject.tsx";;
 import Layout from '@layouts/Layout.tsx';
-import Table from '@components/Pagenation/Players/Table.tsx';
+import Table from './Table.tsx';
+import useFetch from '@hooks/useFetch.tsx';
 
 function Players() {
-    const [player, setplayer] = useState<UpdateFormData[]>();
+   
     const permission: string = User().role;
     const allowed: boolean = (permission == "SiteAdmin" || permission == "Admin") ? false : true;
+    const { data, loading, error } = useFetch<UpdateFormData>(import.meta.env.VITE_SERVER_URL + "api/players/" + League().id.toString());
 
+    if (loading) {
+        return <p>Loading...</p>;
+    }
 
-    useEffect(() => {
-        GetData();
-    });
+    if (error)
+        return <p>Error: {error}</p>;
 
-    const contents = player === undefined
-        ? <p><em>Loading ...</em></p>
+    if (!data)
+        return (
 
-        : <Table data={player} rowsPerPage={15} allowed={allowed} />
+            <Layout>
+
+                <h3>Players in league {League().leagueName}</h3>
+                <Link to="/League/Players/Create" hidden={allowed}>Add</Link>
+                <p>No Players</p>
+            </Layout>
+        );
+
+     
 
     return (
         <Layout>
 
             <h3>Players in league {League().leagueName}</h3>
             <Link to="/League/Players/Create" hidden={allowed}>Add</Link>
-            {contents}
-            <p>Number of players: {player?.length}</p>
+            <Table data={data} rowsPerPage={15} allowed={allowed} />
+            <p>Number of players: {data.length}</p>
         </Layout>
     );
 
-    async function GetData() {
-       
-
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/players/".concat(League().id.toString());
-        axios.get(url)
-            .then(response => {
-                setplayer(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching data: ', error);
-            })
-    }
+  
 }
 
 export default Players;

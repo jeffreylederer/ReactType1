@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-
-import axios from "axios";
+import CreateData from '@components/CreateData.tsx';
 import { FormData, FormDataSchema } from "./FormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
@@ -18,26 +17,9 @@ const MembershipCreate = () => {
         resolver: zodResolver(FormDataSchema),
     });
 
-    const onSubmit: SubmitHandler<FormData> = (data) => CreateData(data)
+    const onSubmit: SubmitHandler<FormData> = (data) => createData(data)
        
     const navigate = useNavigate();
-
-    function CreateData(data: FormData) {
-        axios.post(import.meta.env.VITE_SERVER_URL+'api/Memberships', data)
-            .then((response) => {
-                console.log(response.data);
-                navigate("/Membership");
-                console.log('Record created successfully: ', response.data);
-             })
-            .catch(error => {
-                console.log('Error creating record: ', error);
-            });
-    }
-
-    
-
-    
-  
 
     return (
         <Layout>
@@ -92,11 +74,10 @@ const MembershipCreate = () => {
         </Layout>
     );
 
-
-    
-
+    function createData(data: FormData) {
+        if (CreateData<FormData>(data, import.meta.env.VITE_SERVER_URL + 'api/Memberships'))
+            navigate("/Membership");
+    }
 }
-
-
 
 export default MembershipCreate;

@@ -3,7 +3,7 @@ import { UpdateFormData } from '@pages/League/Players/UpdateFormData.tsx';
 import { Link } from 'react-router-dom';
 
 import useTable from '@hooks/useTable';
-import styles from "../Table.module.css";
+import styles from "@styles/Table.module.css";
 import TableFooter from "@components/TableFooter";
 
 //https://dev.to/franciscomendes10866/how-to-create-a-table-with-pagination-in-react-4lpd
