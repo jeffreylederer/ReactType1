@@ -9,7 +9,7 @@ function Players() {
    
     const permission: string = User().role;
     const allowed: boolean = (permission == "SiteAdmin" || permission == "Admin") ? false : true;
-    const { data, loading, error } = useFetch<UpdateFormData>(import.meta.env.VITE_SERVER_URL + "api/players/" + League().id.toString());
+    const { data, loading, error } = useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/players/${League().id}`);
 
     if (loading) {
         return <p>Loading...</p>;

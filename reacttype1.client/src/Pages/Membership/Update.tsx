@@ -35,7 +35,7 @@ const MembershipUpdate = () => {
     const onSubmit: SubmitHandler<UpdateFormData> = (data) => updateData(data)
  
    
-    const { data, loading, error } = useFetchOne<UpdateFormData>(import.meta.env.VITE_SERVER_URL + "api/Memberships", id);
+    const { data, loading, error } = useFetchOne<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships`, id);
 
     if (error)
         return (
@@ -113,7 +113,7 @@ const MembershipUpdate = () => {
     }
 
     function updateData(data: UpdateFormData) {
-        if (UpdateData<UpdateFormData>(data, import.meta.env.VITE_SERVER_URL + "api/Memberships/" + id.toString()))
+        if (UpdateData<UpdateFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Memberships/{id}`))
             navigate("/Membership");
     }
 

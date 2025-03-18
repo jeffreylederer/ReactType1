@@ -75,7 +75,7 @@ const MembershipCreate = () => {
     );
 
     function createData(data: FormData) {
-        if (CreateData<FormData>(data, import.meta.env.VITE_SERVER_URL + 'api/Memberships'))
+        if (CreateData<FormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Memberships`))
             navigate("/Membership");
     }
 }

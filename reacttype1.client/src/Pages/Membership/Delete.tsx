@@ -14,7 +14,7 @@ const MembershipDelete = () => {
    
     const navigate = useNavigate();
 
-    const { data, loading, error } = useFetchOne<UpdateFormData>(import.meta.env.VITE_SERVER_URL + "api/Memberships" ,id);
+    const { data, loading, error } = useFetchOne<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships` ,id);
     if (error)
         return (
             <Layout>
