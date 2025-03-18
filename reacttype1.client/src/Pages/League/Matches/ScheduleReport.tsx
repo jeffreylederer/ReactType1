@@ -1,36 +1,30 @@
-import { useEffect, useState } from 'react';
-import axios from "axios";
+import useFetchPDF from '@hooks/useFetchPDF';
 import { League } from "@components/leagueObject.tsx";;
 
 
-function ScheduleRepor() {
-    const [report, setReport] = useState('');
+function ScheduleReport() {
+    const { data, loading, error } = useFetchPDF<string>(`${import.meta.env.VITE_SERVER_URL}api/Matches/ScheduleReport/${League().id}`);
 
-    useEffect(() => {
-        GetReport();
-    });
-
-    return (
-        <embed src={report} type="application/pdf" width='1000' height='800' />
-
-    );
-
-    async function GetReport() {
-        const url: string = import.meta.env.VITE_SERVER_URL + "api/Matches/ScheduleReport/".concat(League().id.toString());
-        axios.get(url)
-            .then(response => {
-                const data: string = "data:application/pdf;base64,".concat(response.data);
-                setReport(data);
-
-            })
-            .catch(error => {
-                console.error('Error fetching data: ', error);
-            })
+    if (loading) {
+        return;
+    }
+    if (error) {
+        alert(`Error: ${error}`)
+        return;
     }
 
-
+    if (!data) {
+        alert(`Error: No PDF generated`);
+        return;
+    }
+    else {
+       
+        return (
+            <embed src={data} type="application/pdf" width='1000' height='800' />
+        );
+    }
 }
 
 
 
-export default ScheduleRepor;
+export default ScheduleReport;
