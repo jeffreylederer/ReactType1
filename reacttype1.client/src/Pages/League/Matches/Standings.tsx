@@ -1,38 +1,30 @@
-import { useEffect, useState } from 'react';
-import axios from "axios";
+import useFetchPDF from '@hooks/useFetchPDF';
 import { useLocation } from "react-router-dom";
 
 
 function Standings() {
-    const [report, setReport] = useState('');
     const location = useLocation();
     const id: string = location.search.substring(4);
 
+    const { data, loading, error } = useFetchPDF<string>(`${import.meta.env.VITE_SERVER_URL}api/Matches/Standings/${id}`);
 
-
-    useEffect(() => {
-        GetReport();
-    });
-
-    return (
-        <embed src={report} type="application/pdf" width='1000' height='800' />
-
-    );
-
-    async function GetReport() {
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/Matches/Standings/".concat(id);
-        axios.get(url)
-            .then(response => {
-                const data: string = "data:application/pdf;base64,".concat(response.data);
-                setReport(data);
-
-            })
-            .catch(error => {
-                console.error('Error fetching data: ', error);
-            })
+    if (loading) {
+        return;
+    }
+    if (error) {
+        alert(`Error: ${error}`)
+        return;
     }
 
+    if (!data) {
+        alert(`Error: No PDF generated`);
+        return;
+    }
 
+    return (
+        <embed src={data} type="application/pdf" width='1000' height='800' />
+
+    );
 }
 
 
