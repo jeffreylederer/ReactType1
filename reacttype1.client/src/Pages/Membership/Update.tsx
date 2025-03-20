@@ -59,7 +59,7 @@ const MembershipUpdate = () => {
 
         return (
             <Layout>
-                <h3>Update mwmbership record</h3>
+                <h3>Update membership record</h3>
                 <form onSubmit={handleSubmit(onSubmit)} >
 
 
