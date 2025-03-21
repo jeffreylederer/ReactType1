@@ -4,7 +4,7 @@ import useFetchPDF from '@hooks/useFetchPDF';
 function Standings() {
    
 
-    const { data, loading, error } = useFetchPDF<string>(`${import.meta.env.VITE_SERVER_URL}api/Matches/Byes/${League().id}`);
+    const { data, loading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Matches/Byes/${League().id}`);
 
     if (loading) {
         return;
@@ -14,7 +14,7 @@ function Standings() {
         return;
     }
 
-    if (!data) {
+    if (data==="") {
         alert(`Error: No PDF generated`);
         return;
     }

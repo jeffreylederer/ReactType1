@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using QuestPDF.Elements;
 using QuestPDF.Fluent;
@@ -31,7 +32,7 @@ namespace ReactType1.Server.Code
                     .ToList();
            
 
-            List<Standing> places = CalculateStandings.Doit(id, league.Id, db);
+            
             return Document.Create(container =>
             {
                 container
@@ -116,63 +117,72 @@ namespace ReactType1.Server.Code
                         column.Item().Inlined(inlined =>
                         {
                             inlined.Spacing(20);
-                            inlined.Item().Text("");
+                            inlined.Item().Text("Standings").AlignCenter().FontSize(15);
                         });
 
-                        column.Item().AlignCenter().Table(table =>
+                        for (int div = 1; div <= league?.Divisions; div++)
                         {
-                        table.Header(header =>
-                        {
+                            List<Standing> places = CalculateStandings.Doit(id, league.Id,div, db);
+                            column.Item().AlignLeft().Table(table =>
+                            {
+                                if (league.Divisions > 1)
+                                    table.Header(header =>
+                                    {
+                                        header.Cell().
+                                            ColumnSpan(6)
+                                            .AlignLeft()
+                                            .AlignMiddle()
+                                            .Text($"Division {div}");
+                                    });
 
-                            header.Cell().
-                                ColumnSpan(6)
-                                .AlignCenter()
-                                .AlignMiddle()
-                                .Text($"Standings");
-                        });
+                            table.ColumnsDefinition(columns =>
+                            {
 
-                        table.ColumnsDefinition(columns =>
-                        {
+                                columns.ConstantColumn(30); //place
+                                columns.ConstantColumn(40); //team number
+                                columns.ConstantColumn(150); //players
+                                columns.ConstantColumn(30); //wins
+                                columns.ConstantColumn(40); //loses
+                                columns.ConstantColumn(60); //Total points
 
-                            columns.ConstantColumn(30); //place
-                            columns.ConstantColumn(40); //team number
-                            columns.ConstantColumn(150); //players
-                            columns.ConstantColumn(30); //wins
-                            columns.ConstantColumn(40); //loses
-                            columns.ConstantColumn(60); //Total points
+                            });
 
-                        });
+                                static IContainer CellStyle2(IContainer container)
+                                {
+                                    return container.Border(1).BorderColor(Colors.Black).PaddingVertical(5).AlignCenter();
+                                }
 
-                        static IContainer CellStyle2(IContainer container)
-                        {
-                            return container.Border(1).BorderColor(Colors.Black).PaddingVertical(5).AlignCenter();
+                                table.Cell().Element(CellStyle2).Text("Place").SemiBold().FontSize(10);
+                                table.Cell().Element(CellStyle2).Text("Team #").SemiBold().FontSize(10);
+                                table.Cell().Element(CellStyle2).Text("Players").SemiBold().FontSize(10);
+                                table.Cell().Element(CellStyle2).Text("Wins").SemiBold().FontSize(10);
+                                table.Cell().Element(CellStyle2).Text("Loses").SemiBold().FontSize(10);
+                                table.Cell().Element(CellStyle2).Text("Total Points Scored").SemiBold().FontSize(10);
+
+                                static IContainer CellStyle(IContainer container)
+                                {
+                                    return container.Border(1).BorderColor(Colors.Black).PaddingVertical(5).AlignCenter();
+                                }
+
+                                foreach (Standing item in places)
+                                {
+                                    table.Cell().Element(CellStyle).Text(item.Place.ToString()).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(item.Team.ToString()).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(item.Players).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(item.Wins.ToString()).FontSize(10);
+
+                                    table.Cell().Element(CellStyle).Text(item.Loses.ToString()).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(item.TotalScore.ToString()).FontSize(10);
+                                }
+
+
+                            }); // table
+                            column.Item().Inlined(inlined =>
+                            {
+                                inlined.Spacing(20);
+                                
+                            });
                         }
-
-                        table.Cell().Element(CellStyle2).Text("Place").SemiBold().FontSize(10);
-                        table.Cell().Element(CellStyle2).Text("Team #").SemiBold().FontSize(10);
-                        table.Cell().Element(CellStyle2).Text("Players").SemiBold().FontSize(10);
-                        table.Cell().Element(CellStyle2).Text("Wins").SemiBold().FontSize(10);
-                        table.Cell().Element(CellStyle2).Text("Loses").SemiBold().FontSize(10);
-                        table.Cell().Element(CellStyle2).Text("Total Points Scored").SemiBold().FontSize(10);
-
-                        static IContainer CellStyle(IContainer container)
-                        {
-                            return container.Border(1).BorderColor(Colors.Black).PaddingVertical(5).AlignCenter();
-                        }
-
-                        foreach (Standing item in places)
-                        {
-                            table.Cell().Element(CellStyle).Text(item.Place.ToString()).FontSize(10);
-                            table.Cell().Element(CellStyle).Text(item.Team.ToString()).FontSize(10);
-                            table.Cell().Element(CellStyle).Text(item.Players).FontSize(10);
-                            table.Cell().Element(CellStyle).Text(item.Wins.ToString()).FontSize(10);
-
-                            table.Cell().Element(CellStyle).Text(item.Loses.ToString()).FontSize(10);
-                            table.Cell().Element(CellStyle).Text(item.TotalScore.ToString()).FontSize(10);
-                        }
-
-
-                    }); // table
                     });
                 }); //page
             }); //container

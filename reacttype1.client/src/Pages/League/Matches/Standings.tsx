@@ -6,7 +6,7 @@ function Standings() {
     const location = useLocation();
     const id: string = location.search.substring(4);
 
-    const { data, loading, error } = useFetchPDF<string>(`${import.meta.env.VITE_SERVER_URL}api/Matches/Standings/${id}`);
+    const { data, loading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Matches/Standings/${id}`);
 
     if (loading) {
         return;
@@ -16,7 +16,7 @@ function Standings() {
         return;
     }
 
-    if (!data) {
+    if (data === "") {
         alert(`Error: No PDF generated`);
         return;
     }

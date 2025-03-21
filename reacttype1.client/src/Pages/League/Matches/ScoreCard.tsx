@@ -9,7 +9,7 @@ function ScoreCard() {
 
 
 
-    const { data, loading, error } = useFetchPDF<string>(`${import.meta.env.VITE_SERVER_URL}api/Matches/ScoreCard/${id}`);
+    const { data, loading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Matches/ScoreCard/${id}`);
 
     if (loading) {
         return;
@@ -19,7 +19,7 @@ function ScoreCard() {
         return;
     }
 
-    if (!data) {
+    if (data === "") {
         alert(`Error: No PDF generated`);
         return;
     }

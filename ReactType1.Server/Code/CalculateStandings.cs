@@ -16,7 +16,7 @@ namespace ReactType1.Server.Code
         /// <param name="teamsize">number of players per team</param>
         /// <param name="leagueid">the record id of the league table</param>
         /// <returns></returns>
-        public static List<Standing> Doit(int weekid, int leagueid, DbLeagueApp db)
+        public static List<Standing> Doit(int weekid, int leagueid, int DivisionId, DbLeagueApp db)
         {
             League? league = db.Leagues.Find(leagueid);
             int teamsize = league.TeamSize;
@@ -25,7 +25,7 @@ namespace ReactType1.Server.Code
 
 
             // get the names of the player for each team
-            foreach (var team in db.Teams.Where(x => x.Leagueid == league.Id).ToList())
+            foreach (var team in db.Teams.Where(x => (x.Leagueid == league.Id) && x.DivisionId== DivisionId).ToList())
             {
 
                 OneTeamView? team1 = db.OneTeamViews
@@ -45,6 +45,7 @@ namespace ReactType1.Server.Code
                         players = $"{team1.Skip}, {team1.ViceSkip}, {team1.Lead}";
                         break;
                 }
+
                 list.Add(new Standing()
                 {
                     Team = team.TeamNo,
@@ -56,6 +57,7 @@ namespace ReactType1.Server.Code
                     Players = players,
                     DivisionId = team.DivisionId
                 });
+               
             }
 
             // determine the total score and wins and loses for each team for each week
@@ -70,9 +72,9 @@ namespace ReactType1.Server.Code
                 var bye = false;
                 bool forfeit = false;
 
-                foreach (var match in db.Matches.Where(x => x.WeekId == week.Id).ToList())
+                foreach (var match in db.Matches.Where(x => x.WeekId == week.Id).Where(x=>x.TeamNo1Navigation.DivisionId == DivisionId).ToList())
                 {
-
+                    
                     GetTeamView? teamView = db.GetTeamViews
                         .FromSql($"Exec GetTeam {match.Id}")
                         .AsEnumerable()
@@ -163,19 +165,19 @@ namespace ReactType1.Server.Code
                         winner.Byes++;
                         bye = true;
                     }
-
                 }
 
                 // for byes or forfeit (the team that did not forfeit), the team gets the average score of all winning games that week and a win
                 if (bye || forfeit)
                 {
 
-                    foreach (var match in db.Matches.Where(x => x.WeekId == week.Id).ToList())
+                    foreach (var match in db.Matches.Where(x => x.WeekId == week.Id).Where(x => x.TeamNo1Navigation.DivisionId == DivisionId).ToList())
                     {
+                        
                         GetTeamView? teamView = db.GetTeamViews
-                       .FromSql($"Exec GetTeam {match.Id}")
-                       .AsEnumerable()
-                       .FirstOrDefault();
+                        .FromSql($"Exec GetTeam {match.Id}")
+                        .AsEnumerable()
+                        .FirstOrDefault();
 
                         if (match.Rink != -1 && match.ForFeitId > 0)
                         {
@@ -188,7 +190,9 @@ namespace ReactType1.Server.Code
                             winner.TotalScore += 14;
                         }
                     }
+
                 }
+               
             }
 
             int place = 1;

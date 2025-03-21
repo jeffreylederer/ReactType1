@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-interface ApiResponse<T> {
-    data: T | null;
+interface ApiResponse {
+    data: string;
     loading: boolean;
     error: string | null;
 }
 
-function useFetchPDF<T>(url: string): ApiResponse<T> {
-    const [data, setData] = useState<T>(null);
+function useFetchPDF(url: string): ApiResponse {
+    const [data, setData] = useState<string>("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 

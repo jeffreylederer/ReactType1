@@ -3,7 +3,7 @@ import { League } from "@components/leagueObject.tsx";;
 
 
 function ScheduleReport() {
-    const { data, loading, error } = useFetchPDF<string>(`${import.meta.env.VITE_SERVER_URL}api/Matches/ScheduleReport/${League().id}`);
+    const { data, loading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Matches/ScheduleReport/${League().id}`);
 
     if (loading) {
         return;
@@ -13,7 +13,7 @@ function ScheduleReport() {
         return;
     }
 
-    if (!data) {
+    if (data === "") {
         alert(`Error: No PDF generated`);
         return;
     }

@@ -3,7 +3,7 @@ import useFetchPDF from '@hooks/useFetchPDF'
 
 
 function TeamReport() {
-    const { data, loading, error } = useFetchPDF<string>(`${import.meta.env.VITE_SERVER_URL}api/Teams/TeamReport/${League().id}`);
+    const { data, loading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Teams/TeamReport/${League().id}`);
 
     if (loading) {
         return;
@@ -13,7 +13,7 @@ function TeamReport() {
         return;
     }
 
-    if (!data) {
+    if (data === "") {
         alert(`Error: No PDF generated`);
         return;
     }
