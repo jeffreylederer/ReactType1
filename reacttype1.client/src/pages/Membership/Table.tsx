@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UpdateFormData } from '@pages/Membership/UpdateFormData.tsx';
+import { TableData } from './TableData.ts';
 import { Link } from 'react-router-dom';
 import useTable from '@hooks/useTable';
 import styles from "@styles/Table.module.css";
@@ -8,8 +8,8 @@ import TableFooter from "@components/TableFooter";
 //https://dev.to/franciscomendes10866/how-to-create-a-table-with-pagination-in-react-4lpd
 const Table = ({ data, rowsPerPage, allowed} : TableType ) => {
     const [page, setPage] = useState<number>(1);
-    const { slice, tableRange } = useTable<UpdateFormData>(data, page, rowsPerPage);
-    const Html: JSX.Element = TableFooter<UpdateFormData>(tableRange, setPage, page, slice); 
+    const { slice, tableRange } = useTable<TableData>(data, page, rowsPerPage);
+    const Html: JSX.Element = TableFooter<TableData>(tableRange, setPage, page, slice); 
     return (
         <>
             <table className={styles.table}>
@@ -43,7 +43,7 @@ const Table = ({ data, rowsPerPage, allowed} : TableType ) => {
 }
 
 interface TableType {
-    data: UpdateFormData[],
+    data: TableData[],
     rowsPerPage: number,
     allowed: boolean
 }

@@ -7,15 +7,17 @@ import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 import useFetchOne from '@hooks/useFetchOne.tsx';
 import UpdateData from '@components/UpdateData.tsx';
+import GetData from './GetData.ts'; 
 
 
 const MembershipUpdate = () => {
-    let membership: UpdateFormData = {
+
+    let membership: GetData = {
         id: 0,
         firstName: '',
         lastName: '',
-        fullName: '',
         shortname: '',
+        fullName: '',
         nickName: '',
         wheelchair: false
     };
@@ -32,7 +34,7 @@ const MembershipUpdate = () => {
     } = useForm<UpdateFormData>({
         resolver: zodResolver(UpdateFormDataSchema),
     });
-    const onSubmit: SubmitHandler<UpdateFormData> = (data) => updateData(data)
+    const onSubmit: SubmitHandler<UpdateFormData> = (data) => updateData(data,id)
  
    
     const { data, loading, error } = useFetchOne<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships`, id);
@@ -112,8 +114,8 @@ const MembershipUpdate = () => {
         );
     }
 
-    function updateData(data: UpdateFormData) {
-        if (UpdateData<UpdateFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Memberships/{id}`))
+    function updateData(data: UpdateFormData, id:number) {
+        if (UpdateData<UpdateFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`))
             navigate("/Membership");
     }
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UpdateFormData } from '@pages/League/Players/UpdateFormData.tsx';
+import UpdateFormData from '@pages/League/Players/UpdateFormData.tsx';
 import { Link } from 'react-router-dom';
 
 import useTable from '@hooks/useTable';
@@ -24,7 +24,7 @@ const Table = ({ data, rowsPerPage, allowed} : TableType ) => {
                     {slice.map((el) => (
                         <tr className={styles.tableRowItems} key={el.id}>
                             <td className={styles.tableCell}>{el.fullName}</td>
-                             <td> <Link to="/Players/Delete" state={el.id.toString()}>Delete</Link></td>
+                            <td> <Link to="/league/Players/Delete" state={el.id.toString()}>Delete</Link></td>
                         </tr>
                     ))}
                 </tbody>

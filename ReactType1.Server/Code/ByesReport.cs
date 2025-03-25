@@ -22,12 +22,33 @@ namespace ReactType1.Server.Code
         /// <param name="db">context</param>
         public IDocument CreateDocument(int id, DbLeagueApp db)
         {
-            League? league = db.Leagues.Find(id);
+            League? league = db.Leagues
+                .Include(l => l.Teams)
+                .Where(x => x.Id == id).FirstOrDefault();
+            string? LeagueName = league?.LeagueName;
+            if (league?.Teams.Count % 2 == 0)
+            {
+                return Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        page.Margin(25);
+
+
+                        page.Header()
+                        .Text($"{LeagueName} has no byes")
+                        .SemiBold().FontSize(24)
+                        .AlignCenter()
+                        .FontSize(20);
+                    });
+                });
+            }
+
             int? TeamSize = league?.TeamSize;
             List<GetByesView> teams = db.GetByesViews
                      .FromSql($"EXEC GetByes {id}")
                     .ToList();
-            string LeagueName = league?.LeagueName;
+           
            
             return Document.Create(container =>
             {

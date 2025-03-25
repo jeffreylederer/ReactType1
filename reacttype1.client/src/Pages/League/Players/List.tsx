@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { UpdateFormData } from "./UpdateFormData.tsx";
+import  UpdateFormData from "./UpdateFormData.tsx";
 import { User, League } from "@components/leagueObject.tsx";;
 import Layout from '@layouts/Layout.tsx';
 import Table from './Table.tsx';

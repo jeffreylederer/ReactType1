@@ -28,10 +28,14 @@ namespace ReactType1.Server.Code
             foreach (var team in db.Teams.Where(x => (x.Leagueid == league.Id) && x.DivisionId== DivisionId).ToList())
             {
 
+                
+
+
                 OneTeamView? team1 = db.OneTeamViews
                          .FromSql($"EXEC OneTeam {team.Id}")
                          .AsEnumerable()
                          .FirstOrDefault();
+
                 string players = "";
                 switch (teamsize)
                 {

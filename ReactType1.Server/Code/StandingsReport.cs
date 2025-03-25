@@ -6,6 +6,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using ReactType1.Server.Models;
+using System.Data.Common;
 using static QuestPDF.Helpers.Colors;
 
 
@@ -81,7 +82,7 @@ namespace ReactType1.Server.Code
 
                             static IContainer CellStyle2(IContainer container)
                             {
-                                return container.Border(1).BorderColor(Colors.Black).PaddingVertical(5).AlignCenter();
+                                return container.Border(1).BorderColor(Colors.Black).PaddingVertical(1).AlignCenter();
                             }
 
                             table.Cell().Element(CellStyle2).Text("Rink").SemiBold().FontSize(10);
@@ -114,23 +115,22 @@ namespace ReactType1.Server.Code
                             }
                         }); //table
 
-                        column.Item().Inlined(inlined =>
-                        {
-                            inlined.Spacing(20);
-                            inlined.Item().Text("Standings").AlignCenter().FontSize(15);
-                        });
+                        column.Item().Text("    ");
+                        column.Item().AlignCenter().Text("Standings").SemiBold();
+                        
+
 
                         for (int div = 1; div <= league?.Divisions; div++)
                         {
                             List<Standing> places = CalculateStandings.Doit(id, league.Id,div, db);
-                            column.Item().AlignLeft().Table(table =>
+                            column.Item().AlignCenter().Table(table =>
                             {
                                 if (league.Divisions > 1)
                                     table.Header(header =>
                                     {
                                         header.Cell().
                                             ColumnSpan(6)
-                                            .AlignLeft()
+                                            .AlignCenter()
                                             .AlignMiddle()
                                             .Text($"Division {div}");
                                     });
@@ -149,7 +149,7 @@ namespace ReactType1.Server.Code
 
                                 static IContainer CellStyle2(IContainer container)
                                 {
-                                    return container.Border(1).BorderColor(Colors.Black).PaddingVertical(5).AlignCenter();
+                                    return container.Border(1).BorderColor(Colors.Black).PaddingVertical(1).AlignCenter();
                                 }
 
                                 table.Cell().Element(CellStyle2).Text("Place").SemiBold().FontSize(10);
@@ -177,11 +177,8 @@ namespace ReactType1.Server.Code
 
 
                             }); // table
-                            column.Item().Inlined(inlined =>
-                            {
-                                inlined.Spacing(20);
-                                
-                            });
+                            
+
                         }
                     });
                 }); //page

@@ -1,7 +1,8 @@
 import axios from "axios";
 
 function DeleteItem(url: string, id: number) : boolean{
-    
+
+
     const fullUrl = url + "/" + id.toString();
     axios.delete(fullUrl)
         .then(response => {

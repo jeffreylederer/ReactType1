@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import useFetch from '@hooks/useFetch.tsx';
-import { UpdateFormData } from "./UpdateFormData.tsx";
+import { ListData } from "./ListData.tsx";
 import { User } from "@components/leagueObject.tsx";
 import Layout from '@layouts/Layout.tsx';
 import Table from './Table.tsx';
@@ -8,7 +8,7 @@ import Table from './Table.tsx';
 
 function Membership() {   
     const allowed: boolean = (User().role == "SiteAdmin" || User().role == "Admin") ? false : true;
-    const { data, loading, error } = useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/memberships`);
+    const { data, loading, error } = useFetch<ListData>(`${import.meta.env.VITE_SERVER_URL}api/memberships`);
     if (loading) {
         return <p>Loading...</p>;
     }

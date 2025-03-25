@@ -1,74 +1,63 @@
 import { useLocation, useNavigate, } from "react-router-dom";
-import { useEffect, useState } from 'react';
-import axios from "axios";
-import { UpdateFormData } from "./UpdateFormData.tsx";
-import { League } from "@components/leagueObject.tsx";;
-import { DeleteButton } from '@components/Buttons.tsx';
+import DeleteItem from '@components/DeleteItem.tsx';
+import { League } from '@components/leagueObject.tsx';
+import { Button } from "flowbite-react";
 import Layout from '@layouts/Layout.tsx';
+import useFetchOne from '@hooks/useFetchOne.tsx';
+import DeleteTypeData from './DeleteTypeData.ts';
 
 
 const PlayersDelete = () => {
     const location = useLocation();
     const id: number = location.state;
-    const [errorMsg, SeterrorMsg] = useState("");
-    const [players, setPlayers] = useState<UpdateFormData>();
-
+    
     
     const navigate = useNavigate();
 
-    useEffect(() => {
-        GetData();
-    });
 
-    const contents = players === undefined
-        ? <p><em>Loading ...</em></p> :
+    const { data, loading, error } = useFetchOne<DeleteTypeData>(`${import.meta.env.VITE_SERVER_URL}api/Players/getOne`, id);
 
-        <table>
-            <tr>
-                <td className="Label">Name:</td>
-
-                <td className="Field">{players.fullName}</td>
-            </tr>
-            <tr>
-                <td colSpan={2} >
-                    <DeleteButton DeleteItem={DeleteItem }/>
-                </td>
-            </tr>
-        </table>;
+    if (error)
+        return (
+            <>
+                <h3>Delete player from league {League().leagueName}</h3>
+                {error}
+            </>
+        );
         
-    return (
-        <Layout>
-            <h2>Delete player from league {League().leagueName} </h2>
-            {contents}
-            <p className="errorMessage">{errorMsg}</p>
-           
-        </Layout>
-    );
 
-    async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Players/getOne/'.concat(id.toString());
-        axios.get(url)
-            .then(response => {
-                setPlayers(response.data);
-                console.log('Record aquired successfully: ', response.data);
-            })
-            .catch(error => {
-                SeterrorMsg("Player record could not be found: ".concat(error.response.data));
-            });
+    if (loading)
+        return 
+            <p>Loading...</p>;
 
+
+    if (data) {
+
+        return (
+            <Layout>
+                <h2>Delete player from league {League().leagueName} </h2>
+                <table>
+                    <tr>
+                        <td className="Label">Name:</td>
+
+                        <td className="Field">{data.fullName}</td>
+                    </tr>
+                    <tr>
+                        <td colSpan={2} >
+                            <Button pill color="gray" onClick={() => Delete(id)}>Delete Record</Button>&nbsp;&nbsp;
+                            <Button pill color="gray" onClick={() => navigate(-1)}>Go back to list</Button>
+                        </td>
+                    </tr>
+                </table>
+
+
+            </Layout>
+        );
     }
 
-    async function DeleteItem() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Players/'.concat(id.toString());
-        axios.delete(url)
-            .then(response => {
-                console.log(response.statusText);
-                navigate("/League/Players");
-            })
-            .catch(error => {
-                
-                SeterrorMsg(error.response.data);
-            })
+     function Delete(id: number) {
+         if (DeleteItem(`${import.meta.env.VITE_SERVER_URL}api/players`, id))
+            navigate("/League/Players");
     }
 }
 

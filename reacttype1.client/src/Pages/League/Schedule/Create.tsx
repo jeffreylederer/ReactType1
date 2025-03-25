@@ -25,7 +25,7 @@ const ScheduleCreate = () => {
         axios.post(import.meta.env.VITE_SERVER_URL+'api/Schedules', data)
             .then((response) => {
                 console.log(response.data);
-                navigate("/League/Schedules");
+                navigate("/League/Schedule");
                 console.log('Record created successfully: ', response.data);
              })
             .catch(error => {
@@ -65,7 +65,7 @@ const ScheduleCreate = () => {
 
                     <tr>
                         <td colSpan={2}>
-                            <SubmitButton/>
+                            <SubmitButton />
                         </td>
                     </tr>
                     

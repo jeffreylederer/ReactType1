@@ -24,7 +24,8 @@ namespace ReactType1.Server.Controllers
         {
             try
             {
-                var list = await _context.Leagues.ToArrayAsync();
+                var list = await _context.Leagues
+                    .ToArrayAsync();
                 return list;
             }
             catch(Exception)

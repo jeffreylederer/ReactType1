@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { UpdateFormData } from "./UpdateFormData.tsx";
+import { ListData } from "./ListData.tsx";
 import Layout from '@layouts/Layout.tsx';
 import { DeleteButton } from '@components/Buttons.tsx';
 import useFetchOne from '@hooks/useFetchOne.tsx';
@@ -10,11 +10,10 @@ const MembershipDelete = () => {
     const location = useLocation();
     const id: number = location.state;
    
-    let membership: UpdateFormData;
    
     const navigate = useNavigate();
 
-    const { data, loading, error } = useFetchOne<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships` ,id);
+    const { data, loading, error } = useFetchOne<ListData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships` ,id);
     if (error)
         return (
             <Layout>
@@ -32,7 +31,7 @@ const MembershipDelete = () => {
         );
 
     if (data) {
-        membership = data;
+       
 
         return (
             <Layout>
@@ -41,20 +40,20 @@ const MembershipDelete = () => {
                     <tr>
                         <td className="Label">First Name:</td>
 
-                        <td className="Field">{membership.firstName}</td>
+                        <td className="Field">{data.firstName}</td>
                     </tr>
                     <tr>
                         <td style={{ width: "200px" }}>Last Name:</td>
-                        <td className="Field">{membership.lastName}</td>
+                        <td className="Field">{data.lastName}</td>
 
                     </tr>
                     <tr>
                         <td style={{ width: "200px" }}>Short Name:</td>
-                        <td className="Field">{membership.shortname == null ? "" : membership.shortname}</td>
+                        <td className="Field">{data.shortname == null ? "" : data.shortname}</td>
                     </tr>
                     <tr>
                         <td style={{ width: "200px" }}>Wheel Chair:</td>
-                        <td className="Field">{membership.wheelchair ? "Yes" : "No"}</td>
+                        <td className="Field">{data.wheelchair ? "Yes" : "No"}</td>
                     </tr>
                     <tr>
                         <td colSpan={2}>
@@ -69,7 +68,7 @@ const MembershipDelete = () => {
     }
 
     function deleteItem() {
-        if (DeleteItem(import.meta.env.VITE_SERVER_URL + 'api/Memberships', id))
+        if (DeleteItem(`${import.meta.env.VITE_SERVER_URL}api/Memberships`, id))
             navigate("/Membership");
     }
 }

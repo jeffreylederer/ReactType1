@@ -59,7 +59,7 @@ namespace ReactType1.Server.Controllers
                     new SqlParameter("leagueid", id)
                 };
                 var team = _context.OneTeamViews
-                         .FromSqlRaw("EXEC OneTeam @leagueid", parameters)
+                         .FromSqlRaw("EXEC OneTeamFullname @leagueid", parameters)
                          .AsEnumerable()
                          .FirstOrDefault();
                          

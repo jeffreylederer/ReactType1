@@ -75,7 +75,7 @@ const ScheduleDelete = () => {
         axios.delete(fullUrl)
             .then(response => {
                 console.log(response.statusText);
-                navigate("/League/Schedules");
+                navigate("/League/Schedule");
             })
             .catch(error => {
                 SeterrorMsg(error.response.data);
