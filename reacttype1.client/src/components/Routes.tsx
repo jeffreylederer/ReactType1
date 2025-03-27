@@ -59,7 +59,7 @@ import Contact from "@pages/Contact.tsx";
 import Welcome from "@pages/Welcome.tsx";
 import Home from '@pages/Home.tsx'; 
 
-
+import Weather from '@pages/Weather.tsx';
 
 
 function RouteMenu() {
@@ -119,7 +119,8 @@ function RouteMenu() {
                 <Route path="/UpdatePassword" element={<UpdatePassword />} />
                 <Route path='*' element={<NotLogin />} />
                 <Route path="/Welcome" element={<Welcome/>} />
-         
+
+                <Route path="/Weather" element={<Weather />} />
             </Routes>
 
  
