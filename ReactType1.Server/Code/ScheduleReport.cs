@@ -19,46 +19,16 @@ namespace ReactType1.Server.Code
         public IDocument CreateDocument(int id, DbLeagueApp db)
         {
             League? league = db.Leagues.Find(id);
-            var schedule = league.Schedules.OrderBy(x => x.GameDate).ToList();
+            var schedule = db.Schedules.Where(x=>x.Leagueid==league.Id).OrderBy(x => x.GameDate).ToList();
 
-            List<MatchScheduleView> matches = new List<MatchScheduleView>();
-            foreach (var item in schedule)
-            {
-                foreach (var match in db.Matches.Where(x => x.WeekId == item.Id))
-                {
-                    matches.Add(new MatchScheduleView()
-                    {
-                        GameDate = item.GameDate,
-                        Rink = match.Rink,
-                        Team1 = match.TeamNo1,
-                        Team2 = match.TeamNo2,
-                        Divisionid = match.TeamNo1Navigation.DivisionId
-                    });
-                }
-            }
-                
+            List<MatchScheduleView> matches = db.MatchScheduleViews
+                     .FromSql($"EXEC MatchSchedule {league.Id}").ToList();
 
+            List<AllTeamsView> teams = db.AllTeamsViews
+                     .FromSql($"EXEC AllTeams {league.Id}").ToList();
+            
 
-
-            List<AllTeamsView> teams = new List<AllTeamsView>();
-            foreach (var team in league.Teams)
-            {
-                teams.Add(new AllTeamsView()
-                {
-                    Id = team.Id,
-                    Skip = team.Skip != null? team.SkipNavigation.Membership.FullName : null,
-                    ViceSkip = team.ViceSkip != null ? team.ViceSkipNavigation.Membership.FullName : null,
-                    Lead = team.Lead != null ? team.LeadNavigation.Membership.FullName : null,
-                    Skipid = team.Skip,
-                    ViceSkipid = team.ViceSkip,
-                    Leadid = team.Lead,
-                    Leagueid = team.Leagueid,
-                    Division = team.DivisionId,
-                    TeamNo = team.TeamNo
-                });
-            }
-
-            int rinks =league.Teams.Count() / 2;
+            int rinks = teams.Count / 2;
             int? TeamSize = league?.TeamSize;
 
             return Document.Create(container =>

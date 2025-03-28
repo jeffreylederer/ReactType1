@@ -11,17 +11,7 @@ import Layout from '@layouts/Layout.tsx';
 
 
 const ScheduleUpdate = () => {
-    const [schedule, setSchedule] = useState(
-        {
-            id: 0,
-            gameDate: new Date().toISOString().slice(0, 10),
-            playOffs: false,
-            cancelled: false,
-            leagueid: 0
-
-
-        }
-    );
+    const [schedule, setSchedule] = useState <UpdateFormData>();
     const location = useLocation();
     const id: number = location.state;
    
@@ -46,7 +36,7 @@ const ScheduleUpdate = () => {
         
     });
 
-    const contents = schedule.id === 0
+    const contents = schedule===undefined
         ? <p><em>Loading ...</em></p> :
 
         <form onSubmit={handleSubmit(onSubmit, (errors) => console.log(errors))} >
@@ -118,20 +108,21 @@ const ScheduleUpdate = () => {
     }
 
     function updateData(data: UpdateFormData) {
-        data.id = schedule.id;
-        data.leagueid = schedule.leagueid;
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Schedules/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-          axios.put(fullUrl, data)
-            .then(response => {
-                console.log('Record updated successfully: ', response.data);
-                navigate("/League/Schedule");
-            })
-            .catch(error => {
-                console.error('Error updating record: ', error);
-            });
-
+        if (schedule != undefined) {
+            data.id = schedule.id;
+            data.leagueid = schedule.leagueid;
+            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Schedules/';
+            const num: string = id.toString();
+            const fullUrl = url.concat(num);
+            axios.put(fullUrl, data)
+                .then(response => {
+                    console.log('Record updated successfully: ', response.data);
+                    navigate("/League/Schedule");
+                })
+                .catch(error => {
+                    console.error('Error updating record: ', error);
+                });
+        }
 
     }
 }

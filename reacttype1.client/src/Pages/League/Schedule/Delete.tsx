@@ -5,6 +5,8 @@ import { FormData } from "./FormData.tsx";
 import { League } from "@components/leagueObject.tsx";;
 import { DeleteButton } from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
+import convertDate from '@components/convertDate.tsx';
+
 
 
 const ScheduleDelete = () => {
@@ -26,7 +28,7 @@ const ScheduleDelete = () => {
             <tr>
                 <td className="Label">Game Date:</td>
 
-                <td className="Field">{schedule.gameDate}</td>
+                <td className="Field">{convertDate(schedule.gameDate)}</td>
             </tr>
             <tr>
                 <td className="Label">playOffs:</td>

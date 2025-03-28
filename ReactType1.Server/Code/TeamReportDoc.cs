@@ -22,23 +22,23 @@ namespace ReactType1.Server.Code
 
             string? LeagueName = league?.LeagueName;
             int? TeamSize = league?.TeamSize;
-            List<TeamMember> list = new List<TeamMember>();
+           
 
-            //List<TeamMember> list = db.TeamMembers
-            //         .FromSql($"EXEC TeamAllowDelete {id}")
-            //        .ToList();
+            List<TeamMember> list = db.TeamMembers
+                     .FromSql($"EXEC TeamAllowDelete {id}")
+                    .ToList();
 
-            foreach (var item in league.Teams)
-            {
-                list.Add(new TeamMember
-                {
-                    Division = item.DivisionId,
-                    TeamNo = item.TeamNo,
-                    Skip = item.Skip.HasValue ? item.SkipNavigation.Membership.FullName: "",
-                    ViceSkip = item.ViceSkip.HasValue ? item.ViceSkipNavigation.Membership.FullName : "",
-                    Lead = item.Lead.HasValue ? item.LeadNavigation.Membership.FullName : "",
-                });
-            }
+            //foreach (var item in league.Teams)
+            //{
+            //    list.Add(new TeamMember
+            //    {
+            //        Division = item.DivisionId,
+            //        TeamNo = item.TeamNo,
+            //        Skip = item.Skip.HasValue ? item.SkipNavigation.Membership.FullName : "",
+            //        ViceSkip = item.ViceSkip.HasValue ? item.ViceSkipNavigation.Membership.FullName : "",
+            //        Lead = item.Lead.HasValue ? item.LeadNavigation.Membership.FullName : "",
+            //    });
+            //    }
             list.Sort((a, b) => a.TeamNo.CompareTo(b.TeamNo));
 
 

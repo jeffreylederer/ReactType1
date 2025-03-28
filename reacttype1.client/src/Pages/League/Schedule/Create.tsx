@@ -7,6 +7,9 @@ import { Checkbox, TextInput } from "flowbite-react";
 import { League } from "@components/leagueObject.tsx";;
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
+import useFetch from '@hooks/useFetch.tsx';
+import { UpdateFormData } from './UpdateFormData.tsx';
+import convertDate from '@components/convertDate.tsx'
 
 const ScheduleCreate = () => {
    const {
@@ -16,10 +19,31 @@ const ScheduleCreate = () => {
     } = useForm<FormData>({
         resolver: zodResolver(FormDataSchema),
     });
+    const navigate = useNavigate();
+   
+   
+
+    const { data, loading, error } = useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/Schedules/${League().id}`);
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+    if (error)
+        return <p>Error: {error}</p>;   
+    
+
+        
 
     const onSubmit: SubmitHandler<FormData> = (data) => CreateData(data)
-       
-    const navigate = useNavigate();
+    function calculation(): string {
+
+        if (data && data.length > 0) {
+            const date = new Date(data[data.length - 1].gameDate);
+            date.setDate(date.getDate() + 7);
+            return convertDate(date.toString());
+        }
+        return new Date().toLocaleTimeString();
+    }  
+    
 
     function CreateData(data: FormData) {
         axios.post(import.meta.env.VITE_SERVER_URL+'api/Schedules', data)
@@ -40,10 +64,10 @@ const ScheduleCreate = () => {
                 <table>
                     <input type="hidden" defaultValue={League().id} {...register('leagueid')} />
                     <tr>
-                        <td className="Label">Playoffs:</td>
+                        <td className="Label">Game Date:</td>
 
                         <td className="Field">
-                            <TextInput type="date" {...register('gameDate')} />
+                            <TextInput type="date" {...register('gameDate')} defaultValue={calculation()} />
                         </td>
                     </tr>
 

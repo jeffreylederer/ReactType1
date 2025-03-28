@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactType1.Server", "ReactT
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "reacttype1.client", "reacttype1.client\reacttype1.client.esproj", "{F6298476-30B5-47C6-8E42-59E33A81A2A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "reacttype1.server.testing", "reacttype1.server.testing\reacttype1.server.testing.csproj", "{A554D4EC-05F2-4635-A56D-1A3CE4EEF971}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "reacttype1.server.testing", "reacttype1.server.testing\reacttype1.server.testing.csproj", "{A554D4EC-05F2-4635-A56D-1A3CE4EEF971}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,7 +28,6 @@ Global
 		{A554D4EC-05F2-4635-A56D-1A3CE4EEF971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A554D4EC-05F2-4635-A56D-1A3CE4EEF971}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A554D4EC-05F2-4635-A56D-1A3CE4EEF971}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A554D4EC-05F2-4635-A56D-1A3CE4EEF971}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

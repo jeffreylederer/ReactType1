@@ -4,6 +4,7 @@ import axios from "axios";
 import { UpdateFormData } from "./UpdateFormData.tsx";
 import { League, User} from "@components/leagueObject.tsx";;
 import Layout from '@layouts/Layout.tsx';
+import convertDate from '@components/convertDate.tsx';
 
 
 function Schedule() {
@@ -31,7 +32,7 @@ function Schedule() {
             <tbody>
                 {schedule.map(item =>
                     <tr key={item.id}>
-                        <td>{item.gameDate}</td>
+                        <td>{convertDate(item.gameDate)}</td>
                         <td>{item.cancelled ? "yes" : "no"}</td>
                         <td>{item.playOffs ? "yes" : "no"}</td>
                         <td hidden={allowed}><Link to="/League/Schedule/Update" state={ item.id.toString() }>Update</Link>|  
@@ -61,6 +62,8 @@ function Schedule() {
                 console.error('Error fetching data: ', error);
             })
     }
+
+    
 }
 
 export default Schedule;
