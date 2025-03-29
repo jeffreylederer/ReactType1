@@ -19,7 +19,7 @@ namespace ReactType1.Server.Code
         public IDocument CreateDocument(int id, DbLeagueApp db)
         {
             League? league = db.Leagues.Find(id);
-            var schedule = db.Schedules.Where(x=>x.Leagueid==league.Id).OrderBy(x => x.GameDate).ToList();
+            var schedule = db.Schedules.Where(x=>x.Leagueid==league.Id && !x.PlayOffs).OrderBy(x => x.GameDate).ToList();
 
             List<MatchScheduleView> matches = db.MatchScheduleViews
                      .FromSql($"EXEC MatchSchedule {league.Id}").ToList();

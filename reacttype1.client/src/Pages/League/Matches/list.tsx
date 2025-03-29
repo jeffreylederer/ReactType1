@@ -126,7 +126,7 @@ function Matches() {
                             <td hidden={admin}><button hidden={item.rink == 1} onClick={Reorder} name={item.id.toString()} style={{ backgroundColor: 'white' }}><img src={uparrow} /></button></td>
                             
                             <td>{item.gameDate}</td>
-                            <td>{item.rink}</td>
+                            <td>{item.rink+1}</td>
                             <td style={{ color: item.wheelchair1, textAlign: "right" }} >
                                 {item.team1No} ({item.team1})</td>
 

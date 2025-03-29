@@ -107,7 +107,7 @@ namespace ReactType1.Server.Code
 
 
                             table.Cell().Element(CellStyle).Text(GameDate);
-                            table.Cell().Element(CellStyle).Text(item.Rink.ToString());
+                            table.Cell().Element(CellStyle).Text((item.Rink+1).ToString());
                             table.Cell().Element(CellStyle).Text(item.Team1.ToString());
                             table.Cell().Element(CellStyle).Text(item.Team2.ToString());
                             table.Cell().Element(CellStyle1).Text(item.Skip1);

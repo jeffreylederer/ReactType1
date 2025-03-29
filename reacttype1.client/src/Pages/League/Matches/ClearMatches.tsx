@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import { League } from "@components/leagueObject.tsx";;
 import Layout from '@layouts/Layout.tsx';
-i
+
 
 
 const ClearMatches = () => {
