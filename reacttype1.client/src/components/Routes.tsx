@@ -41,8 +41,8 @@ import Standings from "@pages/League/Matches/Standings.tsx";
 import MatchUpdate from "@pages/League/Matches/Update.tsx";
 import Byes from "@pages/League/Matches/Byes.tsx";
 import ScheduleReport from "@pages/League/Matches/ScheduleReport.tsx";
-import { CreateMatches } from "@pages/League/Matches/CreateMatches.tsx";
-import { ClearMatches } from "@pages/League/Matches/ClearMatches.tsx";
+import CreateMatches  from "@pages/League/Matches/CreateMatches.tsx";
+import ClearMatches from "@pages/League/Matches/ClearMatches.tsx";
 
 
 

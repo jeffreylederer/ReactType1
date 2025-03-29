@@ -58,7 +58,7 @@ function Matches() {
         event.preventDefault();
         const button: HTMLButtonElement = event.currentTarget;
         const id: string = button.name;
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/Matches/Reorder".concat(id);
+        const url: string = import.meta.env.VITE_SERVER_URL+"api/Matches/Reorder/".concat(id);
         axios.get(url)
             .then(response => {
                 GetData(weekid);
@@ -144,7 +144,7 @@ function Matches() {
         </>;   
         return(
         <Layout>
-        <h3>Players in league {League().leagueName}</h3>
+        <h3>Games in {League().leagueName} league</h3>
                 {contents}
                 {matchcontents}
                 <p style={{ color: 'red', textAlign: 'left' }} hidden={weekid==0}>Teams with wheel chair members are in red</p>
