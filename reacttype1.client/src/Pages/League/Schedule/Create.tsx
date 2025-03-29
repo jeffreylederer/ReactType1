@@ -7,9 +7,7 @@ import { Checkbox, TextInput } from "flowbite-react";
 import { League } from "@components/leagueObject.tsx";;
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
-import useFetch from '@hooks/useFetch.tsx';
-import { UpdateFormData } from './UpdateFormData.tsx';
-import convertDate from '@components/convertDate.tsx'
+import { UpdateFormData } from "./UpdateFormData.tsx";
 
 const ScheduleCreate = () => {
    const {
@@ -20,30 +18,21 @@ const ScheduleCreate = () => {
         resolver: zodResolver(FormDataSchema),
     });
     const navigate = useNavigate();
-   
-   
-
-    const { data, loading, error } = useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/Schedules/${League().id}`);
-    if (loading) {
-        return <p>Loading...</p>;
+ 
+    const zeroPad = (num: number): string => {
+        const x: string = num.toString();
+        if (x.length == 2)
+            return x;
+        return '0' + x;
     }
-    if (error)
-        return <p>Error: {error}</p>;   
-    
+
+
+       
 
         
 
     const onSubmit: SubmitHandler<FormData> = (data) => CreateData(data)
-    function calculation(): string {
-
-        if (data && data.length > 0) {
-            const date = new Date(data[data.length - 1].gameDate);
-            date.setDate(date.getDate() + 7);
-            return convertDate(date.toString());
-        }
-        return new Date().toLocaleTimeString();
-    }  
-    
+        
 
     function CreateData(data: FormData) {
         axios.post(import.meta.env.VITE_SERVER_URL+'api/Schedules', data)
@@ -67,7 +56,7 @@ const ScheduleCreate = () => {
                         <td className="Label">Game Date:</td>
 
                         <td className="Field">
-                            <TextInput type="date" {...register('gameDate')} defaultValue={calculation()} />
+                            <TextInput type="date" {...register('gameDate')} defaultValue={calculate()} />
                         </td>
                     </tr>
 
@@ -105,9 +94,19 @@ const ScheduleCreate = () => {
         </Layout>
     );
 
-
     
-
+    function calculate(): string {
+        const data: UpdateFormData[] = JSON.parse(localStorage.getItem("schedule") as string);
+        if (data && data.length > 0) {
+            const date = new Date(data[data.length - 1].gameDate);
+            date.setDate(date.getDate() + 7);
+            return `${zeroPad(date.getMonth() + 1)}/${zeroPad(date.getDate()) }/${ date.getFullYear() }`;
+        }
+        const date = new Date();
+        return `${zeroPad(date.getMonth() + 1)}/${zeroPad(date.getDate())}/${date.getFullYear()}`;
+    }  
+    
+   
 }
 
 
