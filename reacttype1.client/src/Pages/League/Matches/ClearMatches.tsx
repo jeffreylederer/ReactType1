@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import { League } from "@components/leagueObject.tsx";;
 import Layout from '@layouts/Layout.tsx';
+i
 
 
-
-export const ClearMatches = () => {
+const ClearMatches = () => {
     const [errorMsg, setErrorMsg] = useState('');
     useEffect(() => {
         GetData();
@@ -33,3 +33,5 @@ export const ClearMatches = () => {
             })
     }
 }
+
+export default ClearMatches;

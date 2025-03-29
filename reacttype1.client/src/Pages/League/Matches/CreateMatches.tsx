@@ -5,7 +5,7 @@ import Layout from '@layouts/Layout.tsx';
 
 
 
-export const CreateMatches = () => {
+const CreateMatches = () => {
     const [errorMsg, setErrorMsg] = useState('');
     useEffect(() => {
         GetData();
@@ -32,3 +32,5 @@ export const CreateMatches = () => {
             })
     }
 }
+
+export default CreateMatches;
