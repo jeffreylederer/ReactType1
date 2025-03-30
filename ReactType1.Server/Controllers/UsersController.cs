@@ -99,7 +99,6 @@ namespace ReactType1.Server.Controllers
             }
             
             return user;
-
         }
 
         // GET: Users/Create
@@ -153,28 +152,48 @@ namespace ReactType1.Server.Controllers
             user.DisplayName = item?.DisplayName;
             _context.Entry(user).State = EntityState.Modified;
 
-            //UserRole? userRole = await _context.UserRoles.Where(x => x.UserId == user.Id).FirstOrDefaultAsync();
-            //if (userRole == null )
-            //{
-            //    _context.UserRoles.Add(new UserRole()
-            //    {
-            //        UserId = id,
-            //        RoleId = item.RoleId
-            //    });
-                
-            //}
-            //else if(userRole != null)
-            //{
-            //    userRole.RoleId = item.RoleId;
-            //    try
-            //    {
-            //        _context.Entry(userRole).State = EntityState.Modified;
-            //    }
-            //    catch(Exception ex1)
-            //    {
-            //        var mess = ex1.Message;
-            //    }
-            //}
+            
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            return Ok();
+        }
+
+        [HttpPut("ChangePassword{id}")]
+        public async Task<IActionResult> ChangePassword(int id, DTOChangePassword item)
+        {
+            if (id != item.Id)
+            {
+                return BadRequest();
+            }
+
+            User? user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.Password= GetSha256Hash.Encode(item.Password);
+            _context.Entry(user).State = EntityState.Modified;
+
+
 
             try
             {
@@ -227,4 +246,6 @@ namespace ReactType1.Server.Controllers
             return _context.Users.Any(e => e.Id == id);
         }
     }
+
+   
 }

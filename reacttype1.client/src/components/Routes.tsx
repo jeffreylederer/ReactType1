@@ -19,6 +19,7 @@ import Users from "@pages/Admin/Users/List.tsx";
 import UsersDelete from "@pages/Admin/Users/Delete.tsx";
 import UsersUpdate from "@pages/Admin/Users/Update.tsx";
 import UsersCreate from "@pages/Admin/Users/Create.tsx";
+import ChangePassword from "@pages/Admin/Users/ChangePassword.tsx";
 
 import Players from "@pages/League/Players/List.tsx";
 import PlayersDelete from "@pages/League/Players/Delete.tsx";
@@ -67,61 +68,63 @@ function RouteMenu() {
     
     return (
        
-            <Routes>
-                <Route path="/" element={<Home />} />
+        <Routes>
+            <Route path="/" element={<Home />} />
 
-                <Route path="/Membership" element={<Membership />} />
-                <Route path="/Membership/Delete" element={<MembershipDelete />} />
-                <Route path="/Membership/Update" element={<MembershipUpdate />} />
-                <Route path="/Membership/Create" element={<MembershipCreate />} />
+            <Route path="/Membership" element={<Membership />} />
+            <Route path="/Membership/Delete" element={<MembershipDelete />} />
+            <Route path="/Membership/Update" element={<MembershipUpdate />} />
+            <Route path="/Membership/Create" element={<MembershipCreate />} />
 
-                <Route path="/Admin/Leagues" element={<League />} />
-                <Route path="/Admin/League/Delete" element={<LeagueDelete />} />
-                <Route path="/Admin/League/Update" element={<LeagueUpdate />} />
-                <Route path="/Admin/League/Create" element={<LeagueCreate />} />
-                <Route path="/Admin/League/Details" element={<LeagueDetails />} />
+            <Route path="/Admin/Leagues" element={<League />} />
+            <Route path="/Admin/League/Delete" element={<LeagueDelete />} />
+            <Route path="/Admin/League/Update" element={<LeagueUpdate />} />
+            <Route path="/Admin/League/Create" element={<LeagueCreate />} />
+            <Route path="/Admin/League/Details" element={<LeagueDetails />} />
 
-                <Route path="/Admin/Users" element={<Users />} />
-                <Route path="/Admin/Users/Delete" element={<UsersDelete />} />
-                <Route path="/Admin/Users/Update" element={<UsersUpdate />} />
-                <Route path="/Admin/Users/Create" element={<UsersCreate />} />
+            <Route path="/Admin/Users" element={<Users />} />
+            <Route path="/Admin/Users/Delete" element={<UsersDelete />} />
+            <Route path="/Admin/Users/Update" element={<UsersUpdate />} />
+            <Route path="/Admin/Users/Create" element={<UsersCreate />} />
+            <Route path="/Admin/Users/ChangePassword" element={<ChangePassword />} />
 
-                <Route path="/League/Players" element={<Players />} />
-                <Route path="/League/Players/Delete" element={<PlayersDelete />} />
-                <Route path="/League/Players/Create" element={<PlayersCreate />} />
 
-                <Route path="/League/Schedule" element={<Schedule />} />
-                <Route path="/League/Schedule/Delete" element={<SchedulesDelete />} />
-                <Route path="/League/Schedule/Create" element={<SchedulesCreate />} />
-                <Route path="/League/Schedule/Update" element={<SchedulesUpdate />} />
+            <Route path="/League/Players" element={<Players />} />
+            <Route path="/League/Players/Delete" element={<PlayersDelete />} />
+            <Route path="/League/Players/Create" element={<PlayersCreate />} />
 
-                <Route path="/League/Teams" element={<Teams />} />
-                <Route path="/League/Teams/Delete" element={<TeamsDelete />} />
-                <Route path="/League/Teams/Create" element={<TeamsCreate />} />
-                <Route path="/League/Teams/Update" element={<TeamsUpdate />} />
-                <Route path="/League/Teams/Report" element={<TeamReport />} />
+            <Route path="/League/Schedule" element={<Schedule />} />
+            <Route path="/League/Schedule/Delete" element={<SchedulesDelete />} />
+            <Route path="/League/Schedule/Create" element={<SchedulesCreate />} />
+            <Route path="/League/Schedule/Update" element={<SchedulesUpdate />} />
 
-                <Route path="/League/Matches" element={<Matches />} />
-                <Route path="/League/Matches/Update" element={<MatchUpdate />} />
-                <Route path="/League/Matches/Standings" element={<Standings />} />
-                <Route path="/League/Matches/ScoreCard" element={<ScoreCard />} />
-                <Route path="/League/Byes" element={<Byes />} />
-                <Route path="/League/ScheduleReport" element={<ScheduleReport />} />
-                <Route path="/League/CreateMatches" element={<CreateMatches />} />
-                <Route path="/League/ClearMatches" element={<ClearMatches />} />
+            <Route path="/League/Teams" element={<Teams />} />
+            <Route path="/League/Teams/Delete" element={<TeamsDelete />} />
+            <Route path="/League/Teams/Create" element={<TeamsCreate />} />
+            <Route path="/League/Teams/Update" element={<TeamsUpdate />} />
+            <Route path="/League/Teams/Report" element={<TeamReport />} />
+
+            <Route path="/League/Matches" element={<Matches />} />
+            <Route path="/League/Matches/Update" element={<MatchUpdate />} />
+            <Route path="/League/Matches/Standings" element={<Standings />} />
+            <Route path="/League/Matches/ScoreCard" element={<ScoreCard />} />
+            <Route path="/League/Byes" element={<Byes />} />
+            <Route path="/League/ScheduleReport" element={<ScheduleReport />} />
+            <Route path="/League/CreateMatches" element={<CreateMatches />} />
+            <Route path="/League/ClearMatches" element={<ClearMatches />} />
                 
 
                 
-                <Route path="/Contact" element={<Contact />} />
-                <Route path="/About" element={<About />} />
-                <Route path="/Logoff" element={<Logoff />} />
-                <Route path="/Login" element={<Login />} />
-                <Route path="/UpdatePassword" element={<UpdatePassword />} />
-                <Route path='*' element={<NotLogin />} />
-                <Route path="/Welcome" element={<Welcome/>} />
+            <Route path="/Contact" element={<Contact />} />
+            <Route path="/About" element={<About />} />
+            <Route path="/Logoff" element={<Logoff />} />
+            <Route path="/Login" element={<Login />} />
+            <Route path="/UpdatePassword" element={<UpdatePassword />} />
+            <Route path='*' element={<NotLogin />} />
+            <Route path="/Welcome" element={<Welcome/>} />
 
-                <Route path="/Weather" element={<Weather />} />
-            </Routes>
+            <Route path="/Weather" element={<Weather />} />
+        </Routes>
 
  
   );

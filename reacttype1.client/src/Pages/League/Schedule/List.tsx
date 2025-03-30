@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import useFetch from '@hooks/useFetch.tsx';
 import { UpdateFormData } from "./UpdateFormData.tsx";
-import { League, User} from "@components/leagueObject.tsx";;
+import { League, User} from "@components/leagueObject.tsx";
 import Layout from '@layouts/Layout.tsx';
 import convertDate from '@components/convertDate.tsx';
 

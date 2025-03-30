@@ -32,7 +32,7 @@ function useFetchOne<T>(url: string, index: number): ApiResponse<T> {
             }
         };
         fetchData();
-    }, [url, index]);
+    });
 
     return { data, loading, error };
 }

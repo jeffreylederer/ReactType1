@@ -8,6 +8,8 @@ import { League } from "@components/leagueObject.tsx";;
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 import { UpdateFormData } from "./UpdateFormData.tsx";
+import { useState } from 'react';
+
 
 const ScheduleCreate = () => {
    const {
@@ -27,8 +29,9 @@ const ScheduleCreate = () => {
     }
 
 
-       
+    const [defaultDate, setDefaultDate] = useState<string>(today());
 
+    
         
 
     const onSubmit: SubmitHandler<FormData> = (data) => CreateData(data)
@@ -56,7 +59,7 @@ const ScheduleCreate = () => {
                         <td className="Label">Game Date:</td>
 
                         <td className="Field">
-                            <TextInput type="date" {...register('gameDate')} defaultValue={calculate()} />
+                            <TextInput type="date" {...register('gameDate')} defaultValue={defaultDate} />
                         </td>
                     </tr>
 
@@ -95,16 +98,18 @@ const ScheduleCreate = () => {
     );
 
     
-    function calculate(): string {
+    function today():string {
         const data: UpdateFormData[] = JSON.parse(localStorage.getItem("schedule") as string);
         if (data && data.length > 0) {
             const date = new Date(data[data.length - 1].gameDate);
             date.setDate(date.getDate() + 7);
-            return `${zeroPad(date.getMonth() + 1)}/${zeroPad(date.getDate()) }/${ date.getFullYear() }`;
+            return `${date.getFullYear()}-${zeroPad(date.getMonth() + 1)}-${zeroPad(date.getDate())}`;
         }
         const date = new Date();
-        return `${zeroPad(date.getMonth() + 1)}/${zeroPad(date.getDate())}/${date.getFullYear()}`;
+        return `${date.getFullYear()}-${zeroPad(date.getMonth() + 1)}-${zeroPad(date.getDate())}`;
     }  
+
+     
     
    
 }

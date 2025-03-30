@@ -47,4 +47,12 @@ namespace ReactType1.Server.Code
         public int? RoleId { get; set; }
     }
 
+    public class DTOChangePassword
+    {
+        public int Id { get; set; }
+        public string Password { get; set; }
+        public string? ConfirmPassword { get; set; }
+
+    }
+
 }

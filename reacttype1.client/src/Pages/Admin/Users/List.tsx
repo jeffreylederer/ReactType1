@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 import { DetailsType } from "./DetailsType.tsx";
 import Layout from "@layouts/Layout.tsx";
-
+import { User } from "@components/leagueObject.tsx";
 
 function Users() {
+    const permission: string = User().role;
     const [Users, SetUsers] = useState<DetailsType[]>();
-
+    const allowed: boolean = permission !== "SiteAdmin";
 
     useEffect(() => {
         GetData();
@@ -35,7 +36,8 @@ function Users() {
                         <td>{item.role}</td>
                         
                         <td><Link to="/Admin/Users/Update" state={item.id.toString()}>Update</Link>|
-                            <Link to="/Admin/Users/Delete" state={item.id.toString()}>Delete</Link>
+                            <Link to="/Admin/Users/Delete" state={item.id.toString()}>Delete</Link><span hidden={allowed}>|</span>
+                            <Link hidden={allowed} to="/Admin/Users/ChangePassword" state={item.id.toString()}>Change Password</Link>
                         </td>
 
                     </tr>
