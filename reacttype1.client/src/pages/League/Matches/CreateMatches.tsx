@@ -6,7 +6,7 @@ import Layout from '@layouts/Layout.tsx';
 
 
 const CreateMatches = () => {
-    const [errorMsg, setErrorMsg] = useState('');
+    const [errorMsg, setErrorMsg] = useState('Matches created');
     useEffect(() => {
         GetData();
     });
@@ -21,7 +21,6 @@ const CreateMatches = () => {
         const url: string = import.meta.env.VITE_SERVER_URL + "api/Matches/CreateSchedule/".concat(League().id.toString());
         axios.get(url)
             .then(response => {
-                setErrorMsg("Matches created");
                 console.log(response.data);
             })
             .catch(error => {
