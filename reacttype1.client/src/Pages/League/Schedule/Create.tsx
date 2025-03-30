@@ -8,7 +8,6 @@ import { League } from "@components/leagueObject.tsx";;
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 import { UpdateFormData } from "./UpdateFormData.tsx";
-import { useState } from 'react';
 
 
 const ScheduleCreate = () => {
@@ -29,14 +28,10 @@ const ScheduleCreate = () => {
     }
 
 
-    const [defaultDate, setDefaultDate] = useState<string>(today());
-
-    
-        
+    const defaultDate:string =today();
 
     const onSubmit: SubmitHandler<FormData> = (data) => CreateData(data)
         
-
     function CreateData(data: FormData) {
         axios.post(import.meta.env.VITE_SERVER_URL+'api/Schedules', data)
             .then((response) => {

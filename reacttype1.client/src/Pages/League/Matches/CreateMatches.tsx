@@ -21,7 +21,7 @@ const CreateMatches = () => {
         const url: string = import.meta.env.VITE_SERVER_URL + "api/Matches/CreateSchedule/".concat(League().id.toString());
         axios.get(url)
             .then(response => {
-  
+                console.log(response.data);
             })
             .catch(error => {
                 if (error.response.status === 404)
