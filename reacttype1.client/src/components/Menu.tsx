@@ -4,14 +4,14 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 function Menu() {
     const navigate = useNavigate();
-    const showSiteAdmin:boolean = !IsUserNull() && User().role == "SiteAdmin" ;
-    const showAdmin:boolean = !IsUserNull() && (User().role == "Admin" || showSiteAdmin );
+    const showSiteAdmin:boolean = (User() !== undefined) && (User()?.role == "SiteAdmin") ;
+    const showAdmin: boolean = (User() !== undefined) && (User()?.role == "Admin" || showSiteAdmin );
    
     const showLeague: boolean = !IsLeagueNull();
-    const username: string = IsUserNull() ? "" : User().username;
+    const username: string| null = User()?.username;
 
     
-    if (IsUserNull()) {
+    if (!User()) {
         navigate("/Login");
     }
        
@@ -75,7 +75,7 @@ function Menu() {
                                 <span className="nav-link " aria-current="page" >Hello {username}!</span>
                             </li>
                             <li className="nav-item">
-                                <NavLink className="nav-link " aria-current="page" to="/Admin/Login/UpdatePassword">Contact</NavLink>
+                                <NavLink className="nav-link " aria-current="page" to="/Admin/Login/UserUpdatePassword">Change Password</NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink className="nav-link " aria-current="page" to="/Logoff">Log off</NavLink>
