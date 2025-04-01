@@ -11,7 +11,7 @@ public partial class MatchScheduleView
 
     public int Team1 { get; set; }
 
-    public int? Team2 { get; set; }
+    public int Team2 { get; set; }
 
     public short Divisionid { get; set; }
 }

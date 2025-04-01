@@ -2,6 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using ReactType1.Server.Code;
 using ReactType1.Server.Models;
+using System.Net.Mail;
+using System.Net;
+using ReactType1.Server.DTOs.Admin;
+
+
+
 
 
 namespace ReactType1.Server.Controllers
@@ -11,15 +17,18 @@ namespace ReactType1.Server.Controllers
     public class AdminController : ControllerBase
     {
         private readonly DbLeagueApp _context;
+        private readonly IConfiguration _configuration;
 
-        public AdminController(DbLeagueApp context)
+        public AdminController(DbLeagueApp context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: Leagues/Create
+        // login.tsx
         [HttpPost]
-        public async Task<UserTypeDetail?> Login(UserType item)
+        public async Task<LoginResultDto?> Login(LoginDTO item)
         {
             User? user = await _context.Users.Where(x => x.Username == item.username).FirstOrDefaultAsync();
             if (user == null || item.password == null)
@@ -42,39 +51,22 @@ namespace ReactType1.Server.Controllers
                 case 4: Role = "SiteAdmin"; break;
                 
             };
-            var result = new UserTypeDetail()
+            var result = new LoginResultDto()
             {
-                id = user.Id,
-                username = user.Username,
-                role = Role
+                Id = user.Id,
+                UserName = user.Username,
+                Role = Role
             };
             return result;
         }
 
-        // GET: Leagues/Details/5
-        [HttpGet("{id}")]
-        public async Task<UserTypeDetail?> Details(int? id)
-        {
-            if (id == null)
-            {
-                return null;
-            }
+       
 
-            var user = await _context.Users.FindAsync(id.Value);
-            if (user == null)
-            {
-                return null;
-            }
-            var detail = new UserTypeDetail()
-            {
-                id = user.Id,
-                username = user.Username
-            };
-            return detail;
-        }
+       
 
+        // UserUpdatePassword.tsx
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, UserTypeUpdate item)
+        public async Task<IActionResult> Edit(int id, UserUpdateDto item)
         {
             if (id != item.Id)
             {
@@ -96,23 +88,100 @@ namespace ReactType1.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
-                {
+               if(!UserExists(id)) 
                     return NotFound();
-                }
-                else
-                {
+               else
                     throw;
-                }
+           
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
             return Ok();
-
-
         }
+
+        // RecoverPasswordRequest.tsx
+        [HttpPost("RecoverPasswordRequest")]
+        public async Task<IActionResult> RecoverPasswordRequest(RecoverPasswordRequestDto item)
+        {
+            
+            var user = await _context.Users.Where(x=>x.Username == item.UserName).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var rp = new RecoverPassword()
+            {
+                Userid = user.Id,
+                Id = Guid.NewGuid(),
+                Time = DateTime.Now
+            };
+
+            try
+            {
+                _context.RecoverPasswords.Add(rp);
+                _context.SaveChanges();
+            }
+            catch(Exception error)
+            {
+                return StatusCode(500, error.Message);
+            }
+
+           
+            var link = $"{item.url}/Admin/Users/UpdateRecoverPassword?id={rp.Id.ToString()}";
+
+            using (var smtp = new SmtpClient())
+            {
+
+                smtp.Host =  _configuration.GetValue<string>("Mailer:smtp");
+                smtp.Port = 587;
+                smtp.EnableSsl = true;
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential(_configuration.GetValue<string>("Mailer:userid"), _configuration.GetValue<string>("Mailer:password"));
+
+                using (var message = new MailMessage(new MailAddress(_configuration.GetValue<string>("Mailer:sender")), new MailAddress(user.Username)))
+                {
+
+                    message.Subject = "Request to Recover Password";
+                    message.Body = $"Hi,<br/><br/>We got request for reset your account password. Please click on the below link to reset your password<br/><br/><a href={link}>Reset Password link</a>"; ;
+                    message.IsBodyHtml = true;
+                    try
+                    {
+                        smtp.Send(message);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return StatusCode(500, ex.Message);
+                    }
+                }
+            }
+
+            return Ok();
+        }
+
+        
+        [HttpGet("UpdatePassword/{id}")]
+        public async Task<int?> UpdateUserPassword(string? id)
+        {
+            if (id == null)
+            {
+                return null;
+            }
+            var guid = _context.RecoverPasswords.Find(id);
+            if (guid == null)
+            {
+                return null;
+            }
+
+
+            return guid.Userid;
+        }
+
+
 
         private bool UserExists(int id)
         {
@@ -120,27 +189,17 @@ namespace ReactType1.Server.Controllers
         }
     }
 
+    
+
+
+   
+
+    
 
 
 
 
+   
 
-        public class UserType
-    {
-        public string? username { get; set; }
-        public string? password { get; set; }
-    }
-
-    public class UserTypeDetail
-    {
-        public string? username { get; set; }
-        public int id { get; set; }
-        public string? role { get; set; }
-    }
-
-    public class UserTypeUpdate
-    {
-        public string? password { get; set; }
-        public int Id { get; set; }
-    }
+   
 }

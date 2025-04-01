@@ -7,5 +7,7 @@ public partial class GetTeamView
 {
     public int Team { get; set; }
 
-    public int? Team1 { get; set; }
+    public int Team1 { get; set; }
+
+    public short DivisionId { get; set; }
 }

@@ -39,6 +39,8 @@ public partial class DbLeagueApp : DbContext
 
     public virtual DbSet<Player> Players { get; set; }
 
+    public virtual DbSet<RecoverPassword> RecoverPasswords { get; set; }
+
     public virtual DbSet<RinkOrder> RinkOrders { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
@@ -331,6 +333,18 @@ public partial class DbLeagueApp : DbContext
                 .HasForeignKey(d => d.MembershipId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Player_Membership");
+        });
+
+        modelBuilder.Entity<RecoverPassword>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("RecoverPassword");
+
+            entity.Property(e => e.Time)
+                .HasColumnType("datetime")
+                .HasColumnName("time");
+            entity.Property(e => e.Userid).HasColumnName("userid");
         });
 
         modelBuilder.Entity<RinkOrder>(entity =>

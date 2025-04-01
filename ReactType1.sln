@@ -9,6 +9,8 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "reacttype1.client", "reactt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "reacttype1.server.testing", "reacttype1.server.testing\reacttype1.server.testing.csproj", "{A554D4EC-05F2-4635-A56D-1A3CE4EEF971}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TournmentDB", "TournmentDB\TournmentDB.sqlproj", "{62ABFAB9-6EFC-408A-9D82-6E914938188B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,12 @@ Global
 		{A554D4EC-05F2-4635-A56D-1A3CE4EEF971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A554D4EC-05F2-4635-A56D-1A3CE4EEF971}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A554D4EC-05F2-4635-A56D-1A3CE4EEF971}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62ABFAB9-6EFC-408A-9D82-6E914938188B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62ABFAB9-6EFC-408A-9D82-6E914938188B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62ABFAB9-6EFC-408A-9D82-6E914938188B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{62ABFAB9-6EFC-408A-9D82-6E914938188B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62ABFAB9-6EFC-408A-9D82-6E914938188B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62ABFAB9-6EFC-408A-9D82-6E914938188B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

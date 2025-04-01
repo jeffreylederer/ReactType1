@@ -19,7 +19,8 @@ import Users from "@pages/Admin/Users/List.tsx";
 import UsersDelete from "@pages/Admin/Users/Delete.tsx";
 import UsersUpdate from "@pages/Admin/Users/Update.tsx";
 import UsersCreate from "@pages/Admin/Users/Create.tsx";
-import ChangePassword from "@pages/Admin/Users/ChangePassword.tsx";
+
+
 
 import Players from "@pages/League/Players/List.tsx";
 import PlayersDelete from "@pages/League/Players/Delete.tsx";
@@ -49,7 +50,9 @@ import ClearMatches from "@pages/League/Matches/ClearMatches.tsx";
 
 import Logoff from "@pages/Admin/Login/Logoff.tsx";
 import Login from "@pages/Admin/Login/Login.tsx";
-import UpdatePassword from "@pages/Admin/Login/UpdatePassword.tsx";
+import UserUpdatePassword from "@pages/Admin/Login/UserUpdatePassword.tsx";
+import UpdateRecoverPassword from "@pages/Admin/Login/UpdateRecoverPassword.tsx";
+import RecoverPasswordRequest from "@pages/Admin/Login/RecoverPasswordRequest.tsx";
 import NotLogin from "@pages/Admin/Login/NotLogin.tsx";
 
 
@@ -86,7 +89,8 @@ function RouteMenu() {
             <Route path="/Admin/Users/Delete" element={<UsersDelete />} />
             <Route path="/Admin/Users/Update" element={<UsersUpdate />} />
             <Route path="/Admin/Users/Create" element={<UsersCreate />} />
-            <Route path="/Admin/Users/ChangePassword" element={<ChangePassword />} />
+            <Route path="/Admin/Users/RecoverPasswordRequest" element={<RecoverPasswordRequest />} />
+            
 
 
             <Route path="/League/Players" element={<Players />} />
@@ -119,7 +123,9 @@ function RouteMenu() {
             <Route path="/About" element={<About />} />
             <Route path="/Logoff" element={<Logoff />} />
             <Route path="/Login" element={<Login />} />
-            <Route path="/UpdatePassword" element={<UpdatePassword />} />
+            <Route path="/UserUpdatePassword" element={<UserUpdatePassword />} />
+            <Route path="/UpdateRecoverPassword" element={<UpdateRecoverPassword />} />
+            <Route path="/RecoverPasswordRequest" element={<RecoverPasswordRequest />} />
             <Route path='*' element={<NotLogin />} />
             <Route path="/Welcome" element={<Welcome/>} />
 
