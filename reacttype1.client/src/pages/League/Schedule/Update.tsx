@@ -111,10 +111,10 @@ const ScheduleUpdate = () => {
         if (schedule != undefined) {
             data.id = schedule.id;
             data.leagueid = schedule.leagueid;
-            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Schedules/';
-            const num: string = id.toString();
-            const fullUrl = url.concat(num);
-            axios.put(fullUrl, data)
+           
+
+            const url = `${import.meta.env.VITE_SERVER_URL}api/Schedules/${id}`;
+            axios.put(url, data)
                 .then(response => {
                     console.log('Record updated successfully: ', response.data);
                     navigate("/League/Schedule");
