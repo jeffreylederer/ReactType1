@@ -75,7 +75,7 @@ function Menu() {
                                 <span className="nav-link " aria-current="page" >Hello {username}!</span>
                             </li>
                             <li className="nav-item">
-                                <NavLink className="nav-link " aria-current="page" to="/Admin/Login/UserUpdatePassword">Change Password</NavLink>
+                                <NavLink className="nav-link " aria-current="page" to="/UserUpdatePassword">Change Password</NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink className="nav-link " aria-current="page" to="/Logoff">Log off</NavLink>

@@ -38,7 +38,7 @@ const UserUpdatePassword = () => {
                 <tr>
                     <td className="Label">User Name:</td>
 
-                    <td className="Field"><TextInput defaultValue={User().username} disabled />
+                    <td className="Field"><TextInput defaultValue={User().userName} disabled />
                     </td>
                 </tr>
 
@@ -61,7 +61,6 @@ const UserUpdatePassword = () => {
                 <tr>
                     <td colSpan={2} >
 
-                        return (
                         <div className="flex flex-wrap gap-5"  >
                             <br />
                             <Button color="gray" type="submit" >Submit</Button>&nbsp;&nbsp;
@@ -74,6 +73,7 @@ const UserUpdatePassword = () => {
 
 
                     {errors.password && <p className="errorMessage">{errors.password.message}</p>}
+                    {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
 
                 </td></tr>
 
@@ -97,7 +97,7 @@ const UserUpdatePassword = () => {
         axios.put(url, data)
             .then(response => {
                 console.log('Record updated successfully ', response.data);
-                navigate("/Admim/Login/Login");
+                navigate(-1);
             })
             .catch(error => {
                 console.log('Error updating record: ', error);

@@ -13,7 +13,7 @@ const UpdateRecoverPassword = () => {
 
     const location = useLocation();
     const id: string = location.search.substring(4);   
-    const [userid, setUserid] = useState<int | null>('');
+    const [userid, setUserid] = useState<number | null>(null);
     const [errorMsg, setErrorMsg] = useState<string | null>('');
     
 
@@ -38,7 +38,7 @@ const UpdateRecoverPassword = () => {
     });
 
     
-    const contents = userid === ''
+    const contents = userid === undefined
         ? <p><em>Loading ...</em></p>
         :
 
@@ -106,7 +106,7 @@ const UpdateRecoverPassword = () => {
                 navigate("/Login");
             })
             .catch(error => {
-                setErrorMsg('Error updating record: ', error);
+                setErrorMsg('Error updating record: ' + error);
             });
     }
 

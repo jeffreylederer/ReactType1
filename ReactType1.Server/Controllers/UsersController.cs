@@ -111,7 +111,7 @@ namespace ReactType1.Server.Controllers
                 var user = new User()
                 {
                     LastLoggedIn = null,
-                    SerialNumber = Guid.NewGuid().ToString("N"),
+                    SerialNumber = Guid.NewGuid().ToString(),
                     Password = password,
                     IsActive = item.IsActive,
                     Username = item.Username,
