@@ -4,7 +4,6 @@ import axios from "axios";
 import { UpdatePasswordData, UpdatePasswordDataScheme } from "./LoginDataTypes.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextInput, Button } from "flowbite-react";
-import { User } from "@components/leagueObject.tsx";
 import { useEffect, useState } from 'react';
 
 
@@ -13,8 +12,9 @@ import { useEffect, useState } from 'react';
 const UpdateRecoverPassword = () => {
 
     const location = useLocation();
-    const id: string = location.state;   
-    const [ userid, setUserid ] = useState<number | null>(null);
+    const id: string = location.search.substring(4);   
+    const [userid, setUserid] = useState<int | null>('');
+    const [errorMsg, setErrorMsg] = useState<string | null>('');
     
 
     const {
@@ -38,12 +38,12 @@ const UpdateRecoverPassword = () => {
     });
 
     
-    const contents = userid === undefined
+    const contents = userid === ''
         ? <p><em>Loading ...</em></p>
         :
 
         <form onSubmit={handleSubmit(onSubmit)} >
-
+            <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={userid} />
             <table>
 
 
@@ -66,7 +66,6 @@ const UpdateRecoverPassword = () => {
                 <tr>
                     <td colSpan={2} >
                         
-                        return (
                         <div className="flex flex-wrap gap-5"  >
                             <br />
                             <Button color="gray" type="submit" >Submit</Button>&nbsp;&nbsp;
@@ -75,10 +74,12 @@ const UpdateRecoverPassword = () => {
                         </div>
                     </td>
                 </tr>
-                <tr><td colSpan={1}>
+                <tr><td colSpan={2}>
 
 
                     {errors.password && <p className="errorMessage">{errors.password.message}</p>}
+                    {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
+                    <p>{errorMsg}</p>
 
                 </td></tr>
 
@@ -98,30 +99,28 @@ const UpdateRecoverPassword = () => {
     
 
     function updateData(data: UpdatePasswordData) {
-       const url: string = import.meta.env.VITE_SERVER_URL+'api/Admin/'.concat(User().id.toString());
+        const url: string = `${import.meta.env.VITE_SERVER_URL}api/Admin/${userid}`;
         axios.put(url, data)
             .then(response => {
                 console.log('Record updated successfully ', response.data);
-                navigate("/Admim/Login/Login");
+                navigate("/Login");
             })
             .catch(error => {
-                console.log('Error updating record: ', error);
+                setErrorMsg('Error updating record: ', error);
             });
     }
 
     
     function GetUserid() {
-        const url: string = `${import.meta.env.VITE_SERVER_URL}api/Admin/UpdateUserPassword/${id}`;
+        const url: string = `${import.meta.env.VITE_SERVER_URL}api/Admin/UpdatePassword/${id}`;
         axios.get(url)
             .then(response => {
 
                 setUserid(response.data);
 
-
-                console.log('Record aquired successfully: ', response.data);
             })
             .catch(error => {
-                console.error('Error aquiring record: ', error);
+                setErrorMsg('Error aquiring record: '+ error.message);
             });
     }
        

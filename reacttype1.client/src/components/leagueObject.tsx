@@ -2,21 +2,29 @@
 import { UserType, LeagueType }  from './leagueObjectTypes.ts';
 
 export function User(): UserType  {
-    const UserType: UserType = JSON.parse(localStorage.getItem("login") as string);
-    return UserType;
+    const value = localStorage.getItem("login");
+
+    if (typeof value === 'string') 
+        return JSON.parse(value) // ok
+
+    return new UserType();
 }
 
 export function League(): LeagueType {
-    const league: LeagueType = JSON.parse(localStorage.getItem("league") as string);
-    return league;
+    const value = localStorage.getItem("league");
+
+    if (typeof value === 'string') 
+        return JSON.parse(value) // ok
+
+    return new LeagueType();
 }
 
 export function IsLeagueNull():boolean {
-    return localStorage.getItem("league") === null
+    return League().id == 0;
 }
 
 export function IsUserNull(): boolean {
-    return localStorage.getItem("login") === null
+    return User().id == 0;
 }
 
 export function SetUser( data: UserType): void

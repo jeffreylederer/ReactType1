@@ -1,4 +1,4 @@
-export type LeagueType = {
+export class LeagueType  {
     id: number;
     leagueName: string;
     active: boolean;
@@ -12,18 +12,39 @@ export type LeagueType = {
     pointsLimit: boolean;
     divisions: number;
     playOffs: boolean;
-    players: unknown[];
-    schedules: unknown[];
-    teams: unknown[];
-    userLeagues: unknown[];
+ 
+    
+
+    constructor() {
+        this.id= 0;
+        this.leagueName= '';
+        this.active= false;
+        this.teamSize= 0;
+        this.tiesAllowed = false;
+        this.pointsCount = false;
+        this.winPoints= 0;
+        this.tiePoints= 0;
+        this.byePoints= 0;
+        this.startWeek= 0;
+        this.pointsLimit = false;
+        this.divisions= 0;
+        this.playOffs = false;
+    }
+
 };
 
 
 
-export type UserType = {
-    id: number,
-    username: string,
-    role: string
+export class UserType {
+    id: number;
+    userName: string;
+    role: string;
+
+    constructor() {
+        this.id = 0;
+        this.userName = '';
+        this.role = '';
+    }
 }
 
 

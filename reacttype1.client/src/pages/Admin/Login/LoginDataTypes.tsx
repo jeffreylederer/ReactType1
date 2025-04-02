@@ -21,7 +21,7 @@ export type RecoverPasswordRequestData = z.infer<typeof RecoverPasswordRequestDa
 
 export const  UpdatePasswordDataScheme = z
     .object({
-        id: z.number(),
+        id: z.coerce.string(),
         password: z.string().min(1, "Password is required").max(50, "Password is limited to 450 characters"),
         confirmPassword: z.string()
     })

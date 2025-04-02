@@ -130,7 +130,7 @@ namespace ReactType1.Server.Controllers
             }
 
            
-            var link = $"{item.url}/Admin/Users/UpdateRecoverPassword?id={rp.Id.ToString()}";
+            var link = $"{item.url}UpdateRecoverPassword?id={rp.Id.ToString()}";
 
             using (var smtp = new SmtpClient())
             {
@@ -146,7 +146,7 @@ namespace ReactType1.Server.Controllers
                 {
 
                     message.Subject = "Request to Recover Password";
-                    message.Body = $"Hi,<br/><br/>We got request for reset your account password. Please click on the below link to reset your password<br/><br/><a href={link}>Reset Password link</a>"; ;
+                    message.Body = $"Hi,<br/><br/>We got your request for resetting your account password. Please click on the below link to reset your password<br/><br/><a href={link}>Reset Password link</a>"; ;
                     message.IsBodyHtml = true;
                     try
                     {
@@ -171,14 +171,15 @@ namespace ReactType1.Server.Controllers
             {
                 return null;
             }
-            var guid = _context.RecoverPasswords.Find(id);
-            if (guid == null)
+            var guid = new Guid(id);
+            var result = _context.RecoverPasswords.Find(guid);
+            if (result == null)
             {
                 return null;
             }
 
 
-            return guid.Userid;
+            return result.Userid;
         }
 
 

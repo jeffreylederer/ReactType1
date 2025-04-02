@@ -337,10 +337,9 @@ public partial class DbLeagueApp : DbContext
 
         modelBuilder.Entity<RecoverPassword>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("RecoverPassword");
+            entity.ToTable("RecoverPassword");
 
+            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Time)
                 .HasColumnType("datetime")
                 .HasColumnName("time");
