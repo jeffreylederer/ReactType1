@@ -23,7 +23,7 @@ namespace ReactType1.Server.Code
         /// </summary>
         /// <param name="id">weekid</param>
         /// <param name="db">context</param>
-        public IDocument CreateDocument(int id, DbLeagueApp db)
+        public IDocument CreateDocument(int id, DbLeagueApp db, string site)
         {
             Schedule? schedule = db.Schedules.Find(id);
             League? league = db.Leagues.Find(schedule?.Leagueid);
@@ -31,20 +31,28 @@ namespace ReactType1.Server.Code
             List<MatchScoreView> matches = db.MatchScoreViews
                      .FromSql($"EXEC MatchScore {id}")
                     .ToList();
-           
 
-            
+            int fontsize = 10;
+            if (league.Divisions == 2)
+                fontsize = 8;
             return Document.Create(container =>
             {
                 container
                 .Page(page =>
                 {
+                    
                     page.Margin(50);
 
                     page.Header()
-                        .AlignCenter()
-                        .AlignMiddle()
-                        .Text(league.LeagueName);
+                           .AlignCenter()
+                           .AlignMiddle()
+                           .Column(column =>
+                           {
+                               column.Item().Text(site).FontSize(16);
+                               column.Item().Text(" ");
+                               column.Item().Text(league.LeagueName);
+
+                           });
 
 
 
@@ -52,9 +60,10 @@ namespace ReactType1.Server.Code
                     page.Content().PaddingVertical(20).Column(column =>
                     {
                         
-
+                        
                         column.Item().AlignCenter().Table(table =>
                         {
+                            
                             table.Header(header =>
                             {
 
@@ -85,14 +94,14 @@ namespace ReactType1.Server.Code
                                 return container.Border(1).BorderColor(Colors.Black).PaddingVertical(1).AlignCenter();
                             }
 
-                            table.Cell().Element(CellStyle2).Text("Rink").SemiBold().FontSize(10);
-                            table.Cell().Element(CellStyle2).Text("Team #").SemiBold().FontSize(10);
-                            table.Cell().Element(CellStyle2).Text("Players").SemiBold().FontSize(10);
-                            table.Cell().Element(CellStyle2).Text("Score").SemiBold().FontSize(10);
-                            table.Cell().Element(CellStyle2).Text("Team #").SemiBold().FontSize(10);
-                            table.Cell().Element(CellStyle2).Text("Players").SemiBold().FontSize(10);
-                            table.Cell().Element(CellStyle2).Text("Score").SemiBold().FontSize(10);
-                            table.Cell().Element(CellStyle2).Text("Team Forfeiting").SemiBold().FontSize(10);
+                            table.Cell().Element(CellStyle2).Text("Rink").SemiBold().FontSize(fontsize);
+                            table.Cell().Element(CellStyle2).Text("Team #").SemiBold().FontSize(fontsize);
+                            table.Cell().Element(CellStyle2).Text("Players").SemiBold().FontSize(fontsize);
+                            table.Cell().Element(CellStyle2).Text("Score").SemiBold().FontSize(fontsize);
+                            table.Cell().Element(CellStyle2).Text("Team #").SemiBold().FontSize(fontsize);
+                            table.Cell().Element(CellStyle2).Text("Players").SemiBold().FontSize(fontsize);
+                            table.Cell().Element(CellStyle2).Text("Score").SemiBold().FontSize(fontsize);
+                            table.Cell().Element(CellStyle2).Text("Team Forfeiting").SemiBold().FontSize(fontsize);
 
 
 
@@ -104,34 +113,34 @@ namespace ReactType1.Server.Code
                             if(matches.Where(x=>x.Rink == -1).Count() >0)
                             {
                                 var item = matches.Where(x => x.Rink == -1).First();
-                                table.Cell().Element(CellStyle).Text("Bye").FontSize(10);
-                                table.Cell().Element(CellStyle).Text(item.Teamno1.ToString()).FontSize(10);
-                                table.Cell().Element(CellStyle).Text(item.Player1).FontSize(10);
-                                table.Cell().Element(CellStyle).Text("14").FontSize(10);
+                                table.Cell().Element(CellStyle).Text("Bye").FontSize(fontsize);
+                                table.Cell().Element(CellStyle).Text(item.Teamno1.ToString()).FontSize(fontsize);
+                                table.Cell().Element(CellStyle).Text(item.Player1).FontSize(fontsize);
+                                table.Cell().Element(CellStyle).Text("14").FontSize(fontsize);
 
-                                table.Cell().Element(CellStyle).Text("").FontSize(10);
-                                table.Cell().Element(CellStyle).Text("").FontSize(10);
-                                table.Cell().Element(CellStyle).Text("").FontSize(10);
-                                table.Cell().Element(CellStyle).Text("").FontSize(10);
+                                table.Cell().Element(CellStyle).Text("").FontSize(fontsize);
+                                table.Cell().Element(CellStyle).Text("").FontSize(fontsize);
+                                table.Cell().Element(CellStyle).Text("").FontSize(fontsize);
+                                table.Cell().Element(CellStyle).Text("").FontSize(fontsize);
                             }
 
                             foreach (MatchScoreView item in matches.Where(x=>x.Rink > -1))
                             {
                                 
-                                table.Cell().Element(CellStyle).Text((item.Rink+1).ToString()).FontSize(10);
-                                table.Cell().Element(CellStyle).Text(item.Teamno1.ToString()).FontSize(10);
-                                table.Cell().Element(CellStyle).Text(item.Player1).FontSize(10);
+                                table.Cell().Element(CellStyle).Text((item.Rink+1).ToString()).FontSize(fontsize);
+                                table.Cell().Element(CellStyle).Text(item.Teamno1.ToString()).FontSize(fontsize);
+                                table.Cell().Element(CellStyle).Text(item.Player1).FontSize(fontsize);
                                 if(item.ForFeitId == item.Teamno2)
-                                    table.Cell().Element(CellStyle).Text("14").FontSize(10);
+                                    table.Cell().Element(CellStyle).Text("14").FontSize(fontsize);
                                 else
-                                    table.Cell().Element(CellStyle).Text(item.Team1Score.ToString()).FontSize(10);
-                                table.Cell().Element(CellStyle).Text(item.Teamno2.ToString()).FontSize(10);
-                                table.Cell().Element(CellStyle).Text(item.Player2).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(item.Team1Score.ToString()).FontSize(fontsize);
+                                table.Cell().Element(CellStyle).Text(item.Teamno2.ToString()).FontSize(fontsize);
+                                table.Cell().Element(CellStyle).Text(item.Player2).FontSize(fontsize);
                                 if(item.ForFeitId == item.Teamno1)
-                                    table.Cell().Element(CellStyle).Text("14").FontSize(10);
+                                    table.Cell().Element(CellStyle).Text("14").FontSize(fontsize);
                                 else
-                                    table.Cell().Element(CellStyle).Text(item.Team2Score.ToString()).FontSize(10);
-                                table.Cell().Element(CellStyle).Text(item.ForFeitId.ToString()).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(item.Team2Score.ToString()).FontSize(fontsize);
+                                table.Cell().Element(CellStyle).Text(item.ForFeitId.ToString()).FontSize(fontsize);
                             }
                         }); //table
 
@@ -172,12 +181,12 @@ namespace ReactType1.Server.Code
                                     return container.Border(1).BorderColor(Colors.Black).PaddingVertical(1).AlignCenter();
                                 }
 
-                                table.Cell().Element(CellStyle2).Text("Place").SemiBold().FontSize(10);
-                                table.Cell().Element(CellStyle2).Text("Team #").SemiBold().FontSize(10);
-                                table.Cell().Element(CellStyle2).Text("Players").SemiBold().FontSize(10);
-                                table.Cell().Element(CellStyle2).Text("Wins").SemiBold().FontSize(10);
-                                table.Cell().Element(CellStyle2).Text("Loses").SemiBold().FontSize(10);
-                                table.Cell().Element(CellStyle2).Text("Total Points Scored").SemiBold().FontSize(10);
+                                table.Cell().Element(CellStyle2).Text("Place").SemiBold().FontSize(fontsize);
+                                table.Cell().Element(CellStyle2).Text("Team #").SemiBold().FontSize(fontsize);
+                                table.Cell().Element(CellStyle2).Text("Players").SemiBold().FontSize(fontsize);
+                                table.Cell().Element(CellStyle2).Text("Wins").SemiBold().FontSize(fontsize);
+                                table.Cell().Element(CellStyle2).Text("Loses").SemiBold().FontSize(fontsize);
+                                table.Cell().Element(CellStyle2).Text("Total Points Scored").SemiBold().FontSize(fontsize);
 
                                 static IContainer CellStyle(IContainer container)
                                 {
@@ -186,19 +195,20 @@ namespace ReactType1.Server.Code
 
                                 foreach (Standing item in places)
                                 {
-                                    table.Cell().Element(CellStyle).Text(item.Place.ToString()).FontSize(10);
-                                    table.Cell().Element(CellStyle).Text(item.Team.ToString()).FontSize(10);
-                                    table.Cell().Element(CellStyle).Text(item.Players).FontSize(10);
-                                    table.Cell().Element(CellStyle).Text(item.Wins.ToString()).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(item.Place.ToString()).FontSize(fontsize);
+                                    table.Cell().Element(CellStyle).Text(item.Team.ToString()).FontSize(fontsize);
+                                    table.Cell().Element(CellStyle).Text(item.Players).FontSize(fontsize);
+                                    table.Cell().Element(CellStyle).Text(item.Wins.ToString()).FontSize(fontsize);
 
-                                    table.Cell().Element(CellStyle).Text(item.Loses.ToString()).FontSize(10);
-                                    table.Cell().Element(CellStyle).Text(item.TotalScore.ToString()).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(item.Loses.ToString()).FontSize(fontsize);
+                                    table.Cell().Element(CellStyle).Text(item.TotalScore.ToString()).FontSize(fontsize);
                                 }
 
 
                             }); // table
-                            
 
+                            column.Item().Text("    ");
+                            column.Item().AlignCenter().Text("Standings").SemiBold();
                         }
                     });
                 }); //page

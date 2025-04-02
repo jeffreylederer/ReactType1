@@ -4,6 +4,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using ReactType1.Server.Models;
+using System.Security.Policy;
 
 
 namespace ReactType1.Server.Code
@@ -20,7 +21,7 @@ namespace ReactType1.Server.Code
         /// </summary>
         /// <param name="id">leagueid</param>
         /// <param name="db">context</param>
-        public IDocument CreateDocument(int id, DbLeagueApp db)
+        public IDocument CreateDocument(int id, DbLeagueApp db, string site)
         {
             League? league = db.Leagues
                 .Include(l => l.Teams)
@@ -36,10 +37,17 @@ namespace ReactType1.Server.Code
 
 
                         page.Header()
-                        .Text($"{LeagueName} has no byes")
-                        .SemiBold().FontSize(24)
-                        .AlignCenter()
-                        .FontSize(20);
+                            .AlignCenter()
+                            .AlignMiddle()
+                            .Column(column =>
+                            {
+                                column.Item().Text(site).FontSize(16);
+                                column.Item().Text(" ");
+                                column.Item().Text(league.LeagueName);
+                                column.Item().Text(" ");
+                                column.Item().Text("No byes for this league");
+
+                            });
                     });
                 });
             }
@@ -58,10 +66,15 @@ namespace ReactType1.Server.Code
 
 
                     page.Header()
-                    .Text(LeagueName)
-                    .SemiBold().FontSize(24)
-                    .AlignCenter()
-                    .FontSize(20);
+                            .AlignCenter()
+                            .AlignMiddle()
+                            .Column(column =>
+                            {
+                                column.Item().Text(site).FontSize(16);
+                                column.Item().Text(" ");
+                                column.Item().Text(league.LeagueName);
+
+                            });
 
 
                     page.Content().PaddingVertical(20).Column(column =>

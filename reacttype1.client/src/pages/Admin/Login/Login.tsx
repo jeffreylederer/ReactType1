@@ -48,7 +48,7 @@ function Login() {
     return (
         <>
 
-            <h3>Please login to application</h3>
+            <h3>Please login to {import.meta.env.VITE_SERVER_ClubName} league application</h3>
             <form onSubmit={handleSubmit(onSubmit)} >
                 <table>
                     <tbody>

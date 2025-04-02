@@ -22,7 +22,7 @@ function RecoverPasswordRequest() {
     function SendData(data: RecoverPasswordRequestData) {
         axios.post(import.meta.env.VITE_SERVER_URL + 'api/Admin/RecoverPasswordRequest', data)
             .then((response) => {
-                setErrorMsg("You will be sent an email with instructions to reset your password.");
+                setErrorMsg("The email has been sent.");
                 console.log(response);
             })
             .catch(error => {
@@ -35,7 +35,11 @@ function RecoverPasswordRequest() {
 
     return (
         <>
-            <h3>Password Recover</h3>
+            <h3>Password Recover for {import.meta.env.VITE_SERVER_ClubName} league application</h3>
+            <p>Please fill in your email address (which is also your login user name). Once you select the submit button, an email
+                will be set to you. This email will have a hyperlink with a unique ticket number. Once the email is sent, you have 20
+            minutes to response or the ticket will expire.
+            </p>
             <form onSubmit={handleSubmit(onSubmit)} >
                 <input type="hidden" {...register("url")} defaultValue={import.meta.env.VITE_SERVER_URL} />
                 <table>

@@ -16,10 +16,12 @@ namespace ReactType1.Server.Controllers
     public class TeamsController : ControllerBase
     {
         private readonly DbLeagueApp _context;
+        private readonly IConfiguration _configuration;
 
-        public TeamsController(DbLeagueApp context)
+        public TeamsController(DbLeagueApp context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: Teams
@@ -87,8 +89,9 @@ namespace ReactType1.Server.Controllers
                 return null;
             }
             QuestPDF.Settings.License = LicenseType.Community;
+            var site = _configuration.GetValue<string>("SiteInfo:clubname");
             var report = new TeamReportDoc();
-            var document = report.CreateDocument(id.Value, _context);
+            var document = report.CreateDocument(id.Value, _context, site);
             byte[] pdfBytes = document.GeneratePdf();
             var results = Convert.ToBase64String(pdfBytes);
             return results;

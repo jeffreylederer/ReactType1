@@ -16,7 +16,7 @@ namespace ReactType1.Server.Code
 
 
 
-        public IDocument CreateDocument(int id, DbLeagueApp db)
+        public IDocument CreateDocument(int id, DbLeagueApp db, string site)
         {
             League? league = db.Leagues.Find(id);
 
@@ -49,9 +49,14 @@ namespace ReactType1.Server.Code
                     page.Margin(50);
 
                     page.Header()
-                        .Text(LeagueName)
-                        .SemiBold().FontSize(24)
-                        .AlignCenter();
+                           .AlignCenter()
+                           .AlignMiddle()
+                           .Column(column =>
+                           {
+                               column.Item().Text(site).FontSize(16);
+                               column.Item().Text(" ");
+                               column.Item().Text(league.LeagueName);
+                           });
 
 
 

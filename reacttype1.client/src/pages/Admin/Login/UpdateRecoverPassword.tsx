@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { UpdatePasswordData, UpdatePasswordDataScheme } from "./LoginDataTypes.tsx";
@@ -13,7 +13,7 @@ const UpdateRecoverPassword = () => {
 
     const location = useLocation();
     const id: string = location.search.substring(4);   
-    const [userid, setUserid] = useState<number | null>(null);
+    const [userid, setUserid] = useState<number>(-1);
     const [errorMsg, setErrorMsg] = useState<string | null>('');
     
 
@@ -38,57 +38,59 @@ const UpdateRecoverPassword = () => {
     });
 
     
-    const contents = userid === undefined
+    const contents = userid ==-1
         ? <p><em>Loading ...</em></p>
-        :
+        : (userid == 0 ?
+            <h4>Your time has expired. <Link to="/RecoverPasswordRequest">Try again</Link></h4>
+            :
 
-        <form onSubmit={handleSubmit(onSubmit)} >
-            <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={userid} />
-            <table>
-
-
-                <tr>
-                    <td className="Label">Password:</td>
-
-                    <td className="Field">
-                        <TextInput type="password" {...register('password')}  />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td className="Label">Confirm Password:</td>
-
-                    <td className="Field">
-                        <TextInput type="password" {...register('confirmPassword')} />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td colSpan={2} >
-                        
-                        <div className="flex flex-wrap gap-5"  >
-                            <br />
-                            <Button color="gray" type="submit" >Submit</Button>&nbsp;&nbsp;
+            <form onSubmit={handleSubmit(onSubmit)} >
+                <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={userid} />
+                <table>
 
 
-                        </div>
-                    </td>
-                </tr>
-                <tr><td colSpan={2}>
+                    <tr>
+                        <td className="Label">Password:</td>
+
+                        <td className="Field">
+                            <TextInput type="password" {...register('password')} />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td className="Label">Confirm Password:</td>
+
+                        <td className="Field">
+                            <TextInput type="password" {...register('confirmPassword')} />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colSpan={2} >
+
+                            <div className="flex flex-wrap gap-5"  >
+                                <br />
+                                <Button color="gray" type="submit" >Submit</Button>&nbsp;&nbsp;
 
 
-                    {errors.password && <p className="errorMessage">{errors.password.message}</p>}
-                    {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
-                    <p>{errorMsg}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr><td colSpan={2}>
 
-                </td></tr>
 
-            </table>
-        </form>
+                        {errors.password && <p className="errorMessage">{errors.password.message}</p>}
+                        {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
+                        <p>{errorMsg}</p>
+
+                    </td></tr>
+
+                </table>
+            </form>);
 
     return (
         <>
-            <h3>Update your password</h3>
+            <h3>Update your password for {import.meta.env.VITE_SERVER_ClubName} league application</h3>
             {contents}
 
 

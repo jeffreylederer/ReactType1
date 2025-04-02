@@ -5,6 +5,7 @@ using ReactType1.Server.Models;
 using System.Net.Mail;
 using System.Net;
 using ReactType1.Server.DTOs.Admin;
+using System;
 
 
 
@@ -176,6 +177,13 @@ namespace ReactType1.Server.Controllers
             if (result == null)
             {
                 return null;
+            }
+            var today = DateTime.Now;
+            var diffOfDates = today.Subtract(result.Time);
+            
+            if(diffOfDates.Ticks > 12000000000)
+            {
+                return 0;
             }
 
 

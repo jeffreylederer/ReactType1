@@ -6,6 +6,7 @@ using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using ReactType1.Server.Models;
 using System.Numerics;
+using System.Security.Policy;
 
 namespace ReactType1.Server.Code
 {
@@ -16,7 +17,7 @@ namespace ReactType1.Server.Code
         /// </summary>
         /// <param name="id">leagueid</param>
         /// <param name="db">context</param>
-        public IDocument CreateDocument(int id, DbLeagueApp db)
+        public IDocument CreateDocument(int id, DbLeagueApp db, string site)
         {
             League? league = db.Leagues.Find(id);
             var schedule = db.Schedules.Where(x=>x.Leagueid==league.Id && !x.PlayOffs).OrderBy(x => x.GameDate).ToList();
@@ -39,9 +40,15 @@ namespace ReactType1.Server.Code
                     page.Margin(50);
 
                     page.Header()
-                        .AlignCenter()
-                        .AlignMiddle()
-                        .Text(league?.LeagueName);
+                           .AlignCenter()
+                           .AlignMiddle()
+                           .Column(column =>
+                           {
+                               column.Item().Text(site).FontSize(16);
+                               column.Item().Text(" ");
+                               column.Item().Text(league.LeagueName);
+
+                           });
 
                     page.Content().PaddingVertical(20).Column(column =>
                     {

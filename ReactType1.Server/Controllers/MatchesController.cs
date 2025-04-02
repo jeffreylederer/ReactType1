@@ -6,6 +6,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using ReactType1.Server.Code;
 using ReactType1.Server.Models;
+using System.Configuration;
 
 // https://medium.com/@hassanjabbar2017/performing-crud-operations-using-react-with-net-core-a-step-by-step-guide-0176efa86934
 namespace ReactType1.Server.Controllers
@@ -15,10 +16,12 @@ namespace ReactType1.Server.Controllers
     public class MatchesController : ControllerBase
     {
         private readonly DbLeagueApp _context;
+        private readonly IConfiguration _configuration;
 
-        public MatchesController(DbLeagueApp context)
+        public MatchesController(DbLeagueApp context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: Matches
@@ -63,7 +66,8 @@ namespace ReactType1.Server.Controllers
             
             QuestPDF.Settings.License = LicenseType.Community;
             var report = new ByesReport();
-            var document = report.CreateDocument(id, _context);
+            var site = _configuration.GetValue<string>("SiteInfo:clubname");
+            var document = report.CreateDocument(id, _context, site);
             byte[] pdfBytes = document.GeneratePdf();
             var results = Convert.ToBase64String(pdfBytes);
             return results;
@@ -152,7 +156,8 @@ namespace ReactType1.Server.Controllers
             }
             QuestPDF.Settings.License = LicenseType.Community;
             var report = new StandingsReport();
-            var document = report.CreateDocument(id.Value, _context);
+            var site = _configuration.GetValue<string>("SiteInfo:clubname");
+            var document = report.CreateDocument(id.Value, _context,site);
             byte[] pdfBytes = document.GeneratePdf();
             var results = Convert.ToBase64String(pdfBytes);
             return results;
@@ -166,8 +171,9 @@ namespace ReactType1.Server.Controllers
                 return null;
             }
             QuestPDF.Settings.License = LicenseType.Community;
+            var site = _configuration.GetValue<string>("SiteInfo:clubname");
             var report = new ScorecardReport();
-            var document = report.CreateDocument(id.Value, _context);
+            var document = report.CreateDocument(id.Value, _context, site);
             byte[] pdfBytes = document.GeneratePdf();
             var results = Convert.ToBase64String(pdfBytes);
             return results;
@@ -181,8 +187,9 @@ namespace ReactType1.Server.Controllers
                 return null;
             }
             QuestPDF.Settings.License = LicenseType.Community;
+            var site = _configuration.GetValue<string>("SiteInfo:clubname");
             var report = new ScheduleReport();
-            var document = report.CreateDocument(id.Value, _context);
+            var document = report.CreateDocument(id.Value, _context, site);
             byte[] pdfBytes = document.GeneratePdf();
             var results = Convert.ToBase64String(pdfBytes);
             return results;
