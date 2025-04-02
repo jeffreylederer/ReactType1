@@ -6,6 +6,7 @@ using System.Net.Mail;
 using System.Net;
 using ReactType1.Server.DTOs.Admin;
 using System;
+using System.Reflection.Metadata.Ecma335;
 
 
 
@@ -104,13 +105,13 @@ namespace ReactType1.Server.Controllers
 
         // RecoverPasswordRequest.tsx
         [HttpPost("RecoverPasswordRequest")]
-        public async Task<IActionResult> RecoverPasswordRequest(RecoverPasswordRequestDto item)
+        public async Task<string> RecoverPasswordRequest(RecoverPasswordRequestDto item)
         {
             
             var user = await _context.Users.Where(x=>x.Username == item.UserName).FirstOrDefaultAsync();
             if (user == null)
             {
-                return NotFound();
+                return "User not found";
             }
 
             var rp = new RecoverPassword()
@@ -127,7 +128,7 @@ namespace ReactType1.Server.Controllers
             }
             catch(Exception error)
             {
-                return StatusCode(500, error.Message);
+                return error.Message;
             }
 
            
@@ -156,12 +157,12 @@ namespace ReactType1.Server.Controllers
                     }
                     catch (Exception ex)
                     {
-                        return StatusCode(500, ex.Message);
+                        return ex.Message;
                     }
                 }
             }
 
-            return Ok();
+            return "email sent";
         }
 
         

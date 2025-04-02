@@ -22,11 +22,10 @@ function RecoverPasswordRequest() {
     function SendData(data: RecoverPasswordRequestData) {
         axios.post(import.meta.env.VITE_SERVER_URL + 'api/Admin/RecoverPasswordRequest', data)
             .then((response) => {
-                setErrorMsg("The email has been sent.");
-                console.log(response);
+                setErrorMsg(response.data);
             })
             .catch(error => {
-                setErrorMsg("Send data not successful, ".concat(error));
+                setErrorMsg("Send data not successful" + error);
             });
     }
 

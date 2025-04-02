@@ -146,7 +146,7 @@ namespace ReactType1.Server.Code
 
                         column.Item().Text("    ");
                         column.Item().AlignCenter().Text("Standings").SemiBold();
-                        
+                        column.Item().Text("    ");
 
 
                         for (int div = 1; div <= league?.Divisions; div++)
@@ -208,7 +208,7 @@ namespace ReactType1.Server.Code
                             }); // table
 
                             column.Item().Text("    ");
-                            column.Item().AlignCenter().Text("Standings").SemiBold();
+                            
                         }
                     });
                 }); //page
