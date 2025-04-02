@@ -29,7 +29,7 @@ function Login() {
     function LoginData(data: LoginType) {
         axios.post(import.meta.env.VITE_SERVER_URL+ 'api/Admin', data)
             .then((response) => {
-                if (response.data == null) {
+                if (response.data == '') {
                     setErrorMsg("Login not successful");
                  }
                 else {
