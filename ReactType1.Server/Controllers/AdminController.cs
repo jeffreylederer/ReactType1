@@ -7,6 +7,7 @@ using System.Net;
 using ReactType1.Server.DTOs.Admin;
 using System;
 using System.Reflection.Metadata.Ecma335;
+using System.Text;
 
 
 
@@ -126,13 +127,25 @@ namespace ReactType1.Server.Controllers
                 _context.RecoverPasswords.Add(rp);
                 _context.SaveChanges();
             }
-            catch(Exception error)
+            catch(Exception ex)
             {
-                return error.Message;
+                StringBuilder stringBuilder = new StringBuilder(ex.Message);
+                do
+                {
+                    stringBuilder.Append("; ");
+                    ex = ex.InnerException;
+                } while (ex != null);
+                return stringBuilder.ToString();
+
             }
 
-           
+
             var link = $"{item.url}UpdateRecoverPassword?id={rp.Id.ToString()}";
+
+            
+            var fromEmail = new MailAddress(_configuration.GetValue<string>("Mailer:userid"), "Lawn Bowling Pittsburgh");
+            var toEmail = new MailAddress(user.Username);
+            var fromEmailPassword = _configuration.GetValue<string>("Mailer:password");
 
             using (var smtp = new SmtpClient())
             {
@@ -142,13 +155,13 @@ namespace ReactType1.Server.Controllers
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential(_configuration.GetValue<string>("Mailer:userid"), _configuration.GetValue<string>("Mailer:password"));
+                smtp.Credentials = new NetworkCredential(fromEmail.Address, fromEmailPassword);
 
-                using (var message = new MailMessage(new MailAddress(_configuration.GetValue<string>("Mailer:sender")), new MailAddress(user.Username)))
+                using (var message = new MailMessage(fromEmail, toEmail))
                 {
 
-                    message.Subject = "Request to Recover Password";
-                    message.Body = $"Hi,<br/><br/>We got your request for resetting your account password. Please click on the below link to reset your password<br/><br/><a href={link}>Reset Password link</a>"; ;
+                    message.Subject = "Reset Password for Lawn Bowling League Management Application";
+                    message.Body = $"Hi,<br/><br/>We got request for reset your account password. Please click on the below link to reset your password<br/><br/><a href={link}>Reset Password link</a>";
                     message.IsBodyHtml = true;
                     try
                     {
@@ -157,7 +170,14 @@ namespace ReactType1.Server.Controllers
                     }
                     catch (Exception ex)
                     {
-                        return ex.Message;
+                        StringBuilder stringBuilder = new StringBuilder(ex.Message);
+                        do
+                        {
+                           stringBuilder.Append("; ");
+                           ex = ex.InnerException;
+                        }  while(ex != null);
+                        return stringBuilder.ToString();
+
                     }
                 }
             }
