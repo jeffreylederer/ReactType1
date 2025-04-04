@@ -75,7 +75,7 @@ function Login() {
                             </td>
                         </tr>
                         
-                       {/* <Link to="/RecoverPasswordRequest" >Forgot your password?</Link> */}
+                        <Link to="/RecoverPasswordRequest" >Forgot your password?</Link> 
                     </tbody>
                 </table>
             </form>

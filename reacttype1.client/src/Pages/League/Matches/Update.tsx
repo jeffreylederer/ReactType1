@@ -34,7 +34,7 @@ const MatchUpdate = () => {
     const location = useLocation();
     const id: number = location.state;
 
-    const [hidden, setHidden] = useState<boolean>(match.forFeitId != 0);
+    const [hidden, setHidden] = useState<boolean>(false);
 
     const {
         register,
@@ -51,7 +51,6 @@ const MatchUpdate = () => {
         const value = event.target.value;
         if (value == '0') {
             setHidden(false);
-            
         }
         else {
             setHidden(true);
@@ -86,7 +85,7 @@ const MatchUpdate = () => {
               <td className="Label">Rink:</td>
 
                 <td  className="Field">
-                        {match.rink }
+                        {match.rink+1 }
                 </td>
             </tr>
 
@@ -159,22 +158,24 @@ const MatchUpdate = () => {
 
 
     async function GetData(id: number) {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Matches/GetOne/'.concat(id.toString());
-        axios.get(url)
-            .then(response => {
-                const data: MatchFormData = response.data;
-                if (data.forFeitId != 0) {
-                    setHidden(true);
-                }
-                setMatch(response.data);
-                
+        if (match.id === 0) {
+            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Matches/GetOne/'.concat(id.toString());
+            axios.get(url)
+                .then(response => {
+                    const data: MatchFormData = response.data;
+                    if (data.forFeitId != 0) {
+                        setHidden(true);
+                    }
+                    setMatch(response.data);
 
 
-                console.log('Record aquired successfully: ', response.data);
-            })
-            .catch(error => {
-                console.error('Error aquiring record: ', error);
-            });
+
+                    console.log('Record aquired successfully: ', response.data);
+                })
+                .catch(error => {
+                    console.error('Error aquiring record: ', error);
+                });
+        }
 
     }
 
