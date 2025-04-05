@@ -88,17 +88,19 @@ const LeagueDelete = () => {
     );
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/leagues/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        axios.get(fullUrl)
-            .then(response => {
-                SetLeague(response.data);
-                console.log('Record aquired successfully: ', response.data);
-            })
-            .catch(error => {
-                console.error('Error aquiring record: ', error);
-            });
+        if (league === undefined) {
+            const url: string = import.meta.env.VITE_SERVER_URL + 'api/leagues/';
+            const num: string = id.toString();
+            const fullUrl = url.concat(num);
+            axios.get(fullUrl)
+                .then(response => {
+                    SetLeague(response.data);
+                    console.log('Record aquired successfully: ', response.data);
+                })
+                .catch(error => {
+                    console.error('Error aquiring record: ', error);
+                });
+        }
 
     }
 

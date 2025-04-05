@@ -19,6 +19,7 @@ import Users from "@pages/Admin/Users/List.tsx";
 import UsersDelete from "@pages/Admin/Users/Delete.tsx";
 import UsersUpdate from "@pages/Admin/Users/Update.tsx";
 import UsersCreate from "@pages/Admin/Users/Create.tsx";
+import ChangePassword from "@pages/Admin/Users/ChangePassword.tsx";
 
 
 
@@ -90,6 +91,7 @@ function RouteMenu() {
             <Route path="/Admin/Users/Update" element={<UsersUpdate />} />
             <Route path="/Admin/Users/Create" element={<UsersCreate />} />
             <Route path="/Admin/Users/RecoverPasswordRequest" element={<RecoverPasswordRequest />} />
+            <Route path="/Admin/Users/ChangePassword" element={<ChangePassword />} />
             
 
 

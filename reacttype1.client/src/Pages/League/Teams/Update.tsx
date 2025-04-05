@@ -156,21 +156,22 @@ const TeamUpdate = () => {
 
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Teams/getOne/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        axios.get(fullUrl)
-            .then(response => {
+        if (team.id === 0) {
+            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Teams/getOne/';
+            const num: string = id.toString();
+            const fullUrl = url.concat(num);
+            axios.get(fullUrl)
+                .then(response => {
 
-                setTeam(response.data);
-               
-               
-                console.log('Record aquired successfully: ', response.data);
-            })
-            .catch(error => {
-                console.error('Error aquiring record: ', error);
-            });
+                    setTeam(response.data);
 
+
+                    console.log('Record aquired successfully: ', response.data);
+                })
+                .catch(error => {
+                    console.error('Error aquiring record: ', error);
+                });
+        }
     }
 
     async function GetMembers() {

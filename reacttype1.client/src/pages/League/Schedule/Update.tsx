@@ -90,20 +90,23 @@ const ScheduleUpdate = () => {
 
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Schedules/getOne/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        axios.get(fullUrl)
-            .then(response => {
+        if (schedule === undefined) {
 
-                setSchedule(response.data);
-               
-               
-                console.log('Record aquired successfully: ', response.data);
-            })
-            .catch(error => {
-                console.error('Error aquiring record: ', error);
-            });
+            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Schedules/getOne/';
+            const num: string = id.toString();
+            const fullUrl = url.concat(num);
+            axios.get(fullUrl)
+                .then(response => {
+
+                    setSchedule(response.data);
+
+
+                    console.log('Record aquired successfully: ', response.data);
+                })
+                .catch(error => {
+                    console.error('Error aquiring record: ', error);
+                });
+        }
 
     }
 
