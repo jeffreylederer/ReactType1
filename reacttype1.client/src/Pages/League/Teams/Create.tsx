@@ -92,9 +92,9 @@ const TeamsCreate = () => {
                         <td className="Label">Skip:</td>
                         <td>
                             <select style={{ width: '85%' }} defaultValue="0" {...register("skip")}>
-                                <option value="0">Select member</option>
+                                <option value="0" key="0">Select member</option>
                                 {membership?.map((item) => (
-                                    <option value={item.id.toString()}>{item.fullName}</option>
+                                    <option value={item.id.toString()} key={item.id }>{item.fullName}</option>
                                 ))}
                                 )
                             </select></td>
@@ -104,9 +104,9 @@ const TeamsCreate = () => {
                         <td className="Label">Vice Skip:</td>
                         <td>
                             <select style={{ width: '85%' }} defaultValue="0" {...register("viceSkip")}>
-                                <option value="0">Select member</option>
+                                <option value="0" key="0">Select member</option>
                                 {membership?.map((item) => (
-                                    <option value={item.id.toString()}>{item.fullName}</option>
+                                    <option value={item.id.toString()} key={item.id}>{item.fullName}</option>
                                 ))}
                                 )
                             </select></td>
@@ -116,9 +116,9 @@ const TeamsCreate = () => {
                         <td className="Label">Lead:</td>
                         <td>
                             <select style={{ width: '85%' }} defaultValue="0" {...register("lead")}>
-                                <option value="0">Select Member</option>
+                                <option value="0" key="0">Select Member</option>
                                 {membership?.map((item) => (
-                                    <option value={item.id.toString()}>{item.fullName}</option>
+                                    <option value={item.id.toString()} key={item.id}>{item.fullName}</option>
                                 ))}
                                 )
                             </select></td>
@@ -127,10 +127,10 @@ const TeamsCreate = () => {
                         <td className="Label">Division:</td>
                         <td>
                             <select style={{ width: '85%' }} defaultValue="0" {...register("divisionId")}>
-                                <option value="0">Select Division</option>
-                                <option value="1">1</option>
-                                <option value="2" hidden={League().divisions <2  }>2</option>
-                                <option value="3" hidden={League().divisions <3 }>3</option>
+                                <option value="0" key="0">Select Division</option>
+                                <option value="1" key="1">1</option>
+                                <option value="2" hidden={League().divisions < 2} key="2">2</option>
+                                <option value="3" hidden={League().divisions < 3} key="3">3</option>
                             </select></td>
                     </tr>
                 

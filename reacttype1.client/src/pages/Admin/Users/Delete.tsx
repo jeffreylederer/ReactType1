@@ -58,7 +58,8 @@ const UsersDelete = () => {
     );
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Users/';
+        if (Users === undefined) { 
+        const url: string = import.meta.env.VITE_SERVER_URL + 'api/Users/';
         const num: string = id.toString();
         const fullUrl = url.concat(num);
         axios.get(fullUrl)
@@ -69,6 +70,7 @@ const UsersDelete = () => {
             .catch(error => {
                 console.error('Error aquiring record: ', error);
             });
+        }
 
     }
 

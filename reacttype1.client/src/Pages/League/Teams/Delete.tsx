@@ -67,15 +67,17 @@ const TeamsDelete = () => {
     );
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Teams/getOne/'.concat(id.toString());
-        axios.get(url)
-            .then(response => {
-                setTeam(response.data);
-                console.log('Record aquired successfully: ', response.data);
-            })
-            .catch(error => {
-                console.error('Error aquiring record: ', error);
-            });
+        if (team === undefined) {
+            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Teams/getOne/'.concat(id.toString());
+            axios.get(url)
+                .then(response => {
+                    setTeam(response.data);
+                    console.log('Record aquired successfully: ', response.data);
+                })
+                .catch(error => {
+                    console.error('Error aquiring record: ', error);
+                });
+        }
 
     }
 

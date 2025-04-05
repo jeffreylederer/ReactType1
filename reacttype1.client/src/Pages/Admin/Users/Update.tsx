@@ -120,20 +120,22 @@ const UsersUpdate = () => {
 
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Users/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        axios.get(fullUrl)
-            .then(response => {
+        if (users.id === 0) {
+            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Users/';
+            const num: string = id.toString();
+            const fullUrl = url.concat(num);
+            axios.get(fullUrl)
+                .then(response => {
 
-                SetUsers(response.data);
+                    SetUsers(response.data);
 
 
-                console.log('Record aquired successfully: ', response.data);
-            })
-            .catch(error => {
-                console.error('Error aquiring record: ', error);
-            });
+                    console.log('Record aquired successfully: ', response.data);
+                })
+                .catch(error => {
+                    console.error('Error aquiring record: ', error);
+                });
+        }
 
     }
 

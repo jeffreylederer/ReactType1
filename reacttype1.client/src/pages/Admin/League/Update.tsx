@@ -185,20 +185,22 @@ const LeagueUpdate = () => {
 
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Leagues/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        axios.get(fullUrl)
-            .then(response => {
+        if (league.id === 0) {
+            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Leagues/';
+            const num: string = id.toString();
+            const fullUrl = url.concat(num);
+            axios.get(fullUrl)
+                .then(response => {
 
-                SetLeague(response.data);
+                    SetLeague(response.data);
 
 
-                console.log('Record aquired successfully: ', response.data);
-            })
-            .catch(error => {
-                console.error('Error aquiring record: ', error);
-            });
+                    console.log('Record aquired successfully: ', response.data);
+                })
+                .catch(error => {
+                    console.error('Error aquiring record: ', error);
+                });
+        }
 
     }
 

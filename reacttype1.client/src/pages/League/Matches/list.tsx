@@ -58,7 +58,7 @@ function Matches() {
         event.preventDefault();
         const button: HTMLButtonElement = event.currentTarget;
         const id: string = button.name;
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/Matches/Reorder/".concat(id);
+        const url: string = import.meta.env.VITE_SERVER_URL+"api/Matches/Reorder".concat(id);
         axios.get(url)
             .then(response => {
                 GetData(weekid);

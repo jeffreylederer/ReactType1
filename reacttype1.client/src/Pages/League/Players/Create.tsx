@@ -63,9 +63,9 @@ const PlayersCreate = () => {
 
                         <td className="Field">
                             <select defaultValue="0" {...register("membershipId")}>
-                                <option value="0">Select member</option>
+                                <option value="0" key="0">Select member</option>
                                 {membership?.map((item) => (
-                                    <option value={item.id.toString()}>{item.fullName}</option>
+                                    <option value={item.id.toString()} key={item.id}>{item.fullName}</option>
                                 ))}
                                 )
                             </select>
