@@ -8,6 +8,8 @@ import { TextInput } from "flowbite-react";
 import { MatchFormData } from "./MatchFormData.tsx";
 import { ReturnButton } from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
+import convertDate from '@components/convertDate.tsx';
+
 
 
 
@@ -77,7 +79,7 @@ const MatchUpdate = () => {
             <tr>
                 <td className="Label">Game Date:</td>
 
-                    <td className="Field">{match.gameDate} 
+                    <td className="Field">{convertDate(match.gameDate)} 
                 </td>
             </tr>
 

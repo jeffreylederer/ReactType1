@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import { User, League } from '@components/leagueObject.tsx';
 import Layout from '@layouts/Layout.tsx';
 import uparrow from '@images/uparrow.png';
+import convertDate from '@components/convertDate.tsx';
 
 
 function Matches() {
@@ -78,7 +79,7 @@ function Matches() {
             <p className="toLeft">Date: <select onChange={selectChange} defaultValue={weekid}>
                 <option value="0" key="0" disabled>Select date</option>
                 {schedule?.map(item =>
-                    <option key={item.id} value={item.id.toString()}>{item.gameDate}</option>
+                    <option key={item.id} value={item.id.toString()}>{convertDate(item.gameDate)}</option>
                 )};
             </select><br/>
                     <a href={standingUrl} target='blank' hidden={weekid == 0}>This week's standings report</a><br/>
@@ -125,7 +126,7 @@ function Matches() {
                         <tr key={item.id}>
                             <td hidden={admin}><button hidden={item.rink == 0} onClick={Reorder} name={item.id.toString()} style={{ backgroundColor: 'white' }}><img src={uparrow} /></button></td>
                             
-                            <td>{item.gameDate}</td>
+                            <td>{ convertDate(item.gameDate)}</td>
                             <td>{item.rink+1}</td>
                             <td style={{ color: item.wheelchair1, textAlign: "right" }} >
                                 {item.team1No} ({item.team1})</td>
