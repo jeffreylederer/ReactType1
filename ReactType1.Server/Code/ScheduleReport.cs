@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -7,6 +8,7 @@ using QuestPDF.Infrastructure;
 using ReactType1.Server.Models;
 using System.Numerics;
 using System.Security.Policy;
+using System.Text.RegularExpressions;
 
 namespace ReactType1.Server.Code
 {
@@ -21,7 +23,7 @@ namespace ReactType1.Server.Code
         {
             League? league = db.Leagues.Find(id);
             int leagueid = league == null ? 0 : league.Id;
-            var schedule = db.Schedules.Where(x=>x.Leagueid== leagueid && !x.PlayOffs).OrderBy(x => x.GameDate).ToList();
+            var schedule = db.Schedules.Where(x=>x.Leagueid== leagueid).OrderBy(x => x.GameDate).ToList();
 
             List<MatchScheduleView> matches = [.. db.MatchScheduleViews.FromSql($"EXEC MatchSchedule {leagueid}")];
 
@@ -67,7 +69,8 @@ namespace ReactType1.Server.Code
 
                             table.ColumnsDefinition(columns =>
                             {
-
+                                if(league?.Divisions > 1)
+                                    columns.ConstantColumn(40); //division
                                 columns.ConstantColumn(40); //team number
                                 columns.ConstantColumn(90); //Skip
                                 if (TeamSize == 3)
@@ -81,7 +84,8 @@ namespace ReactType1.Server.Code
                             {
                                 return container.Border(1).BorderColor(Colors.Black).PaddingVertical(5).AlignCenter();
                             }
-
+                            if (league?.Divisions > 1)
+                                table.Cell().Element(CellStyle2).Text("Division").SemiBold().FontSize(10);
                             table.Cell().Element(CellStyle2).Text("Team #").SemiBold().FontSize(10);
                             table.Cell().Element(CellStyle2).Text("Skip").SemiBold().FontSize(10);
                             if (TeamSize == 3)
@@ -96,11 +100,14 @@ namespace ReactType1.Server.Code
 
                             foreach (var item in teams)
                             {
+                                if (league?.Divisions > 1)
+                                    table.Cell().Element(CellStyle).Text(item.Division.ToString()).FontSize(10);
                                 table.Cell().Element(CellStyle).Text(item.TeamNo.ToString()).FontSize(10);
-                                table.Cell().Element(CellStyle).Text(item.Skip).FontSize(10);
-                                if (TeamSize == 3)
+                                if (item.Skip != null)
+                                    table.Cell().Element(CellStyle).Text(item.Skip).FontSize(10);
+                                if (item.ViceSkip != null)
                                     table.Cell().Element(CellStyle).Text(item.ViceSkip).FontSize(10);
-                                if (TeamSize > 1)
+                                if (item.Lead != null)
                                     table.Cell().Element(CellStyle).Text(item.Lead).FontSize(10);
                             }
 
@@ -157,13 +164,27 @@ namespace ReactType1.Server.Code
                             
                             for (int w = 0; w < schedule.Count; w++)
                             {
-                                table.Cell().Element(CellStyle).Text(schedule[w].GameDate.ToShortDateString()).FontSize(10);
-                                for (int r = 0; r < rinks; r++)
+                                if (schedule[w].PlayOffs)
                                 {
-                                    var match = $"{matches[index].Team1}-{matches[index].Team2}";
-                                    table.Cell().Element(CellStyle).Text(match).FontSize(10);
-                                    index++;
+                                    table.Cell().Element(CellStyle).Text(schedule[w].GameDate.ToShortDateString()).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text("PO").FontSize(10);
+                                    for (int r = 0; r < rinks - 1; r++)
+                                    {
+                                        table.Cell().Element(CellStyle).Text("*").FontSize(10);
 
+                                    }
+                                    index += rinks;
+                                }
+                                else
+                                {
+                                    table.Cell().Element(CellStyle).Text(schedule[w].GameDate.ToShortDateString()).FontSize(10);
+                                    for (int r = 0; r < rinks; r++)
+                                    {
+                                        var match = $"{matches[index].Team1}-{matches[index].Team2}";
+                                        table.Cell().Element(CellStyle).Text(match).FontSize(10);
+                                        index++;
+
+                                    }
                                 }
                             }
 

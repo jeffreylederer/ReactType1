@@ -14,7 +14,7 @@
         public List<CalculatedMatch> RoundRobin(int Weeks, int numTeams)
         {
            
-            List<CalculatedMatch> schedule = new List<CalculatedMatch>();
+            List<CalculatedMatch> schedule = new ();
             // Create a list of teams
             List<int> teams = new List<int>();
             for (int i = 0; i < numTeams; i++)
