@@ -1,50 +1,68 @@
-# React + TypeScript + Vite
+# React/Typescript Project
+## Introduction
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This a single page application (SPA) that looks like a Win Form application. The major difference is it uses states for URL parameters rather than command line ones.
+## React client
+I used the following react packages:
+- @hookform/resolvers@3.9.1
+- axios@1.7.9
+- flowbite-react@0.10.2
+- react-hook-form@7.54.2
+- react-router-dom@7.1.1
+- zod@3.24.1
 
-Currently, two official plugins are available:
+Each of these packages allowed me to write the client application.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### axios
+This allowed me to call the web api server methos
 
-## Expanding the ESLint configuration
+### bootstrap
+This allowed me to create pages that look correct independent of screen size.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### flowbite-react
+This is a UI library forms with TextInput, Checkbox, Select and Button controls
 
-- Configure the top-level `parserOptions` property like this:
+### localstorage
+I used localstorage aa a simple way to remember dynamic global values. This includes:
+- the identity of the logged in user including the user's role.
+- current league that the user is accessing.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+###  hookform/resolvers and zod
+Zod is a TypeScript-first schema declaration and validation used inside of forms. Hookform/resolvers handles is a hook to attached schemas to submit methods and input validations.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### react-router-dom
+React Router is used as a simple, declarative routing library. Its only job is matching the URL to a set of components. It works with link controls to direct the application to the correct component.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### hooks
+I used these hooks:
+- useEffect - used like a page load in Win Form application for actions when the page loads.
+- useState - used like a ViewState in Win Form application except changes to useState forces a refresh of the page
+- useCallback - this hook is called whenever that parameters of the hook change.
+- useNavigate - like a Win Form Redirect method.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+
+## Web Api Server
+This is a standard .Net Core project. It uses controller methods (which are called by the axios method in the client) to access database records and pass the results to the client. It uses Entity Framework as an 
+object-relational mapper (ORM).
+
+A clever thing I did was to call Stored Prcoedures on stored procedures with joins. First I created a stored procedure and then created a view that mimics the stored procedure results. Then running Scaffold-DbContex, I was able bring in the model of the view. Here is an example:
+
+     List<TeamMember> list = await _context.TeamMemberViews
+         .FromSql($"EXEC TeamMember{id}")
+         .ToListAsync();
+
+# New Features
+I have added new features to both the the client and server projects.
+
+## React
+### Absolute or Alias paths 
+This allowed import statements to use @component/Menu.tsx instead of ../../components/Menu.tsx
+### Layouts
+This creates a standard header and footer for each page. This compares to masterpage in .aspx
+### Pagination
+I have added pagination to the Membership and Players list pages
+### Unit Testing
+I have added vitest component library and created a simple unit test. It would be easy to create additional tests.
+
+
+
