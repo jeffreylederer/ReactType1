@@ -11,17 +11,12 @@ namespace ReactType1.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MembershipsController : ControllerBase
+    public class MembershipsController(IMapper mapper,  IMembershipRepository membershipRepository) : ControllerBase
     {
-        private readonly IMapper _mapper;
-        private readonly IMembershipRepository _membershipRepository;
+        private readonly IMapper _mapper= mapper;
+        private readonly IMembershipRepository _membershipRepository= membershipRepository;
 
-        public MembershipsController(IMapper mapper,
-            IMembershipRepository membershipRepository)
-        {
-            this._mapper = mapper;
-            this._membershipRepository = membershipRepository;
-        }
+        
 
         // GET: Memberships
         [HttpGet]

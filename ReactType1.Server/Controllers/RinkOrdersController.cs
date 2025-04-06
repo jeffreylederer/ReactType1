@@ -7,16 +7,9 @@ namespace ReactType1.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RinkOrdersController : ControllerBase
+    public class RinkOrdersController(DbLeagueApp context) : ControllerBase
     {
-        private readonly DbLeagueApp _context;
-        
-
-
-        public RinkOrdersController(DbLeagueApp context)
-        {
-            _context = context;
-        }
+        private readonly DbLeagueApp _context = context;
 
         // GET: RinkOrder
         [HttpGet]

@@ -14,14 +14,9 @@ namespace ReactType1.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SchedulesController : ControllerBase
+    public class SchedulesController(DbLeagueApp context) : ControllerBase
     {
-        private readonly DbLeagueApp _context;
-
-        public SchedulesController(DbLeagueApp context)
-        {
-            _context = context;
-        }
+        private readonly DbLeagueApp _context = context;
 
         // GET: Schedules
         [HttpGet("{id}")]

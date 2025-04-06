@@ -2,17 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using ReactType1.Server.Contracts;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ReactType1.Server.Repository
 {
-    public class MembershipRepository : IMembershipRepository
+    public class MembershipRepository(DbLeagueApp context) : ControllerBase
     {
-        private readonly DbLeagueApp _context;
-
-        public MembershipRepository(DbLeagueApp context)
-        {
-            this._context = context;
-        }
+        private readonly DbLeagueApp _context = context;
 
         public async Task<List<Membership>> Get()
         {

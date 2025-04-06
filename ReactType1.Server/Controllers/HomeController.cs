@@ -6,11 +6,9 @@ namespace ReactType1.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class HomeController : Controller
+    public class HomeController(IConfiguration configuration) : Controller
     {
-        private readonly IConfiguration _configuration;
-
-        public HomeController(IConfiguration configuration) => _configuration = configuration;
+        private readonly IConfiguration _configuration = configuration;
 
         // GET: Matches
         [HttpGet]

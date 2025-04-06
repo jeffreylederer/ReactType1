@@ -7,16 +7,9 @@ namespace ReactType1.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LeaguesController : ControllerBase
+    public class LeaguesController(DbLeagueApp context) : ControllerBase
     {
-        private readonly DbLeagueApp _context;
-        
-
-
-        public LeaguesController(DbLeagueApp context)
-        {
-            _context = context;
-        }
+        private readonly DbLeagueApp _context = context;
 
         // GET: Leagues
         [HttpGet]

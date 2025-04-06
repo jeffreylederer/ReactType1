@@ -4,16 +4,9 @@ using ReactType1.Server.Models;
 
 namespace ReactType1.Server.Controllers
 {
-    public class RolesController : Controller
+    public class RolesController(DbLeagueApp context) : ControllerBase
     {
-        private readonly DbLeagueApp _context;
-
-
-
-        public RolesController(DbLeagueApp context)
-        {
-            _context = context;
-        }
+        private readonly DbLeagueApp _context = context;
 
         // GET: Leagues
         [HttpGet]

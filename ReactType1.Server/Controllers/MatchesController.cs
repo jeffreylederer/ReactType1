@@ -13,17 +13,12 @@ namespace ReactType1.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MatchesController : ControllerBase
+    public class MatchesController(DbLeagueApp context, IConfiguration configuration) : ControllerBase
     {
-        private readonly DbLeagueApp _context;
-        private readonly IConfiguration _configuration;
+        private readonly DbLeagueApp _context= context;
+        private readonly IConfiguration _configuration= configuration;
 
-        public MatchesController(DbLeagueApp context, IConfiguration configuration)
-        {
-            _context = context;
-            _configuration = configuration;
-        }
-
+        
         // GET: Matches
         [HttpGet("{id}")]
         public async Task<IEnumerable<OneMatchWeekView>?> Get(int id)

@@ -16,14 +16,9 @@ namespace ReactType1.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PlayersController : ControllerBase
+    public class PlayersController(DbLeagueApp context) : ControllerBase
     {
-        private readonly DbLeagueApp _context;
-
-        public PlayersController(DbLeagueApp context)
-        {
-            _context = context;
-        }
+        private readonly DbLeagueApp _context = context;
 
         // GET: Players
         [HttpGet("{id}")]
