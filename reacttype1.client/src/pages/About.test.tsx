@@ -11,7 +11,7 @@ test('renders About', () => {
         </MemoryRouter>
     );
 
-    expect(screen.getByText(/FPLBC website/i)).toBeTruthy();
+    expect(screen.getByText(/About/i)).toBeTruthy();
 });
 
 
