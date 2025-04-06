@@ -61,7 +61,7 @@ namespace ReactType1.Server.Controllers
             
             QuestPDF.Settings.License = LicenseType.Community;
             var report = new ByesReport();
-            var site = _configuration.GetValue<string>("SiteInfo:clubname");
+            var site = _configuration.GetValue<string>("SiteInfo:clubname")??"Unknown club";
             var document = report.CreateDocument(id, _context, site);
             byte[] pdfBytes = document.GeneratePdf();
             var results = Convert.ToBase64String(pdfBytes);
@@ -78,9 +78,9 @@ namespace ReactType1.Server.Controllers
             }
             try
             {
-                SqlParameter[] parameters = {
-                    new SqlParameter("matchid", id)
-                };
+                SqlParameter[] parameters = [
+                    new("matchid", id)
+                ];
                 var match =  _context.OneMatchWeekViews
                          .FromSqlRaw("EXEC OneMatch @matchid", parameters)
                          .AsEnumerable()
@@ -102,7 +102,7 @@ namespace ReactType1.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, MatchType item)
         {
-            if (id != item.id)
+            if (id != item.Id)
             {
                 return BadRequest();
             }
@@ -112,9 +112,9 @@ namespace ReactType1.Server.Controllers
             {
                 return NotFound();
             }
-            match.Team1Score = item.team1Score;
-            match.Team2Score = item.team2Score;
-            match.ForFeitId = item.forFeitId;
+            match.Team1Score = item.Team1Score;
+            match.Team2Score = item.Team2Score;
+            match.ForFeitId = item.Forfeit;
 
             _context.Entry(match).State = EntityState.Modified;
 
@@ -151,7 +151,7 @@ namespace ReactType1.Server.Controllers
             }
             QuestPDF.Settings.License = LicenseType.Community;
             var report = new StandingsReport();
-            var site = _configuration.GetValue<string>("SiteInfo:clubname");
+            var site = _configuration.GetValue<string>("SiteInfo:clubname") ?? "Unknown club";
             var document = report.CreateDocument(id.Value, _context,site);
             byte[] pdfBytes = document.GeneratePdf();
             var results = Convert.ToBase64String(pdfBytes);
@@ -166,7 +166,7 @@ namespace ReactType1.Server.Controllers
                 return null;
             }
             QuestPDF.Settings.License = LicenseType.Community;
-            var site = _configuration.GetValue<string>("SiteInfo:clubname");
+            var site = _configuration.GetValue<string>("SiteInfo:clubname") ?? "Unknown club";
             var report = new ScorecardReport();
             var document = report.CreateDocument(id.Value, _context, site);
             byte[] pdfBytes = document.GeneratePdf();
@@ -182,7 +182,7 @@ namespace ReactType1.Server.Controllers
                 return null;
             }
             QuestPDF.Settings.License = LicenseType.Community;
-            var site = _configuration.GetValue<string>("SiteInfo:clubname");
+            var site = _configuration.GetValue<string>("SiteInfo:clubname") ?? "Unknown club";
             var report = new ScheduleReport();
             var document = report.CreateDocument(id.Value, _context, site);
             byte[] pdfBytes = document.GeneratePdf();
@@ -200,7 +200,7 @@ namespace ReactType1.Server.Controllers
             var list = await _context.TotalScoreViews
                      .FromSql($"EXEC TotalScore {id}")
                     .ToListAsync();
-            if (list.Count() == 0)
+            if (list.Count == 0)
             {
                 return Ok();
             }
@@ -241,60 +241,65 @@ namespace ReactType1.Server.Controllers
             }
 
             var league = _context.Leagues.Find(id);
-            var weeks = _context.Schedules.Where(x => x.Leagueid == id).ToList(); 
+            var weeks = _context.Schedules.Where(x => x.Leagueid == id).ToList();
             var teams = _context.Teams.Where(x => x.Leagueid == id).ToList();
-            if (weeks.Count() == 0)
+            if (weeks.Count == 0)
             {
                 return StatusCode(500, "No weeks scheduled");
             }
-            if (teams.Count() == 0)
+            if (teams.Count == 0)
             {
                 return StatusCode(500, "No teams have been created");
             }
             var list = await _context.TotalScoreViews
                     .FromSql($"EXEC TotalScore {id}")
                    .ToListAsync();
-            if(list.Count() > 0)
+            if (list.Count > 0)
             {
                 return StatusCode(500, "Matches exist, clear schedule first");
             }
 
             var sl = new CreateScheduleList();
-            List< CalculatedMatch > matches = new List<CalculatedMatch>();
-            if(league.Divisions == 1)
+            List<CalculatedMatch> matches = [];
+            if (league?.Divisions == 1)
             {
-                matches = sl.RoundRobin(weeks.Count(), teams.Count());
+                matches = sl.RoundRobin(weeks.Count, teams.Count);
             }
             else
             {
-                matches = sl.matchesWithDivisions(weeks.Count(), teams.Count());
+                matches = sl.matchesWithDivisions(weeks.Count, teams.Count);
             }
-
-            foreach(var item in matches)
-            {
-                var match = new Match()
+            if (teams != null)
+            { 
+                foreach (var item in matches)
                 {
-                    WeekId = weeks[item.Week].Id,
-                    Rink = item.Rink,
-                    TeamNo1 = teams.Find(x => x.TeamNo == item.Team1+1).Id,
-                    TeamNo2 = teams.Find(x => x.TeamNo == item.Team2+1).Id,
-                    Team1Score = 0,
-                    Team2Score = 0,
-                    ForFeitId = 0
-                };
-                _context.Matches.Add(match);
-            }
+                    var TeamNo1 = teams.Find(x => x.TeamNo == item.Team1 + 1);
+                    var TeamNo2 = teams.Find(x => x.TeamNo == item.Team2 + 1);
+                    var match = new Match()
+                    {
+                        WeekId = weeks[item.Week].Id,
+                        Rink = item.Rink,
+                        TeamNo1 = TeamNo1== null ? 0 : TeamNo1.Id,
+                        TeamNo2 = TeamNo2 == null? 0 : TeamNo2.Id,
+                        Team1Score = 0,
+                        Team2Score = 0,
+                        ForFeitId = 0
+                    };
+                    _context.Matches.Add(match);
+                }
 
 
-            try
-            {
-                await _context.SaveChangesAsync();
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    return StatusCode(500, $"Could not create matches: {e.Message}");
+                }
+                return Ok();
             }
-            catch (Exception e)
-            {
-                return StatusCode(500, $"Could not create matches: {e.Message}");
-            }
-            return Ok();
+            return BadRequest();
         }
 
 
@@ -306,10 +311,10 @@ namespace ReactType1.Server.Controllers
 
     public class MatchType
     {
-        public int id { get; set; }
-        public int team1Score { get; set; }
-        public int team2Score { get; set; }
-        public int forFeitId { get; set; }
+        public int Id { get; set; }
+        public int Team1Score { get; set; }
+        public int Team2Score { get; set; }
+        public int Forfeit { get; set; }
     }
 
 }

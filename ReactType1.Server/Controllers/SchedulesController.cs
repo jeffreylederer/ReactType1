@@ -62,10 +62,8 @@ namespace ReactType1.Server.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch(Exception ex)
-            {
-                var message = ex.Message;
-            }
+            catch { }
+       
 
 
         }
@@ -81,7 +79,7 @@ namespace ReactType1.Server.Controllers
             var schedule = new Schedule()
             {
                 Id = item.Id,
-                GameDate = DateOnly.Parse(item.GameDate),
+                GameDate = DateOnly.Parse(item.GameDate?? DateTime.Now.ToString()),
                 Cancelled = item.Cancelled,
                 PlayOffs = item.PlayOffs,
                 Leagueid = item.Leagueid

@@ -13,9 +13,9 @@ namespace ReactType1.Server.Code
         /// <summary>
         /// Determine the standings based on all the games played so far
         /// </summary>
-        /// <param name="weekid">the record id of the week in the schedule table</param>
+        /// <param name="weekid">the record Id of the week in the schedule table</param>
         /// <param name="teamsize">number of players per team</param>
-        /// <param name="leagueid">the record id of the league table</param>
+        /// <param name="leagueid">the record Id of the league table</param>
         /// <returns></returns>
         public static List<Standing> Doit(int weekid, int leagueid, int DivisionId, DbLeagueApp db)
         {
@@ -268,9 +268,9 @@ namespace ReactType1.Server.Code
         /// <summary>
         /// Determine the standings based on all the games this week
         /// </summary>
-        /// <param name="weekid">the record id of the week in the schedule table</param>
+        /// <param name="weekid">the record Id of the week in the schedule table</param>
         /// <param name="teamsize">number of players per team</param>
-        /// <param name="leagueid">the record id of the league table</param>
+        /// <param name="leagueid">the record Id of the league table</param>
         /// <returns></returns>
         public static List<Standing> DoitPlayoffs(int weekid, int leagueid, DbLeagueApp db)
         {

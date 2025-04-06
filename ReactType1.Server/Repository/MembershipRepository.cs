@@ -2,13 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using ReactType1.Server.Contracts;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ReactType1.Server.Repository
 {
-    public class MembershipRepository(DbLeagueApp context) : ControllerBase
+    public class MembershipRepository : IMembershipRepository
     {
-        private readonly DbLeagueApp _context = context;
+        private readonly DbLeagueApp _context;
+
+        public MembershipRepository(DbLeagueApp context)
+        {
+            this._context = context;
+        }
 
         public async Task<List<Membership>> Get()
         {
@@ -24,7 +28,7 @@ namespace ReactType1.Server.Repository
             return await this._context.Memberships.FindAsync(id);
         }
 
-        public async Task<Membership>Create(Membership membership)
+        public async Task<Membership> Create(Membership membership)
         {
             await this._context.Memberships.AddAsync(membership);
             await this._context.SaveChangesAsync();
