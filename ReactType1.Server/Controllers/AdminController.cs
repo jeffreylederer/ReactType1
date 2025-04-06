@@ -17,16 +17,10 @@ namespace ReactType1.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AdminController : ControllerBase
+    public class AdminController(DbLeagueApp context, IConfiguration configuration) : ControllerBase
     {
-        private readonly DbLeagueApp _context;
-        private readonly IConfiguration _configuration;
-
-        public AdminController(DbLeagueApp context, IConfiguration configuration)
-        {
-            _context = context;
-            _configuration = configuration;
-        }
+        private readonly DbLeagueApp _context = context;
+        private readonly IConfiguration _configuration = configuration;
 
         // GET: Leagues/Create
         // login.tsx
@@ -69,9 +63,9 @@ namespace ReactType1.Server.Controllers
 
         // UserUpdatePassword.tsx
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, UserUpdateDto item)
+        public async Task<IActionResult> Edit(int id, UserUpdateDto? item)
         {
-            if (id != item.Id)
+            if (item == null || id != item.Id)
             {
                 return BadRequest();
             }
@@ -129,35 +123,35 @@ namespace ReactType1.Server.Controllers
             }
             catch(Exception ex)
             {
-                StringBuilder stringBuilder = new StringBuilder(ex.Message);
-                do
+                StringBuilder stringBuilder = new (ex.Message);
+                while(ex.InnerException != null)                
                 {
                     stringBuilder.Append("; ");
                     ex = ex.InnerException;
-                } while (ex != null);
+                } 
                 return stringBuilder.ToString();
 
             }
 
 
-            var link = $"{item.url}UpdateRecoverPassword?id={rp.Id.ToString()}";
+            var link = $"{item.url}UpdateRecoverPassword?id={rp.Id}";
 
-            
-            var fromEmail = new MailAddress(_configuration.GetValue<string>("Mailer:userid"), "Lawn Bowling Pittsburgh");
+
+            var fromEmail = new MailAddress(_configuration.GetValue<string>("Mailer:userid") ?? "jeffrey@winnlederer.com", "Lawn Bowling Pittsburgh");
             var toEmail = new MailAddress(user.Username);
             var fromEmailPassword = _configuration.GetValue<string>("Mailer:password");
 
-            using (var smtp = new SmtpClient())
-            {
+            using SmtpClient smtp = new();
+            { 
 
-                smtp.Host =  _configuration.GetValue<string>("Mailer:smtp");
+                smtp.Host = _configuration.GetValue<string>("Mailer:smtp")?? "";
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials = new NetworkCredential(fromEmail.Address, fromEmailPassword);
 
-                using (var message = new MailMessage(fromEmail, toEmail))
+                using MailMessage message = new(fromEmail, toEmail);
                 {
 
                     message.Subject = "Reset Password for Lawn Bowling League Management Application";
@@ -170,12 +164,12 @@ namespace ReactType1.Server.Controllers
                     }
                     catch (Exception ex)
                     {
-                        StringBuilder stringBuilder = new StringBuilder(ex.Message);
-                        do
+                        StringBuilder stringBuilder = new (ex.Message);
+                        while (ex.InnerException != null)
                         {
-                           stringBuilder.Append("; ");
-                           ex = ex.InnerException;
-                        }  while(ex != null);
+                            stringBuilder.Append("; ");
+                            ex = ex.InnerException;
+                        }
                         return stringBuilder.ToString();
 
                     }
@@ -183,11 +177,12 @@ namespace ReactType1.Server.Controllers
             }
 
             return "email sent";
+            
         }
 
-        
-        [HttpGet("UpdatePassword/{id}")]
-        public async Task<int?> UpdateUserPassword(string? id)
+
+            [HttpGet("UpdatePassword/{id}")]
+        public int? UpdateUserPassword(string id)
         {
             if (id == null)
             {

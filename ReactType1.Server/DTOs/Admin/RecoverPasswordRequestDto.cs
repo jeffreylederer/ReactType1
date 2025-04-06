@@ -2,7 +2,7 @@
 {
     public class RecoverPasswordRequestDto
     {
-        public string UserName { get; set; }
-        public string url { get; set; }
+        public string? UserName { get; set; }
+        public string? url { get; set; }
     }
 }

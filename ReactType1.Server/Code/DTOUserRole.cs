@@ -10,11 +10,11 @@ namespace ReactType1.Server.Code
 
     public class DTOUserRoleCreate
     {
-        public string? Username { get; set; }
+        public string Username { get; set; }
 
-        public string? Password { get; set; }
+        public required string Password { get; set; }
 
-        public string? DisplayName { get; set; }
+        public required string DisplayName { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -25,7 +25,7 @@ namespace ReactType1.Server.Code
     {
         public int Id { get; set; } 
 
-        public string? DisplayName { get; set; }
+        public required string DisplayName { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -37,9 +37,9 @@ namespace ReactType1.Server.Code
     {
         public int Id { get; set; }
 
-        public string? UserName { get; set; }
+        public required string UserName { get; set; }
 
-        public string? DisplayName { get; set; }
+        public required string DisplayName { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -50,8 +50,8 @@ namespace ReactType1.Server.Code
     public class DTOChangePassword
     {
         public int Id { get; set; }
-        public string Password { get; set; }
-        public string? ConfirmPassword { get; set; }
+        public required string Password { get; set; }
+        public required string ConfirmPassword { get; set; }
 
     }
 

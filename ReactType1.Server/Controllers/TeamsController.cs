@@ -13,16 +13,10 @@ namespace ReactType1.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TeamsController : ControllerBase
+    public class TeamsController(DbLeagueApp context, IConfiguration configuration) : ControllerBase
     {
-        private readonly DbLeagueApp _context;
-        private readonly IConfiguration _configuration;
-
-        public TeamsController(DbLeagueApp context, IConfiguration configuration)
-        {
-            _context = context;
-            _configuration = configuration;
-        }
+        private readonly DbLeagueApp _context = context;
+        private readonly IConfiguration _configuration = configuration;
 
         // GET: Teams
         [HttpGet("{id}")]
@@ -57,9 +51,9 @@ namespace ReactType1.Server.Controllers
 
             try
             {
-                SqlParameter[] parameters = {
-                    new SqlParameter("leagueid", id)
-                };
+                SqlParameter[] parameters = [
+                    new ("leagueid", id)
+                ];
                 var team = _context.OneTeamViews
                          .FromSqlRaw("EXEC OneTeamFullname @leagueid", parameters)
                          .AsEnumerable()
@@ -73,9 +67,9 @@ namespace ReactType1.Server.Controllers
                 
                 return team;
             }
-            catch(Exception ex)
+            catch
             {
-                var mess = ex.Message;
+               
             }
             return null;
         }
@@ -89,9 +83,9 @@ namespace ReactType1.Server.Controllers
                 return null;
             }
             QuestPDF.Settings.License = LicenseType.Community;
-            var site = _configuration.GetValue<string>("SiteInfo:clubname");
+            string? site = _configuration.GetValue<string>("SiteInfo:clubname");
             var report = new TeamReportDoc();
-            var document = report.CreateDocument(id.Value, _context, site);
+            var document = report.CreateDocument(id.Value, _context, site ?? "Unknown");
             byte[] pdfBytes = document.GeneratePdf();
             var results = Convert.ToBase64String(pdfBytes);
             return results;

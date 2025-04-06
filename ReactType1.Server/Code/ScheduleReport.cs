@@ -20,17 +20,16 @@ namespace ReactType1.Server.Code
         public IDocument CreateDocument(int id, DbLeagueApp db, string site)
         {
             League? league = db.Leagues.Find(id);
-            var schedule = db.Schedules.Where(x=>x.Leagueid==league.Id && !x.PlayOffs).OrderBy(x => x.GameDate).ToList();
+            int leagueid = league == null ? 0 : league.Id;
+            var schedule = db.Schedules.Where(x=>x.Leagueid== leagueid && !x.PlayOffs).OrderBy(x => x.GameDate).ToList();
 
-            List<MatchScheduleView> matches = db.MatchScheduleViews
-                     .FromSql($"EXEC MatchSchedule {league.Id}").ToList();
+            List<MatchScheduleView> matches = [.. db.MatchScheduleViews.FromSql($"EXEC MatchSchedule {leagueid}")];
 
-            List<AllTeamsView> teams = db.AllTeamsViews
-                     .FromSql($"EXEC AllTeams {league.Id}").ToList();
+            List<AllTeamsView> teams = [.. db.AllTeamsViews.FromSql($"EXEC AllTeams {leagueid}")];
             
 
             int rinks = teams.Count / 2;
-            int? TeamSize = league?.TeamSize;
+            int TeamSize = league==null?1 : league.TeamSize;
 
             return Document.Create(container =>
             {
@@ -46,7 +45,7 @@ namespace ReactType1.Server.Code
                            {
                                column.Item().Text(site).FontSize(16);
                                column.Item().Text(" ");
-                               column.Item().Text(league.LeagueName);
+                               column.Item().Text(league?.LeagueName);
 
                            });
 
@@ -60,7 +59,7 @@ namespace ReactType1.Server.Code
                             {
 
                                 header.Cell().
-                                    ColumnSpan((uint)TeamSize.Value + 1)
+                                    ColumnSpan((uint)TeamSize + 1)
                                     .AlignCenter()
                                     .AlignMiddle()
                                     .Text("Teams");
@@ -71,9 +70,9 @@ namespace ReactType1.Server.Code
 
                                 columns.ConstantColumn(40); //team number
                                 columns.ConstantColumn(90); //Skip
-                                if (TeamSize.HasValue && TeamSize.Value == 3)
+                                if (TeamSize == 3)
                                     columns.ConstantColumn(90); //ViceSkip
-                                if (TeamSize.HasValue && TeamSize.Value > 1)
+                                if (TeamSize > 1)
                                     columns.ConstantColumn(90); //Lead
 
                             });

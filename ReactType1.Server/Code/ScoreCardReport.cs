@@ -43,7 +43,7 @@ namespace ReactType1.Server.Code
                             {
                                 column.Item().Text(site).FontSize(16); 
                                 column.Item().Text(" ");
-                                column.Item().Text(league.LeagueName);
+                                column.Item().Text(league?.LeagueName);
                                 column.Item().Text(" ");
                             });
                             

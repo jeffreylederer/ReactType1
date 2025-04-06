@@ -33,7 +33,7 @@ namespace ReactType1.Server.Code
                     .ToList();
 
             int fontsize = 10;
-            if (league.Divisions == 2)
+            if (league?.Divisions == 2)
                 fontsize = 8;
             return Document.Create(container =>
             {
@@ -50,7 +50,7 @@ namespace ReactType1.Server.Code
                            {
                                column.Item().Text(site).FontSize(16);
                                column.Item().Text(" ");
-                               column.Item().Text(league.LeagueName);
+                               column.Item().Text(league?.LeagueName);
 
                            });
 
@@ -71,7 +71,7 @@ namespace ReactType1.Server.Code
                                     ColumnSpan(6)
                                     .AlignCenter()
                                     .AlignMiddle()
-                                    .Text($"Games for week {schedule.GameDate.ToShortDateString()}");
+                                    .Text($"Games for week {schedule?.GameDate.ToShortDateString()}");
                             });
 
 

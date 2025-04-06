@@ -165,9 +165,9 @@ namespace ReactType1.Server.Controllers
 
     public partial class ScheduleTypeCreate
     {
-        public string? GameDate { get; set; }
+        public required string GameDate { get; set; }
 
-        public string? Leagueid { get; set; }
+        public required string Leagueid { get; set; }
 
         public bool Cancelled { get; set; }
 

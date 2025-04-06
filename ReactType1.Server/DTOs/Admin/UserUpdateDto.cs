@@ -2,8 +2,8 @@
 {
     public class UserUpdateDto
     {
-        public string? password { get; set; }
-        public string? confirmPassword { get; set; }
+        public required string password { get; set; }
+        public required string confirmPassword { get; set; }
         public int Id { get; set; }
     }
 }

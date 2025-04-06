@@ -16,10 +16,7 @@ namespace ReactType1.Server.Controllers
 
 
 
-        public UsersController(DbLeagueApp context)
-        {
-            _context = context;
-        }
+        public UsersController(DbLeagueApp context) => _context = context;
 
         // GET: Users
         [HttpGet]
@@ -88,14 +85,14 @@ namespace ReactType1.Server.Controllers
             if (role != null)
             {
                 user.RoleId = role.Id;
-                switch (role.RoleId)
+                user.Role = role.RoleId switch
                 {
-                    case 1: user.Role = "Observer"; break;
-                    case 2: user.Role = "Scorer"; break;
-                    case 3: user.Role = "Admin"; break;
-                    case 4: user.Role = "SiteAdmin"; break;
-                    default: user.Role = "Observer"; break;
-                }
+                    1 => "Observer",
+                    2 => "Scorer",
+                    3 => "Admin",
+                    4 => "SiteAdmin",
+                    _ => "Observer",
+                };
             }
             
             return user;
@@ -149,7 +146,7 @@ namespace ReactType1.Server.Controllers
             }
 
             user.IsActive = item.IsActive;
-            user.DisplayName = item?.DisplayName;
+            user.DisplayName = item.DisplayName;
             _context.Entry(user).State = EntityState.Modified;
 
             

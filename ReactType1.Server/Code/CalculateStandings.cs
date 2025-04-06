@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ReactType1.Server.Models;
 
 
@@ -19,7 +20,10 @@ namespace ReactType1.Server.Code
         public static List<Standing> Doit(int weekid, int leagueid, int DivisionId, DbLeagueApp db)
         {
             League? league = db.Leagues.Find(leagueid);
-            int teamsize = league.TeamSize;
+            if(league == null) 
+                return new List<Standing>();
+
+            int? teamsize = league.TeamSize;
 
             var list = new List<Standing>();
 
@@ -35,19 +39,22 @@ namespace ReactType1.Server.Code
                          .FromSql($"EXEC OneTeam {team.Id}")
                          .AsEnumerable()
                          .FirstOrDefault();
-
+                
                 string players = "";
-                switch (teamsize)
+                if (team1 != null)
                 {
-                    case 1:
-                        players = team1.Skip;
-                        break;
-                    case 2:
-                        players = $"{team1.Skip}, {team1.Lead}";
-                        break;
-                    case 3:
-                        players = $"{team1.Skip}, {team1.ViceSkip}, {team1.Lead}";
-                        break;
+                    switch (teamsize)
+                    {
+                        case 1:
+                            players = team1.Skip;
+                            break;
+                        case 2:
+                            players = $"{team1.Skip}, {team1.Lead}";
+                            break;
+                        case 3:
+                            players = $"{team1.Skip}, {team1.ViceSkip}, {team1.Lead}";
+                            break;
+                    }
                 }
 
                 list.Add(new Standing()
@@ -90,8 +97,11 @@ namespace ReactType1.Server.Code
                     {
                         var winner = list.Find(x => x.Team == teamView?.Team);
                         var loser = list.Find(x => x.Team == teamView?.Team1);
-                        winner.Loses++;
-                        loser.Loses++;
+                        if (winner != null && loser != null)
+                        {
+                            winner.Loses++;
+                            loser.Loses++;
+                        }
 
                     }
                     // tie game
@@ -99,19 +109,22 @@ namespace ReactType1.Server.Code
                     {
                         var winner = list.Find(x => x.Team == teamView?.Team);
                         var loser = list.Find(x => x.Team == teamView?.Team1);
-                        winner.Ties++;
-                        loser.Ties++;
-                        if (league.PointsLimit)
+                        if (winner != null && loser != null)
                         {
-                            winner.TotalScore += Math.Min(20, match.Team1Score);
-                            loser.TotalScore += Math.Min(20, match.Team2Score);
-                            //total += Math.Min(20, match.Team1Score);
-                        }
-                        else
-                        {
-                            winner.TotalScore += match.Team1Score;
-                            loser.TotalScore += match.Team2Score;
-                            //total += match.Team1Score;
+                            winner.Ties++;
+                            loser.Ties++;
+                            if (league.PointsLimit)
+                            {
+                                winner.TotalScore += Math.Min(20, match.Team1Score);
+                                loser.TotalScore += Math.Min(20, match.Team2Score);
+                                //total += Math.Min(20, match.Team1Score);
+                            }
+                            else
+                            {
+                                winner.TotalScore += match.Team1Score;
+                                loser.TotalScore += match.Team2Score;
+                                //total += match.Team1Score;
+                            }
                         }
                         numMatches++;
                     }
@@ -120,17 +133,20 @@ namespace ReactType1.Server.Code
                     {
                         var winner = list.Find(x => x.Team == teamView?.Team);
                         var loser = list.Find(x => x.Team == teamView?.Team1);
-                        winner.Wins++;
-                        loser.Loses++;
-                        if (league.PointsLimit)
+                        if (winner != null && loser != null)
                         {
-                            winner.TotalScore += Math.Min(20, match.Team1Score);
-                            loser.TotalScore += Math.Min(20, match.Team2Score);
-                        }
-                        else
-                        {
-                            winner.TotalScore += match.Team1Score;
-                            loser.TotalScore += match.Team2Score;
+                            winner.Wins++;
+                            loser.Loses++;
+                            if (league.PointsLimit)
+                            {
+                                winner.TotalScore += Math.Min(20, match.Team1Score);
+                                loser.TotalScore += Math.Min(20, match.Team2Score);
+                            }
+                            else
+                            {
+                                winner.TotalScore += match.Team1Score;
+                                loser.TotalScore += match.Team2Score;
+                            }
                         }
                         numMatches++;
                     }
@@ -139,17 +155,20 @@ namespace ReactType1.Server.Code
                     {
                         var winner = list.Find(x => x.Team == teamView?.Team1);
                         var loser = list.Find(x => x.Team == teamView?.Team);
-                        winner.Wins++;
-                        loser.Loses++;
-                        if (league.PointsLimit)
+                        if (winner != null && loser != null)
                         {
-                            winner.TotalScore += Math.Min(20, match.Team2Score);
-                            loser.TotalScore += Math.Min(20, match.Team1Score);
-                        }
-                        else
-                        {
-                            winner.TotalScore += match.Team2Score;
-                            loser.TotalScore += match.Team1Score;
+                            winner.Wins++;
+                            loser.Loses++;
+                            if (league.PointsLimit)
+                            {
+                                winner.TotalScore += Math.Min(20, match.Team2Score);
+                                loser.TotalScore += Math.Min(20, match.Team1Score);
+                            }
+                            else
+                            {
+                                winner.TotalScore += match.Team2Score;
+                                loser.TotalScore += match.Team1Score;
+                            }
                         }
                         numMatches++;
                     }
@@ -159,14 +178,20 @@ namespace ReactType1.Server.Code
                         var winner = list.Find(x => x.Team == (teamView?.Team == match.ForFeitId ? teamView?.Team1 : teamView?.Team));
                         var loser = list.Find(x => x.Team == match.ForFeitId);
                         forfeit = true;
-                        winner.Wins++;
-                        loser.Loses++;
+                        if (winner != null && loser != null)
+                        {
+                            winner.Wins++;
+                            loser.Loses++;
+                        }
                     }
                     //bye
                     else
                     {
                         var winner = list.Find(x => x.Team == teamView?.Team);
-                        winner.Byes++;
+                        if (winner != null)
+                        {
+                            winner.Byes++;
+                        }
                         bye = true;
                     }
                 }
@@ -186,12 +211,14 @@ namespace ReactType1.Server.Code
                         if (match.Rink != -1 && match.ForFeitId > 0)
                         {
                             var winner = list.Find(x => x.Team == (teamView?.Team == match.ForFeitId ? teamView?.Team1 : teamView?.Team));
-                            winner.TotalScore += 14;
+                            if (winner != null)
+                                winner.TotalScore += 14;
                         }
                         else if (match.Rink == -1 && match.ForFeitId != -1)
                         {
                             var winner = list.Find(x => x.Team == teamView?.Team);
-                            winner.TotalScore += 14;
+                            if (winner != null)
+                                winner.TotalScore += 14;
                         }
                     }
 
@@ -248,7 +275,11 @@ namespace ReactType1.Server.Code
         public static List<Standing> DoitPlayoffs(int weekid, int leagueid, DbLeagueApp db)
         {
             League? league = db.Leagues.Find(leagueid);
+            if (league == null)
+                return new List<Standing>();
+
             int? teamsize = league.TeamSize;
+            
 
             var list = new List<Standing>();
 
@@ -261,17 +292,20 @@ namespace ReactType1.Server.Code
                 .AsEnumerable()
                 .FirstOrDefault();
                 string players = "";
-                switch (teamsize)
+                if (team1 != null)
                 {
-                    case 1:
-                        players = team1.Skip;
-                        break;
-                    case 2:
-                        players = $"{team1.Skip}, {team1.Lead}";
-                        break;
-                    case 3:
-                        players = $"{team1.Skip}, {team1.ViceSkip}, {team1.Lead}";
-                        break;
+                    switch (teamsize)
+                    {
+                        case 1:
+                            players = team1.Skip;
+                            break;
+                        case 2:
+                            players = $"{team1.Skip}, {team1.Lead}";
+                            break;
+                        case 3:
+                            players = $"{team1.Skip}, {team1.ViceSkip}, {team1.Lead}";
+                            break;
+                    }
                 }
                 list.Add(new Standing()
                 {
@@ -288,6 +322,7 @@ namespace ReactType1.Server.Code
 
             // determine the total score and wins and loses for each team for each week
             var week = db.Schedules.Find(weekid);
+            if (week != null) 
             {
 
                 //cancelled weeks do not count
@@ -308,8 +343,11 @@ namespace ReactType1.Server.Code
                     {
                         var winner = list.Find(x => x.Team == teamView?.Team);
                         var loser = list.Find(x => x.Team == teamView?.Team1);
-                        winner.Loses++;
-                        loser.Loses++;
+                        if (winner != null && loser != null)
+                        {
+                            winner.Loses++;
+                            loser.Loses++;
+                        }
 
                     }
                     // tie game
@@ -317,19 +355,22 @@ namespace ReactType1.Server.Code
                     {
                         var winner = list.Find(x => x.Team == teamView?.Team);
                         var loser = list.Find(x => x.Team == teamView?.Team1);
-                        winner.Ties++;
-                        loser.Ties++;
-                        if (league.PointsLimit)
+                        if (winner != null && loser != null)
                         {
-                            winner.TotalScore += Math.Min(20, match.Team1Score);
-                            loser.TotalScore += Math.Min(20, match.Team2Score);
-                            //total += Math.Min(20, match.Team1Score);
-                        }
-                        else
-                        {
-                            winner.TotalScore += match.Team1Score;
-                            loser.TotalScore += match.Team2Score;
-                            //total += match.Team1Score;
+                            winner.Ties++;
+                            loser.Ties++;
+                            if (league.PointsLimit)
+                            {
+                                winner.TotalScore += Math.Min(20, match.Team1Score);
+                                loser.TotalScore += Math.Min(20, match.Team2Score);
+                                //total += Math.Min(20, match.Team1Score);
+                            }
+                            else
+                            {
+                                winner.TotalScore += match.Team1Score;
+                                loser.TotalScore += match.Team2Score;
+                                //total += match.Team1Score;
+                            }
                         }
                         numMatches++;
                     }
@@ -338,17 +379,20 @@ namespace ReactType1.Server.Code
                     {
                         var winner = list.Find(x => x.Team == teamView?.Team);
                         var loser = list.Find(x => x.Team == teamView?.Team1);
-                        winner.Wins++;
-                        loser.Loses++;
-                        if (league.PointsLimit)
+                        if (winner != null && loser != null)
                         {
-                            winner.TotalScore += Math.Min(20, match.Team1Score);
-                            loser.TotalScore += Math.Min(20, match.Team2Score);
-                        }
-                        else
-                        {
-                            winner.TotalScore += match.Team1Score;
-                            loser.TotalScore += match.Team2Score;
+                            winner.Wins++;
+                            loser.Loses++;
+                            if (league.PointsLimit)
+                            {
+                                winner.TotalScore += Math.Min(20, match.Team1Score);
+                                loser.TotalScore += Math.Min(20, match.Team2Score);
+                            }
+                            else
+                            {
+                                winner.TotalScore += match.Team1Score;
+                                loser.TotalScore += match.Team2Score;
+                            }
                         }
                         numMatches++;
                     }
@@ -357,17 +401,20 @@ namespace ReactType1.Server.Code
                     {
                         var winner = list.Find(x => x.Team == teamView?.Team1);
                         var loser = list.Find(x => x.Team == teamView?.Team);
-                        winner.Wins++;
-                        loser.Loses++;
-                        if (league.PointsLimit)
+                        if (winner != null && loser != null)
                         {
-                            winner.TotalScore += Math.Min(20, match.Team2Score);
-                            loser.TotalScore += Math.Min(20, match.Team1Score);
-                        }
-                        else
-                        {
-                            winner.TotalScore += match.Team2Score;
-                            loser.TotalScore += match.Team1Score;
+                            winner.Wins++;
+                            loser.Loses++;
+                            if (league.PointsLimit)
+                            {
+                                winner.TotalScore += Math.Min(20, match.Team2Score);
+                                loser.TotalScore += Math.Min(20, match.Team1Score);
+                            }
+                            else
+                            {
+                                winner.TotalScore += match.Team2Score;
+                                loser.TotalScore += match.Team1Score;
+                            }
                         }
                         numMatches++;
                     }
@@ -377,14 +424,20 @@ namespace ReactType1.Server.Code
                         var winner = list.Find(x => x.Team == (teamView?.Team == match.ForFeitId ? teamView?.Team1 : teamView?.Team));
                         var loser = list.Find(x => x.Team == match.ForFeitId);
                         forfeit = true;
-                        winner.Wins++;
-                        loser.Loses++;
+                        if (winner != null && loser != null)
+                        {
+                            winner.Wins++;
+                            loser.Loses++;
+                        }
                     }
                     //bye
                     else
                     {
                         var winner = list.Find(x => x.Team == teamView?.Team);
-                        winner.Byes++;
+                        if (winner != null)
+                        {
+                            winner.Byes++;
+                        }
                         bye = true;
                     }
 
@@ -404,12 +457,14 @@ namespace ReactType1.Server.Code
                         if (match.Rink != -1 && match.ForFeitId > 0)
                         {
                             var winner = list.Find(x => x.Team == (teamView?.Team == match.ForFeitId ? teamView?.Team1 : teamView?.Team));
-                            winner.TotalScore += 14;
+                            if (winner != null)
+                                winner.TotalScore += 14;
                         }
                         else if (match.Rink == -1 && match.ForFeitId != -1)
                         {
                             var winner = list.Find(x => x.Team == teamView?.Team);
-                            winner.TotalScore += 14;
+                            if(winner != null)
+                                winner.TotalScore += 14;
                         }
                     }
                 }
@@ -465,13 +520,15 @@ namespace ReactType1.Server.Code
         public int Team { get; set; }
         public string Players { get; set; } = "";
         public int TotalScore { get; set; } = 0;
-        public int Wins { get; set; }
-        public int Loses { get; set; }
+        public int Wins { get; set; } = 0;
+        public int Loses { get; set; } = 0;
         public int Ties { get; set; } = 0;
-        public int Byes { get; set; }
-        public short DivisionId { get; set; }
-        public int TotalPoints { get; set; }
-        public int Place { get;set; }
+        public int Byes { get; set; } = 0;  
+        public short DivisionId { get; set; }=0;
+        public int TotalPoints { get; set; } = 0;
+        public int Place { get; set; } = 0;
+
+        
     }
 }
     

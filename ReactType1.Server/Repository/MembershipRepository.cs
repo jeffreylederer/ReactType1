@@ -1,6 +1,7 @@
 ﻿using ReactType1.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using ReactType1.Server.Contracts;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ReactType1.Server.Repository
 {
@@ -18,7 +19,7 @@ namespace ReactType1.Server.Repository
             return await _context.Set<Membership>().ToListAsync();
         }
 
-        public async Task<Membership?> GetOne(int? id)
+        public async Task<Membership> GetOne(int? id)
         {
             if (id == null)
             {
@@ -36,12 +37,7 @@ namespace ReactType1.Server.Repository
 
         public async Task Delete(int id)
         {
-            var membership = await GetOne(id);
-
-            if (membership is null)
-            {
-                throw new Exception($"membershipID {id} is not found.");
-            }
+            var membership = await GetOne(id) ?? throw new Exception($"membershipID {id} is not found.");
             this._context.Set<Membership>().Remove(membership);
             await _context.SaveChangesAsync();
         }

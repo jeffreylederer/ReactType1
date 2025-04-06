@@ -10,19 +10,16 @@ namespace ReactType1.Server.Controllers
     {
         private readonly IConfiguration _configuration;
 
-        public HomeController(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+        public HomeController(IConfiguration configuration) => _configuration = configuration;
 
         // GET: Matches
         [HttpGet]
         public SiteInfo GetInfo()
         {
-            SiteInfo item = new SiteInfo()
+            SiteInfo item = new ()
             {
-                clubname = _configuration.GetValue<string>("SiteInfo:clubname"),
-                contact = _configuration.GetValue<string>("SiteInfo:contact")
+                Clubname = _configuration.GetValue<string>("SiteInfo:clubname")??"Unknown club",
+                Contact = _configuration.GetValue<string>("SiteInfo:contact") ?? "jeffrey@winnlederer.com"
             };
 
             return item;
@@ -31,8 +28,8 @@ namespace ReactType1.Server.Controllers
 
     public class SiteInfo
     {
-        public string clubname { get; set; }
-        public string contact { get; set; }
+        public required string Clubname { get; set; }
+        public required string Contact { get; set; }
 
     }
 }
