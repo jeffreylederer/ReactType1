@@ -158,7 +158,8 @@ function Matches() {
             const url: string = import.meta.env.VITE_SERVER_URL+"api/Schedules/".concat(League().id.toString());
             axios.get(url)
                 .then(response => {
-                    setSchedule(response.data);
+                    const weeks: UpdateFormData[] = response.data;
+                    setSchedule(weeks.filter((item) => !item.playOffs));
   
                 })
                 .catch(error => {
