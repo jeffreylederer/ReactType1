@@ -7,6 +7,7 @@ using QuestPDF.Infrastructure;
 using ReactType1.Server.Code;
 using ReactType1.Server.Models;
 using System.Configuration;
+using System.Security.Cryptography;
 
 // https://medium.com/@hassanjabbar2017/performing-crud-operations-using-react-with-net-core-a-step-by-step-guide-0176efa86934
 namespace ReactType1.Server.Controllers
@@ -27,6 +28,21 @@ namespace ReactType1.Server.Controllers
                      .FromSql($"EXEC OneMatchWeek {id}")
                     .ToListAsync();
             return list;
+        }
+
+        // GET: Matches
+        [HttpGet("GetAllMatches/{id}")]
+        public int GetAllMatches(int id)
+        {
+            var query =from m in _context.Matches
+            join s in _context.Schedules 
+            on  m.WeekId equals s.Id
+            where s.Leagueid == id
+            select new
+            {
+               m.Id
+            };
+            return query.ToList().Count();
         }
 
         // GET: Matches

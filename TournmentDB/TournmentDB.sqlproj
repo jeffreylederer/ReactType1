@@ -61,7 +61,6 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Views\" />
-    <Folder Include="Security\" />
     <Folder Include="dbo\Functions\" />
     <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
@@ -88,13 +87,10 @@
     <Build Include="dbo\Views\AllTeamsView.sql" />
     <Build Include="dbo\Views\MatchScheduleView.sql" />
     <Build Include="dbo\Views\MatchView.sql" />
-    <Build Include="dbo\Views\UserLeagueView.sql" />
     <Build Include="dbo\Views\TeamMembers.sql" />
     <Build Include="dbo\Views\OneTeamView.sql" />
     <Build Include="dbo\Views\OneMatchWeekView.sql" />
     <Build Include="dbo\Views\TeamsView.sql" />
-    <Build Include="Security\AdminUser.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
     <Build Include="dbo\Functions\TeamPlayers.sql" />
     <Build Include="dbo\Functions\HasWheelChair.sql" />
     <Build Include="dbo\Stored Procedures\OneMatch.sql" />
@@ -105,7 +101,6 @@
     <Build Include="dbo\Stored Procedures\PlayerAllowDelete.sql" />
     <Build Include="dbo\Stored Procedures\TeamAllowDelete.sql" />
     <Build Include="dbo\Stored Procedures\TotalScore.sql" />
-    <Build Include="dbo\Stored Procedures\ScheduleAllowDelete.sql" />
     <Build Include="dbo\Stored Procedures\GetMatchAll.sql" />
     <Build Include="dbo\Stored Procedures\MatchScore.sql" />
     <Build Include="dbo\Stored Procedures\AllTeams.sql" />

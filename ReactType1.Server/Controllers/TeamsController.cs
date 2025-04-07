@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using ReactType1.Server.Code;
 using ReactType1.Server.Models;
+using System.Collections.Generic;
+using static QuestPDF.Helpers.Colors;
+
 
 
 
@@ -25,7 +27,7 @@ namespace ReactType1.Server.Controllers
             var list = await _context.TeamMembers
                      .FromSql($"EXEC TeamAllowDelete {id}")
                     .ToListAsync();
-            list.Sort((a, b) => a.TeamNo.CompareTo(b.TeamNo));
+            
             return list;
         }
 
@@ -51,11 +53,11 @@ namespace ReactType1.Server.Controllers
 
             try
             {
-                SqlParameter[] parameters = [
-                    new ("leagueid", id)
+                Microsoft.Data.SqlClient.SqlParameter[] parameters = [
+                    new ("teamid", id)
                 ];
                 var team = _context.OneTeamViews
-                         .FromSqlRaw("EXEC OneTeamFullname @leagueid", parameters)
+                         .FromSqlRaw("EXEC OneTeamFullname @teamid", parameters)
                          .AsEnumerable()
                          .FirstOrDefault();
                          
@@ -67,9 +69,9 @@ namespace ReactType1.Server.Controllers
                 
                 return team;
             }
-            catch
+            catch (Exception ex)
             {
-               
+                var message = ex.Message;
             }
             return null;
         }
@@ -93,8 +95,9 @@ namespace ReactType1.Server.Controllers
 
 
         [HttpPost]
-        public async Task Create(TeamTypeCreate item)
+        public async Task<IActionResult> Create(TeamTypeCreate item)
         {
+
             var teamNo = await _context.Teams.Where(x => x.Leagueid == item.Leagueid).CountAsync() + 1;
 
             var Team = new Team()
@@ -114,10 +117,9 @@ namespace ReactType1.Server.Controllers
             }
             catch(Exception ex)
             {
-                var message = ex.Message;
+                return BadRequest();
             }
-
-
+            return await Reorder(item.Leagueid);
         }
 
         [HttpPut("{id}")]
@@ -180,7 +182,7 @@ namespace ReactType1.Server.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-                return NoContent();
+               
             }
             catch (DbUpdateException)
             {
@@ -190,12 +192,36 @@ namespace ReactType1.Server.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
+            return await Reorder(item.Leagueid);
 
         }
 
         private bool TeamExists(int id)
         {
             return _context.Teams.Any(e => e.Id == id);
+        }
+
+        private async Task<IActionResult> Reorder(int LeagueId)
+        {
+            var list = await _context.Teams
+                .Where(x=>x.Leagueid==LeagueId)
+                .OrderBy(x => x.DivisionId)
+                .ToListAsync();
+            int index = 1;
+            foreach (var team in list)
+            {
+                team.TeamNo = index++;
+                _context.Entry(team).State = EntityState.Modified;
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+            return Ok();
         }
     }
 

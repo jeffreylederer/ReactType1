@@ -1,73 +1,115 @@
 import { Link } from 'react-router-dom';
-import useFetch from '@hooks/useFetch.tsx';
 import { TeamMember } from "./TeamMember.tsx";
-import { User, League } from "@components/leagueObject.tsx";;
+import { User, League } from "@components/leagueObject.tsx";
 import Layout from '@layouts/Layout.tsx';
+import { useState, useEffect } from 'react';
 
 
 function Teams() {
-    const { data, loading, error } = useFetch<TeamMember>(`${import.meta.env.VITE_SERVER_URL}api/teams/${League().id}`);
+    const [data, setData] = useState<TeamMember[]| null>(null);
+    const [matches, setMatches] = useState<number | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
     const permission: string = User().role;
-    const allowed: boolean = (permission == "SiteAdmin" || permission == "Admin") ? false : true;
+    const allowed: boolean = !((permission == "SiteAdmin" || permission == "Admin")&& matches == 0);
+    const updateAllowed: boolean = !(permission == "SiteAdmin" || permission == "Admin"); 
+
+
+    const fetchData = async () => {
+        if (data == undefined) {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/Teams/${League().id}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const json = (await response.json()) as TeamMember[];
+                setData(json);
+
+            } catch (error) {
+                let message: string;
+                if (error instanceof Error)
+                    message = error.message
+                else
+                    message = String(error)
+                setError(message);
+            }
+        }
+    };
+
+    const numberMatches = async () => {
+        if (matches == undefined) {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/matches/GetAllMatches/${League().id}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const json = (await response.json()) as number;
+                setMatches(json);
+
+            } catch (error) {
+                let message: string;
+                if (error instanceof Error)
+                    message = error.message
+                else
+                    message = String(error)
+                setError(message);
+            }
+        }
+    };
+    
+
+    
+
+    useEffect(() => {
+        fetchData();
+        numberMatches();
+    });
+
+    const contents = (data === undefined || matches === undefined)
+        ? <p><em>Loading ...</em></p>
+        :
+
+
+        <table className="table table-striped" aria-labelledby="tableLabel">
+            <thead>
+                <tr>
+                    <th>Team No</th>
+                    <th>Skip</th>
+                    <th hidden={League().teamSize < 3}>Vice Skip</th>
+                    <th hidden={League().teamSize < 2}>Lead</th>
+                    <th>Division</th>
+                    <td hidden={allowed}></td>
+                </tr>
+            </thead>
+            <tbody>
+                {data && data.map(item =>
+                    <tr key={item.id}>
+                        <td>{item.teamNo}</td>
+                        <td>{item.skip}</td>
+                        <td hidden={League().teamSize < 3}>{item.viceSkip}</td>
+                        <td hidden={League().teamSize < 2}>{item.lead}</td>
+                        <td>{item.division}</td>
+                        <td hidden={updateAllowed}><Link to="/league/Teams/Update" state={item.id.toString()}>Update</Link><span hidden={allowed}>|</span>
+                            <Link hidden={allowed} to="/league/Teams/Delete" state={item.id.toString()}>Delete</Link>
+                        </td>
+                    </tr>
+                )}
+            </tbody>
+        </table>;
 
 
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
-    if (error)
-        return <p>Error: {error}</p>;
-
-    if (!data)
         return (
-
             <Layout>
-
-                <h3>Teams in league {League().leagueName}</h3>
-                <Link to="/League/Teams/Create" hidden={allowed}>Add</Link>
-                <p>No Teams</p>
+                <h3 id="tableLabel">Teams for League {League().leagueName}</h3>
+                <Link to="/Teams/Create" hidden={allowed}>Add</Link>
+                {contents}
+                <p>Number of Teams: {data?.length}</p>
+                <p>{error}</p>
             </Layout>
         );
 
-
-    return (
-        <Layout>
-            <h3>Teams in league {League().leagueName}</h3>
-            <div >
-                <Link to="/League/Teams/Create" hidden={allowed}>Add</Link><br />
-                <a href="/League/Teams/Report" target="_blank" >Team Report</a>
-            </div>
-            <table className="table table-striped" aria-labelledby="tableLabel">
-                <thead>
-                    <tr>
-                        <th>Team No</th>
-                        <th>Skip</th>
-                        <th hidden={League().teamSize < 3}>Vice Skip</th>
-                        <th hidden={League().teamSize < 2}>Lead</th>
-                        <th>Division</th>
-                        <td hidden={allowed}></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map(item =>
-                        <tr key={item.id}>
-                            <td>{item.teamNo}</td>
-                            <td>{item.skip}</td>
-                            <td hidden={League().teamSize < 3}>{item.viceSkip}</td>
-                            <td hidden={League().teamSize < 2}>{item.lead}</td>
-                            <td>{item.division}</td>
-                            <td hidden={allowed}><Link to="/league/Teams/Update" state={item.id.toString()}>Update</Link>|
-                                <Link to="/league/Teams/Delete" state={item.id.toString()}>Delete</Link>
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-            <p>Number of Teams: {data?.length}</p>
-
-        </Layout>
-    );
+   
 }
 
     
