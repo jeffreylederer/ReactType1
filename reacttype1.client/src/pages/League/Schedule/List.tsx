@@ -13,8 +13,9 @@ function Schedule() {
     const [matches, setMatches] = useState<number | null>(null);
 
     const permission: string = User().role;
-    const allowed: boolean = !((permission == "SiteAdmin" || permission == "Admin")&& matches == 0);
-    const updateAllowed: boolean = !(permission == "SiteAdmin" || permission == "Admin");
+    const updateAllowed: boolean = (permission == "SiteAdmin" || permission == "Admin");
+    const allowed: boolean =  updateAllowed && matches == 0;
+    
     const [error, setError] = useState<string | null>(null);
 
     const fetchData = async () => {
@@ -83,8 +84,8 @@ function Schedule() {
                             <td>{convertDate(item.gameDate)}</td>
                             <td>{item.cancelled ? "yes" : "no"}</td>
                             <td>{item.playOffs ? "yes" : "no"}</td>
-                            <td hidden={updateAllowed}><Link to="/League/Schedule/Update" state={item.id.toString()}>Update</Link><span hidden={allowed}>|</span>
-                                <Link to="/League/Schedule/Delete" state={item.id.toString()} hidden={allowed}>Delete</Link>
+                            <td hidden={!updateAllowed}><Link to="/League/Schedule/Update" state={item.id.toString()}>Update</Link><span hidden={!allowed}>|</span>
+                                <Link to="/League/Schedule/Delete" state={item.id.toString()} hidden={!allowed}>Delete</Link>
                             </td>
 
                         </tr>
@@ -95,8 +96,9 @@ function Schedule() {
         return (
         <Layout>
             <h3 id="tableLabel">Schedule for League {League().leagueName}</h3>
-                <Link to="/League/Schedule/Create" hidden={allowed}>Add</Link>
+                <Link to="/League/Schedule/Create" hidden={!allowed}>Add</Link>
                 {contents}
+                <p>{matches}</p>
                 <p>{error}</p>
             </Layout>
         );

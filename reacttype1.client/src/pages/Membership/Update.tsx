@@ -42,7 +42,7 @@ const MembershipUpdate = () => {
     if (error)
         return (
             <Layout>
-                <h3>Update mwmbership record</h3>
+                <h3>Update membership record</h3>
                 {error}
             </Layout>
         );
@@ -50,7 +50,7 @@ const MembershipUpdate = () => {
     if (loading)
         return (
             <Layout>
-                <h3>Update mwmbership record</h3>
+                <h3>Update membership record</h3>
                 <p>Loading...</p>
             </Layout>
         );

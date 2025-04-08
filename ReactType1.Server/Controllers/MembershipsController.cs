@@ -4,6 +4,7 @@ using ReactType1.Server.Models;
 using ReactType1.Server.Contracts;
 using AutoMapper;
 using ReactType1.Server.DTOs.Membership;
+using System.Runtime.ExceptionServices;
 
 
 //https://geeksarray.com/blog/implement-repository-pattern-with-aspnet-core-web-api
@@ -24,6 +25,7 @@ namespace ReactType1.Server.Controllers
         {
             var membership = await this._membershipRepository.Get();
             var records = _mapper.Map<List<GetMembershipDetailsDto>>(membership);
+            records.Sort((a, b) => (a.LastName + " " + a.FirstName).CompareTo(b.LastName + " "+ b.FullName));
             return Ok(records);
         }
 

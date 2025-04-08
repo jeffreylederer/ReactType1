@@ -123,13 +123,7 @@ namespace ReactType1.Server.Code
                                 table.Cell().Element(CellStyle).Text(item.GameDate.ToString()).FontSize(10).AlignRight(); 
                                 table.Cell().Element(CellStyle).Text(item.TeamNo.ToString()).FontSize(10).AlignCenter(); 
 
-
-                                string? team = item?.Skip;
-                                if (TeamSize == 2)
-                                    team += "," + item?.Lead;
-                                if (TeamSize == 3)
-                                    team += ", " + item?.ViceSkip + "," + item?.Lead;
-                                table.Cell().Element(CellStyle).Text(team).FontSize(10).AlignLeft(); 
+                                table.Cell().Element(CellStyle).Text(item.Players).FontSize(10).AlignLeft(); 
 
                                 
 

@@ -7,11 +7,9 @@ public partial class GetByesView
 {
     public int Id { get; set; }
 
-    public string? Skip { get; set; }
+    public string? Players { get; set; }
 
-    public string? ViceSkip { get; set; }
-
-    public string? Lead { get; set; }
+    
 
     public short Division { get; set; }
 

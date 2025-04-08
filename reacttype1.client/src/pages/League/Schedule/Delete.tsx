@@ -56,17 +56,19 @@ const ScheduleDelete = () => {
     );
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Schedules/getOne/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        axios.get(fullUrl)
-            .then(response => {
-                setSchedule(response.data);
-                console.log('Record aquired successfully: ', response.data);
-            })
-            .catch(error => {
-                SeterrorMsg('Error aquiring record: '.concat(error.response.data));
-            });
+        if (schedule === undefined) {
+            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Schedules/getOne/';
+            const num: string = id.toString();
+            const fullUrl = url.concat(num);
+            axios.get(fullUrl)
+                .then(response => {
+                    setSchedule(response.data);
+                    console.log('Record aquired successfully: ', response.data);
+                })
+                .catch(error => {
+                    SeterrorMsg('Error aquiring record: '.concat(error.response.data));
+                });
+        }
 
     }
 

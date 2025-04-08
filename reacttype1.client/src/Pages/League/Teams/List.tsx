@@ -11,9 +11,8 @@ function Teams() {
     const [error, setError] = useState<string | null>(null);
 
     const permission: string = User().role;
-    const allowed: boolean = !((permission == "SiteAdmin" || permission == "Admin")&& matches == 0);
-    const updateAllowed: boolean = !(permission == "SiteAdmin" || permission == "Admin"); 
-
+    const updateAllowed: boolean = (permission == "SiteAdmin" || permission == "Admin"); 
+    const allowed: boolean = updateAllowed &&  matches == 0;
 
     const fetchData = async () => {
         if (data == undefined) {
@@ -89,8 +88,8 @@ function Teams() {
                         <td hidden={League().teamSize < 3}>{item.viceSkip}</td>
                         <td hidden={League().teamSize < 2}>{item.lead}</td>
                         <td>{item.division}</td>
-                        <td hidden={updateAllowed}><Link to="/league/Teams/Update" state={item.id.toString()}>Update</Link><span hidden={allowed}>|</span>
-                            <Link hidden={allowed} to="/league/Teams/Delete" state={item.id.toString()}>Delete</Link>
+                        <td hidden={!updateAllowed}><Link  to="/league/Teams/Update" state={item.id.toString()}>Update</Link><span hidden={!allowed}>|</span>
+                            <Link hidden={!allowed} to="/league/Teams/Delete" state={item.id.toString()}>Delete</Link>
                         </td>
                     </tr>
                 )}
@@ -102,7 +101,8 @@ function Teams() {
         return (
             <Layout>
                 <h3 id="tableLabel">Teams for League {League().leagueName}</h3>
-                <Link to="/Teams/Create" hidden={allowed}>Add</Link>
+                <Link to="/league/Teams/Create" hidden={!allowed}>Add</Link>
+                <Link to="/league/Teams/Report" target="blank">Teams Report</Link>
                 {contents}
                 <p>Number of Teams: {data?.length}</p>
                 <p>{error}</p>

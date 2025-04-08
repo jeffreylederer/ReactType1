@@ -37,12 +37,13 @@ namespace ReactType1.Server.Controllers
             var query =from m in _context.Matches
             join s in _context.Schedules 
             on  m.WeekId equals s.Id
-            where s.Leagueid == id
+            where s.Leagueid == id && m.Rink != -1
             select new
             {
                m.Id
             };
-            return query.ToList().Count();
+            var count =  query.ToList().Count();
+            return count;
         }
 
         // GET: Matches
