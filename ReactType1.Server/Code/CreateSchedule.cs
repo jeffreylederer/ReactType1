@@ -1,4 +1,7 @@
-﻿namespace ReactType1.Server.Code
+﻿
+using ReactType1.Server.Models;
+
+namespace ReactType1.Server.Code
 {
     public class CreateScheduleList
     {
@@ -29,12 +32,13 @@
                 numTeams++;
             }
 
+            int numofRinks = numTeams / 2;
             
             // Generate schedule for each week
             for (int week = 0; week < Weeks; week++)
             {
                 int rink = 0;
-                for (int i = 0; i < numTeams / 2; i++)
+                for (int i = 0; i < numofRinks; i++)
                 {
                     int team1 = teams[i];
                     int team2 = teams[numTeams - 1 - i];
@@ -45,10 +49,11 @@
                         schedule.Add(new CalculatedMatch()
                         {
                             Week = week,
-                            Rink = rink++,
+                            Rink = (week + rink) % numofRinks,
                             Team1 = team1,
                             Team2 = team2
                         });
+                        rink++;
                     }
                     else if (team1 == -1)
                     {
@@ -79,6 +84,23 @@
             return schedule;
         }
 
+        public List<CalculatedMatch> matchesWithDivisions(int weeks, DbLeagueApp db, int leagueid)
+        {
+            var teams = db.Teams.Where(x=>x.Leagueid==leagueid).ToList();
+            var teamsinDivision1 = teams.Count(x => x.DivisionId == 1);
+            var teamsinDivision2 = teams.Count(x => x.DivisionId == 2);
+            List<CalculatedMatch> x1 = RoundRobin(weeks, teamsinDivision1);
+            List<CalculatedMatch> x2 = RoundRobin(weeks, teamsinDivision2);
+            foreach(var item in x2)
+            {
+                item.Rink += teamsinDivision1;
+                item.Team1 += teamsinDivision1;
+                item.Team2 += teamsinDivision1;
+                x1.Add(item);
+            }
+            return x1;
+        }
+
         /// <summary>
         /// This is called to generate matches for leagues with multiple divisions. It will fill in weeks after the week robin play with
         /// inter divisional matches. If the number of teams is not divisible by 4, it will schedule inter divisional matches on bye weeks.
@@ -87,65 +109,7 @@
         /// <param name="numberOfTeams">number of teams in the league. It must be divisible by 2</param>
         /// <returns>Generates a list of matches. Each list has a week number, rink number, team 1 number and team 2 number.
         /// </returns>
-        public List<CalculatedMatch> matchesWithDivisions(int weeks, int numberOfTeams)
-        {
-            var list = RoundRobin(numberOfTeams / 2, numberOfTeams / 2);
-            var list1 = new List<CalculatedMatch>();
-          
-
-            // create matches for teams in division 2 using matches in division 1
-            var numberOfRinks = numberOfTeams / 4;
-            foreach (var match in list)
-            {
-                if (match.Rink > -1)
-                {
-                    var match1 = new CalculatedMatch()
-                    {
-                        Week = match.Week,
-                        Rink = match.Rink + numberOfRinks,
-                        Team1 = match.Team1 + numberOfTeams / 2,
-                        Team2 = match.Team2 + numberOfTeams / 2
-                    };
-                    list1.Add(match1);
-                }
-
-            }
-
-            // handle the bye weeks with inter divisional games.
-            var newList = list.FindAll(x => x.Rink == -1);
-            foreach (var item in newList)
-            {
-                int index = list.IndexOf(item);
-                var item1 = list[index];
-                item1.Rink = numberOfTeams / 2 - 1;
-                item1.Team2 += numberOfTeams / 2;
-                list[index] = item1;
-            }
-
-            //file in the rest of the schedule with inter divisional matches
-            for (int w = numberOfTeams / 2; w < weeks; w++)
-            {
-                for (int i = 0; i < numberOfTeams / 2; i++)
-                {
-                    int team2 = (i + w + 1);
-                    if (team2 >= numberOfTeams)
-                        team2 = team2 - numberOfTeams / 2;
-                    var match1 = new CalculatedMatch()
-                    {
-                        Week = w,
-                        Rink = i,
-                        Team1 = i,
-                        Team2 = team2
-                    };
-                    list1.Add(match1);
-                }
-            }
-            foreach (var item in list1)
-                list.Add(item);
-
-            list.Sort((a, b) => (a.Week * 100 + a.Rink).CompareTo(b.Week * 100 + b.Rink));
-            return list;
-        }
+        
     }
 
     public class CalculatedMatch

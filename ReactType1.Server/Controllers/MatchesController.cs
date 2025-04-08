@@ -214,14 +214,26 @@ namespace ReactType1.Server.Controllers
             {
                 return StatusCode(500, "Bad value");
             }
-            var list = await _context.TotalScoreViews
-                     .FromSql($"EXEC TotalScore {id}")
-                    .ToListAsync();
-            if (list.Count == 0)
-            {
+
+            var list = _context.Matches
+             .Join(
+                  _context.Schedules,
+                  match => match.WeekId,
+                  schedule => schedule.Id,
+                  (match, schedule) => new
+                  {
+                      match.Id,
+                      schedule.Leagueid,
+                      score = match.Team2Score + match.Team1Score + match.ForFeitId
+                  }
+                )
+              .Where(x => x.Leagueid == id)
+             .ToList();
+
+            if(list.Count == 0)
                 return Ok();
-            }
-            if (list.Any(x => x.Total > 0))
+        
+            if (list.Any(x => x.score > 0))
             {
                 return  StatusCode(500, "Matches cannot be delete, some matches have scores");
             }
@@ -284,7 +296,7 @@ namespace ReactType1.Server.Controllers
             }
             else
             {
-                matches = sl.matchesWithDivisions(weeks.Count, teams.Count);
+                matches = sl.matchesWithDivisions(weeks.Count, _context, id.Value);
             }
             if (teams != null)
             { 
