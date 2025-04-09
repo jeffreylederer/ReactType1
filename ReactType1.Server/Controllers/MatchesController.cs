@@ -224,10 +224,11 @@ namespace ReactType1.Server.Controllers
                   {
                       match.Id,
                       schedule.Leagueid,
-                      score = match.Team2Score + match.Team1Score + match.ForFeitId
+                      score = match.Team2Score + match.Team1Score + match.ForFeitId,
+                      match.Rink
                   }
                 )
-              .Where(x => x.Leagueid == id)
+              .Where(x => x.Leagueid == id && x.Rink > 0)
              .ToList();
 
             if(list.Count == 0)
