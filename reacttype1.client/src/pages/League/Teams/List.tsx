@@ -3,6 +3,7 @@ import { TeamMember } from "./TeamMember.tsx";
 import { User, League } from "@components/leagueObject.tsx";
 import Layout from '@layouts/Layout.tsx';
 import { useState, useEffect } from 'react';
+import './Teams.css';
 
 
 function Teams() {
@@ -88,8 +89,8 @@ function Teams() {
                         <td hidden={League().teamSize < 3}>{item.viceSkip}</td>
                         <td hidden={League().teamSize < 2}>{item.lead}</td>
                         <td>{item.division}</td>
-                        <td hidden={!updateAllowed}><Link  to="/league/Teams/Update" state={item.id.toString()}>Update</Link><span hidden={!allowed}>|</span>
-                            <Link hidden={!allowed} to="/league/Teams/Delete" state={item.id.toString()}>Delete</Link>
+                        <td hidden={!updateAllowed}><Link to={`/league/Teams/Update?matches=${matches}`} state={item.id.toString()} >Update</Link><span hidden={!allowed}>|</span>
+                            <Link hidden={!allowed} to="/league/Teams/Delete" state={item.id.toString}>Delete</Link>
                         </td>
                     </tr>
                 )}
@@ -101,7 +102,7 @@ function Teams() {
         return (
             <Layout>
                 <h3 id="tableLabel">Teams for League {League().leagueName}</h3>
-                <Link to="/league/Teams/Create" hidden={!allowed}>Add</Link>
+                <Link to="/league/Teams/Create" hidden={!allowed}>Add</Link><br/>
                 <Link to="/league/Teams/Report" target="blank">Teams Report</Link>
                 {contents}
                 <p>Number of Teams: {data?.length}</p>

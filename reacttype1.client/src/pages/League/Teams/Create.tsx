@@ -123,7 +123,7 @@ const TeamsCreate = () => {
                                 )
                             </select></td>
                     </tr>
-                    <tr>
+                    <tr hidden={League().divisions==1}>
                         <td className="Label">Division:</td>
                         <td>
                             <select style={{ width: '85%' }} defaultValue="0" {...register("divisionId")}>
@@ -133,7 +133,7 @@ const TeamsCreate = () => {
                                 <option value="3" hidden={League().divisions < 3} key="3">3</option>
                             </select></td>
                     </tr>
-                
+                    
                 
                     <tr>
                         <td colSpan={2} >
@@ -156,6 +156,11 @@ const TeamsCreate = () => {
                     {
                         League().teamSize < 2 && <input type="hidden" defaultValue="0" {...register("lead")} />
                     }
+
+                    {
+                                League().divisions == 1 && <input type="hidden" defaultValue="1" {...register("divisionId")} />
+                    }
+
                         </td></tr>
                     
 
