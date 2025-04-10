@@ -79,7 +79,7 @@ const ScheduleUpdate = () => {
                     <td className="Label">Playoffs:</td>
 
                     <td className="Field">
-                        {schedule.playOffs ? 'yes': 'no' }
+                        <Checkbox {...register('playOffs')} defaultChecked={schedule.playOffs} disabled/>
                     </td>
                 </tr>
 
@@ -100,9 +100,7 @@ const ScheduleUpdate = () => {
             {
                 matches > 0 && <input type="hidden" defaultValue={schedule.gameDate} {...register('gameDate')} />
             }
-            {
-                matches > 0 && <input type="hidden" defaultValue={schedule.playOffs} {...register('playOffs')} />
-            }
+            
         </form>
     
     return (
