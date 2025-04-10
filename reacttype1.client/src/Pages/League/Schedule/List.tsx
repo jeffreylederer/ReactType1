@@ -84,7 +84,7 @@ function Schedule() {
                             <td>{convertDate(item.gameDate)}</td>
                             <td>{item.cancelled ? "yes" : "no"}</td>
                             <td>{item.playOffs ? "yes" : "no"}</td>
-                            <td hidden={!updateAllowed}><Link to="/League/Schedule/Update" state={item.id.toString()}>Update</Link><span hidden={!allowed}>|</span>
+                            <td hidden={!updateAllowed}><Link to={`/league/schedule/Update?matches=${matches}`} state={item.id.toString()} >Update</Link><span hidden={!allowed}>|</span>
                                 <Link to="/League/Schedule/Delete" state={item.id.toString()} hidden={!allowed}>Delete</Link>
                             </td>
 
