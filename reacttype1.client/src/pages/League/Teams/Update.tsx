@@ -130,7 +130,7 @@ const TeamUpdate = () => {
                     </tr>
                 </table>
                 {
-                    matches > 0 && <input type="hidden" defaultvalue={team.division} {...register("divisionId")} />
+                    matches > 0 && <input type="hidden" defaultValue={team.division} {...register("divisionId")} />
                 }
                 
                 {
