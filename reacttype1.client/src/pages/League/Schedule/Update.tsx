@@ -8,12 +8,16 @@ import { Checkbox, TextInput } from "flowbite-react";
 import { League } from "@components/leagueObject.tsx";;
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
+import convertDate from '@components/convertDate.tsx';
 
 
 const ScheduleUpdate = () => {
     const [schedule, setSchedule] = useState <UpdateFormData>();
     const location = useLocation();
     const id: number = location.state;
+    const count: string = location.search.substring(9);
+
+    const matches: number = Number(count);
    
     const {
         register,
@@ -47,19 +51,35 @@ const ScheduleUpdate = () => {
             <input type="hidden" {...register("leagueid", { valueAsNumber: true })} defaultValue={schedule.leagueid} />
            
             <table>
-                <tr>
+                <tr hidden={matches > 0} >
                     <td className="Label">Game Date:</td>
 
                     <td className="Field">
-                        <TextInput type="date" {...register('gameDate')} defaultValue={schedule.gameDate} />
+                        <TextInput type="date" {...register('gameDate')} defaultValue={schedule.gameDate}/>
                     </td>
                 </tr>
 
-                <tr>
+                <tr hidden={matches == 0}>
+                    <td className="Label">Game Date:</td>
+
+                    <td className="Field">
+                        {convertDate(schedule.gameDate)}
+                    </td>
+                </tr>
+
+                <tr hidden={matches > 0} >
                     <td className="Label">Playoffs:</td>
 
                     <td className="Field">
-                        <Checkbox {...register('playOffs')} defaultChecked={schedule.playOffs } />
+                        <Checkbox {...register('playOffs')} defaultChecked={schedule.playOffs} />
+                    </td>
+                </tr>
+
+                <tr hidden={matches == 0} >
+                    <td className="Label">Playoffs:</td>
+
+                    <td className="Field">
+                        {schedule.playOffs ? 'yes': 'no' }
                     </td>
                 </tr>
 
@@ -77,6 +97,12 @@ const ScheduleUpdate = () => {
                 </tr>
 
             </table>
+            {
+                matches > 0 && <input type="hidden" defaultValue={schedule.gameDate} {...register('gameDate')} />
+            }
+            {
+                matches > 0 && <input type="hidden" defaultValue={schedule.playOffs} {...register('playOffs')} />
+            }
         </form>
     
     return (
