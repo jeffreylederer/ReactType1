@@ -228,7 +228,7 @@ namespace ReactType1.Server.Controllers
                       match.Rink
                   }
                 )
-              .Where(x => x.Leagueid == id && x.Rink > 0)
+              .Where(x => x.Leagueid == id )
              .ToList();
 
             if(list.Count == 0)

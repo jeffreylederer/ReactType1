@@ -98,7 +98,6 @@ function Schedule() {
             <h3 id="tableLabel">Schedule for League {League().leagueName}</h3>
                 <Link to="/League/Schedule/Create" hidden={!allowed}>Add</Link>
                 {contents}
-                <p>{matches}</p>
                 <p>{error}</p>
             </Layout>
         );
