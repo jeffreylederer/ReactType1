@@ -20,29 +20,50 @@ namespace ReactType1.Server.Controllers
 
         // GET: Schedules
         [HttpGet("{id}")]
-        public async Task<IEnumerable<Schedule>> Get(int id)
+        public async Task<IEnumerable<ScheduleType>> Get(int id)
         {
             var list = await _context.Schedules.Where(x => x.Leagueid == id).ToListAsync();
             list.Sort((a, b) => a.GameDate.CompareTo(b.GameDate));
-            return list;
+            List<ScheduleType> newList = new();
+            foreach (var item in list)
+            {
+                var sch = new ScheduleType()
+                {
+                    Leagueid = item.Leagueid,
+                    PlayOffs = item.PlayOffs,
+                    Id = item.Id,
+                    GameDate = item.GameDate.ToShortDateString(),
+                    Cancelled = item.Cancelled
+                };
+                newList.Add(sch);
+            }
+            return newList;
         }
 
         // GET: Schedules/Details/5
         [HttpGet("getOne/{id}")]
-        public async Task<Schedule?> GetOne(int? id)
+        public async Task<ScheduleType?> GetOne(int? id)
         {
             if (id == null)
             {
                 return null;
             }
-
+            
             var schedule = await _context.Schedules.FindAsync(id.Value);
             if (schedule == null)
             {
                 return null;
             }
+            var sch = new ScheduleType()
+            {
+                Leagueid = schedule.Leagueid,
+                PlayOffs = schedule.PlayOffs,
+                Id = schedule.Id,
+                GameDate = schedule.GameDate.ToShortDateString(),
+                Cancelled = schedule.Cancelled
 
-            return schedule;
+            };
+            return sch;
         }
 
 
@@ -147,7 +168,7 @@ namespace ReactType1.Server.Controllers
     {
         public int Id { get; set; }
 
-        public string? GameDate { get; set; }
+        public string GameDate { get; set; }
 
         public int Leagueid { get; set; }
 

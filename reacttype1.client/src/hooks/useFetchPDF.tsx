@@ -23,6 +23,7 @@ function useFetchPDF(url: string): ApiResponse {
                 })
                 .catch(error => {
                     setError(error);
+                    console.log("fetch error", error);
                 })
         };
         fetchData();

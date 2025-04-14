@@ -100,8 +100,7 @@ const ScheduleCreate = () => {
             date.setDate(date.getDate() + 7);
             return `${date.getFullYear()}-${zeroPad(date.getMonth() + 1)}-${zeroPad(date.getDate())}`;
         }
-        const date = new Date();
-        return `${date.getFullYear()}-${zeroPad(date.getMonth() + 1)}-${zeroPad(date.getDate())}`;
+        return new Date().toLocaleDateString();
     }  
 
      
