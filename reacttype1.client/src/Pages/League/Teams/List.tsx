@@ -90,7 +90,7 @@ function Teams() {
                         <td hidden={League().teamSize < 2}>{item.lead}</td>
                         <td>{item.division}</td>
                         <td hidden={!updateAllowed}><Link to={`/league/Teams/Update?matches=${matches}`} state={item.id.toString()} >Update</Link><span hidden={!allowed}>|</span>
-                            <Link hidden={!allowed} to="/league/Teams/Delete" state={item.id.toString}>Delete</Link>
+                            <Link hidden={!allowed} to={`/league/Teams/Delete/?id=${item.id}`} >Delete</Link>
                         </td>
                     </tr>
                 )}

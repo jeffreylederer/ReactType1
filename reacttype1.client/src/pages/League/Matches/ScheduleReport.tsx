@@ -1,5 +1,5 @@
 import useFetchPDF from '@hooks/useFetchPDF';
-import { League } from "@components/leagueObject.tsx";;
+import { League } from "@components/leagueObject.tsx";
 
 
 function ScheduleReport() {
@@ -18,7 +18,7 @@ function ScheduleReport() {
         return;
     }
     else {
-       
+        console.log("got data");
         return (
             <embed src={data} type="application/pdf" width='1000' height='800' />
         );

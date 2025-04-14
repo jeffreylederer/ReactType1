@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
@@ -31,16 +31,13 @@ const ScheduleUpdate = () => {
     const onSubmit: SubmitHandler<UpdateFormData> = (data) =>updateData(data)
 
     const navigate = useNavigate();
-    
-    
-    
 
     useEffect(() => {
         GetData();
-        
-    });
+    },[]);
+    
 
-    const contents = schedule===undefined
+    const contents = schedule === undefined
         ? <p><em>Loading ...</em></p> :
 
         <form onSubmit={handleSubmit(onSubmit, (errors) => console.log(errors))} >
@@ -55,7 +52,7 @@ const ScheduleUpdate = () => {
                     <td className="Label">Game Date:</td>
 
                     <td className="Field">
-                        <TextInput type="date" {...register('gameDate')} defaultValue={schedule.gameDate}/>
+                        <TextInput type="date" {...register('gameDate')} defaultValue={today()}/>
                     </td>
                 </tr>
 
@@ -113,25 +110,10 @@ const ScheduleUpdate = () => {
     );
 
 
-    async function GetData() {
-        if (schedule === undefined) {
-
-            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Schedules/getOne/';
-            const num: string = id.toString();
-            const fullUrl = url.concat(num);
-            axios.get(fullUrl)
-                .then(response => {
-
-                    setSchedule(response.data);
-
-
-                    console.log('Record aquired successfully: ', response.data);
-                })
-                .catch(error => {
-                    console.error('Error aquiring record: ', error);
-                });
-        }
-
+    function GetData() {
+   
+        const data: UpdateFormData[] = JSON.parse(localStorage.getItem("schedule") as string);
+        setSchedule( data.find(x => x.id == id));
     }
 
     function updateData(data: UpdateFormData) {
@@ -151,6 +133,12 @@ const ScheduleUpdate = () => {
                 });
         }
 
+    }
+
+    function today(): string {
+       
+        const date : Date = new Date(schedule? schedule.gameDate : new Date().toLocaleDateString());
+        return `${date.getFullYear()}-${date.getMonth() + 1}}-$(date.getDate()}`;
     }
 }
 

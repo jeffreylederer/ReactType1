@@ -5,11 +5,12 @@ import { TeamMember } from "./TeamMember.tsx";
 import { League } from "@components/leagueObject.tsx";;
 import { DeleteButton } from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
+import { StringDecoder } from "string_decoder";
 
 
 const TeamsDelete = () => {
     const location = useLocation();
-    const id: number = location.state;
+    const id: string = location.search.substring(4);
    
     const [errorMsg, SeterrorMsg] = useState("");
     const [team, setTeam] = useState<TeamMember>();
@@ -68,7 +69,7 @@ const TeamsDelete = () => {
 
     async function GetData() {
         if (team === undefined) {
-            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Teams/getOne/'.concat(id.toString());
+            const url: string = `${import.meta.env.VITE_SERVER_URL}api/Teams/getOne/${id}`;
             axios.get(url)
                 .then(response => {
                     setTeam(response.data);

@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import { FormData } from "./FormData.tsx";
+import { UpdateFormData } from "./UpdateFormData.tsx";
 import { League } from "@components/leagueObject.tsx";;
 import { DeleteButton } from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
@@ -12,7 +12,7 @@ import convertDate from '@components/convertDate.tsx';
 const ScheduleDelete = () => {
     const location = useLocation();
     const id: number = location.state;
-    const [schedule, setSchedule] = useState<FormData>();
+    const [schedule, setSchedule] = useState<UpdateFormData>();
     const [errorMsg, SeterrorMsg] = useState("");
     
     const navigate = useNavigate();
@@ -55,21 +55,10 @@ const ScheduleDelete = () => {
         </Layout>
     );
 
-    async function GetData() {
-        if (schedule === undefined) {
-            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Schedules/getOne/';
-            const num: string = id.toString();
-            const fullUrl = url.concat(num);
-            axios.get(fullUrl)
-                .then(response => {
-                    setSchedule(response.data);
-                    console.log('Record aquired successfully: ', response.data);
-                })
-                .catch(error => {
-                    SeterrorMsg('Error aquiring record: '.concat(error.response.data));
-                });
-        }
+    function GetData() {
 
+        const data: UpdateFormData[] = JSON.parse(localStorage.getItem("schedule") as string);
+        setSchedule(data.find(x => x.id == id));
     }
 
     async function DeleteItem() {

@@ -123,7 +123,7 @@ const TeamsCreate = () => {
                                 )
                             </select></td>
                     </tr>
-                    <tr hidden={League().divisions==1}>
+                    <tr >
                         <td className="Label">Division:</td>
                         <td>
                             <select style={{ width: '85%' }} defaultValue="0" {...register("divisionId")}>
@@ -142,29 +142,26 @@ const TeamsCreate = () => {
                     </tr>
                     <tr>
                         <td colSpan={1}>
-                    {errors.skip && <p className="errorMessage">skip: {errors.skip.message}</p>}
-                    {errors.viceSkip && <p className="errorMessage">viceskip: {errors.viceSkip.message}</p>}
-                    {errors.lead && <p className="errorMessage">lead: {errors.lead.message}</p>}
-                    {errors.divisionId && <p className="errorMessage">division: {errors.divisionId.message}</p>}
+                        {errors.skip && <p className="errorMessage">skip: {errors.skip.message}</p>}
+                        {errors.viceSkip && <p className="errorMessage">viceskip: {errors.viceSkip.message}</p>}
+                        {errors.lead && <p className="errorMessage">lead: {errors.lead.message}</p>}
+                        {errors.divisionId && <p className="errorMessage">division: {errors.divisionId.message}</p>}
                     
-                    {errors.teamNo && <p className="errorMessage">teamNo: {errors.teamNo.message}</p>}
-                    {errors.leagueid && <p className="errorMessage">leagueid:  {errors.leagueid.message}</p>}   
-                  
-                    {
-                        League().teamSize < 3 && <input type="hidden" defaultValue="0" {...register("viceSkip")} />
-                    }
-                    {
-                        League().teamSize < 2 && <input type="hidden" defaultValue="0" {...register("lead")} />
-                    }
-
-                    {
-                                League().divisions == 1 && <input type="hidden" defaultValue="1" {...register("divisionId")} />
-                    }
-
-                        </td></tr>
+                        {errors.teamNo && <p className="errorMessage">teamNo: {errors.teamNo.message}</p>}
+                        {errors.leagueid && <p className="errorMessage">leagueid:  {errors.leagueid.message}</p>}   
+                        </td>
+                    </tr>
                     
 
                 </table>
+                {
+                    League().teamSize < 3 && <input type="hidden" defaultValue="0" {...register("viceSkip")} />
+                }
+                {
+                    League().teamSize < 2 && <input type="hidden" defaultValue="0" {...register("lead")} />
+                }
+
+                
             </form>
             <p className="errorMessage">{errorMsg}</p>
         </Layout>

@@ -27,7 +27,7 @@ function Schedule() {
                 }
                 const json = (await response.json()) as UpdateFormData[];
                 setData(json);
-
+                localStorage.setItem("schedule", JSON.stringify(json));
             } catch (error) {
                 let message: string;
                 if (error instanceof Error)
@@ -38,6 +38,12 @@ function Schedule() {
             }
         }
     };
+
+    useEffect(() => {
+        fetchData();
+        numberMatches();
+
+    }, []);
 
     const numberMatches = async () => {
         if (matches == undefined) {
