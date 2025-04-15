@@ -24,7 +24,7 @@ function Teams() {
                 }
                 const json = (await response.json()) as TeamMember[];
                 setData(json);
-
+                localStorage.setItem("teams", JSON.stringify(json));
             } catch (error) {
                 let message: string;
                 if (error instanceof Error)

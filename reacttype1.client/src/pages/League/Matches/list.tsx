@@ -1,5 +1,5 @@
 import { useState, useEffect  } from 'react';
-import { MatchFormData } from "./MatchFormData.tsx";
+import  MatchFormData  from "./MatchFormData.tsx";
 import axios from "axios";
 import { UpdateFormData } from "../Schedule/UpdateFormData.tsx";
 import { Link } from 'react-router-dom';
@@ -47,7 +47,7 @@ function Matches() {
 
                 setMatch(response.data);
                 GetDates();
-
+                localStorage.setItem("matches", JSON.stringify(response.data));
 
             })
             .catch(error => {

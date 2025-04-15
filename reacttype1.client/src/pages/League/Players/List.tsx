@@ -20,6 +20,7 @@ function Players() {
             }
             const json = (await response.json()) as UpdateFormData[];
             setData(json);
+            localStorage.setItem("players", JSON.stringify(json));
 
         } catch (error) {
             let message: string;
