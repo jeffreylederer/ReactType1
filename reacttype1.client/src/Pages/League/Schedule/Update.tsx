@@ -40,7 +40,7 @@ const ScheduleUpdate = () => {
     const contents = schedule === undefined
         ? <p><em>Loading ...</em></p> :
 
-        <form onSubmit={handleSubmit(onSubmit, (errors) => console.log(errors))} >
+        <form onSubmit={handleSubmit(onSubmit)} >
 
 
 
@@ -76,7 +76,7 @@ const ScheduleUpdate = () => {
                     <td className="Label">Playoffs:</td>
 
                     <td className="Field">
-                        <Checkbox {...register('playOffs')} defaultChecked={schedule.playOffs} disabled/>
+                        {schedule.playOffs?"Yes":"No"}
                     </td>
                 </tr>
 
@@ -96,6 +96,9 @@ const ScheduleUpdate = () => {
             </table>
             {
                 matches > 0 && <input type="hidden" defaultValue={schedule.gameDate} {...register('gameDate')} />
+            }
+            {
+                matches > 0 && <input type="hidden" defaultValue={schedule.playOffs} {...register('playOffs')} />
             }
             
         </form>
@@ -118,9 +121,9 @@ const ScheduleUpdate = () => {
 
     function updateData(data: UpdateFormData) {
         if (schedule != undefined) {
-            data.id = schedule.id;
-            data.leagueid = schedule.leagueid;
-           
+            
+           if(matches > 0)
+                data.gameDate=schedule.gameDate;
 
             const url = `${import.meta.env.VITE_SERVER_URL}api/Schedules/${id}`;
             axios.put(url, data)

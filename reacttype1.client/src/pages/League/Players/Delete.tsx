@@ -1,63 +1,78 @@
 import { useLocation, useNavigate, } from "react-router-dom";
-import DeleteItem from '@components/DeleteItem.tsx';
 import { League } from '@components/leagueObject.tsx';
 import { Button } from "flowbite-react";
 import Layout from '@layouts/Layout.tsx';
-import useFetchOne from '@hooks/useFetchOne.tsx';
-import DeleteTypeData from './DeleteTypeData.ts';
-
+import UpdateFormData from './UpdateFormData.tsx';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const PlayersDelete = () => {
     const location = useLocation();
     const id: number = location.state;
-    
-    
+
     const navigate = useNavigate();
 
+    const [player, setPlayer] = useState<UpdateFormData>();
+    const [error, setError] = useState<string>('');
 
-    const { data, loading, error } = useFetchOne<DeleteTypeData>(`${import.meta.env.VITE_SERVER_URL}api/Players/getOne`, id);
+    function GetData() {
 
-    if (error)
-        return (
-            <>
-                <h3>Delete player from league {League().leagueName}</h3>
-                {error}
-            </>
-        );
-        
-
-    if (loading)
-        return 
-            <p>Loading...</p>;
-
-
-    if (data) {
-
-        return (
-            <Layout>
-                <h2>Delete player from league {League().leagueName} </h2>
-                <table>
-                    <tr>
-                        <td className="Label">Name:</td>
-
-                        <td className="Field">{data.fullName}</td>
-                    </tr>
-                    <tr>
-                        <td colSpan={2} >
-                            <Button pill color="gray" onClick={() => Delete(id)}>Delete Record</Button>&nbsp;&nbsp;
-                            <Button pill color="gray" onClick={() => navigate(-1)}>Go back to list</Button>
-                        </td>
-                    </tr>
-                </table>
-
-
-            </Layout>
-        );
+        const data: UpdateFormData[] = JSON.parse(localStorage.getItem("players") as string);
+        setPlayer(data.find(x => x.id == id));
     }
 
-     function Delete(id: number) {
-         if (DeleteItem(`${import.meta.env.VITE_SERVER_URL}api/players`, id))
-            navigate("/League/Players");
+    useEffect(() => {
+        GetData();
+    }, []);
+
+
+    const contests = player === undefined
+        ? <p><em>Loading ...</em></p> :
+
+
+        <table>
+            <tr>
+                <td className="Label">Name:</td>
+                <td className="Field">{player.fullName}</td>
+            </tr>
+            <tr>
+                <td colSpan={2} >
+                    <Button pill color="gray" onClick={() => DeleteItem(id)}>Delete Record</Button>&nbsp;&nbsp;
+                    <Button pill color="gray" onClick={() => navigate(-1)}>Go back to list</Button>
+                </td>
+            </tr>
+        </table>;
+    <p>{error}</p>
+
+
+
+    return (
+        <Layout>
+            <h2>Delete player from league {League().leagueName} </h2>
+            {contests}
+            <p>{error}</p>
+        </Layout>
+    );
+
+
+    
+
+
+    async function DeleteItem(id: number) {
+
+
+        const fullUrl = `${import.meta.env.VITE_SERVER_URL}api/players/${id}`;
+        await axios
+            .delete(fullUrl)
+            .then(response => {
+                console.log(response.statusText);
+                navigate("/league/players");
+
+            })
+            .catch(error => {
+                if (error.response)
+                    setError(error.response.data);
+            })
     }
 }
 

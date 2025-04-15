@@ -1,16 +1,15 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import { TeamMember } from "./TeamMember.tsx";
+import { TeamMember } from "./TeamMember.ts";
 import { League } from "@components/leagueObject.tsx";;
 import { DeleteButton } from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
-import { StringDecoder } from "string_decoder";
 
 
 const TeamsDelete = () => {
     const location = useLocation();
-    const id: string = location.search.substring(4);
+    const id: number = +location.search.substring(4);
    
     const [errorMsg, SeterrorMsg] = useState("");
     const [team, setTeam] = useState<TeamMember>();
@@ -20,7 +19,7 @@ const TeamsDelete = () => {
 
     useEffect(() => {
         GetData();
-    });
+    },[]);
 
     const contents = team === undefined
         ? <p><em>Loading ...</em></p> :
@@ -67,23 +66,13 @@ const TeamsDelete = () => {
         </Layout>
     );
 
-    async function GetData() {
-        if (team === undefined) {
-            const url: string = `${import.meta.env.VITE_SERVER_URL}api/Teams/getOne/${id}`;
-            axios.get(url)
-                .then(response => {
-                    setTeam(response.data);
-                    console.log('Record aquired successfully: ', response.data);
-                })
-                .catch(error => {
-                    console.error('Error aquiring record: ', error);
-                });
-        }
-
+    function GetData() {
+        const data: TeamMember[] = JSON.parse(localStorage.getItem("teams") as string);
+        setTeam(data.find(x => x.id == id));
     }
 
     async function DeleteItem() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Teams/'.concat(id.toString());
+        const url: string = `${import.meta.env.VITE_SERVER_URL}api/Teams/${id}`;
         axios.delete(url)
             .then(response => {
                 console.log(response.statusText);

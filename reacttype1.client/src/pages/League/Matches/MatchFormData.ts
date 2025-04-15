@@ -1,4 +1,4 @@
-export type MatchFormData = {
+type MatchFormData = {
     id: number,
     rink: number,
     team1: string
@@ -7,9 +7,11 @@ export type MatchFormData = {
     wheelchair2: string,
     team1Score: number,
     team2Score: number,
-    forFeitId: number,
+    forFeitid: number,
     weekId: number,
     team1No: number,
     team2No: number,
     gameDate: string
 };
+
+export default MatchFormData;
