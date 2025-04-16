@@ -19,7 +19,7 @@ const ScheduleDelete = () => {
 
     useEffect(() => {
         GetData();
-    });
+    },[]);
 
     const contents = schedule === undefined
         ? <p><em>Loading ...</em></p> :
@@ -62,10 +62,8 @@ const ScheduleDelete = () => {
     }
 
     async function DeleteItem() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Schedules/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        axios.delete(fullUrl)
+        const url: string = `${import.meta.env.VITE_SERVER_URL}api/Schedules/${id}`;
+        axios.delete(url)
             .then(response => {
                 console.log(response.statusText);
                 navigate("/League/Schedule");

@@ -31,7 +31,7 @@ function Matches() {
             GetData(weekid);
         else
             GetDates();
-    });
+    },[weekid]);
 
     const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         //event.preventDefault();
@@ -134,8 +134,8 @@ function Matches() {
                             <td style={{ color: item.wheelchair2, textAlign: "right" }} >
                                 {item.team2No} ({item.team2})</td>
 
-                            <td style={{textAlign: 'center'} }>{item.forFeitId != 0?'' : item.team1Score}</td>
-                            <td style={{textAlign: 'center'} }>{item.forFeitId != 0 ? '': item.team2Score}</td>
+                            <td style={{ textAlign: 'center' }}>{item.forFeitId != 0? '' : item.team1Score}</td>
+                            <td style={{ textAlign: 'center' }}>{item.forFeitId != 0 ? '': item.team2Score}</td>
                             <td style={{ textAlign: 'center' }}>{item.forFeitId == 0 ? '' : item.forFeitId}</td>
                             <td hidden={allowed} ><Link to="/League/Matches/Update" state={item.id.toString()}>Score</Link></td>
                         </tr>

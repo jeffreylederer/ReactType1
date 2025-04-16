@@ -36,6 +36,4 @@ public partial class League
     public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
 
     public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
-
-    public virtual ICollection<UserLeague> UserLeagues { get; set; } = new List<UserLeague>();
 }

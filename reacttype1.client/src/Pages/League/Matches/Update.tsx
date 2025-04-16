@@ -110,7 +110,7 @@ const MatchUpdate = () => {
                             <td className="Label">Forfeit</td>
 
                             <td className="Field">
-                                <select  {...register('forfeit')} defaultValue={match.forFeitid} onChange={ChangeSelect}>
+                                <select  {...register('forfeit')} defaultValue={match.forFeitId} onChange={ChangeSelect}>
                                     <option value="0" >No Forfeit</option>
                                     <option value={match.team1No}>{match.team1No}</option>
                                     <option value={match.team2No}>{match.team2No}</option>

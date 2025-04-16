@@ -19,7 +19,7 @@ public partial class User
 
     public string SerialNumber { get; set; } = null!;
 
-    public virtual ICollection<UserLeague> UserLeagues { get; set; } = new List<UserLeague>();
+    public int RoleId { get; set; }
 
-    public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+    public virtual Role Role { get; set; } = null!;
 }

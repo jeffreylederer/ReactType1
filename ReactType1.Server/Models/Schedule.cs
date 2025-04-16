@@ -7,7 +7,7 @@ public partial class Schedule
 {
     public int Id { get; set; }
 
-    public required DateOnly GameDate { get; set; }
+    public DateOnly GameDate { get; set; }
 
     public int Leagueid { get; set; }
 

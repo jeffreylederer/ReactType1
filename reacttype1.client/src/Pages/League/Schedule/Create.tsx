@@ -79,12 +79,12 @@ const ScheduleCreate = () => {
                             <SubmitButton />
                         </td>
                     </tr>
-                    
-                    {errors.leagueid && <p className="errorMessage">{errors.leagueid.message}</p>}
-                    {errors.gameDate && <p className="errorMessage">{errors.gameDate.message}</p>}
-                    {errors.cancelled && <p className="errorMessage">{errors.cancelled.message}</p>}
-                    {errors.playOffs && <p className="errorMessage">{errors.playOffs.message}</p>}
-                    
+                    <td colSpan={2}>
+                        {errors.leagueid && <p className="errorMessage">{errors.leagueid.message}</p>}
+                        {errors.gameDate && <p className="errorMessage">{errors.gameDate.message}</p>}
+                        {errors.cancelled && <p className="errorMessage">{errors.cancelled.message}</p>}
+                        {errors.playOffs && <p className="errorMessage">{errors.playOffs.message}</p>}
+                    </td>
 
                 </table>
             </form>

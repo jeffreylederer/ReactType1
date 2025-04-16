@@ -8,7 +8,7 @@ import { Checkbox, TextInput } from "flowbite-react";
 import { League } from "@components/leagueObject.tsx";;
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
-import convertDate from '@components/convertDate.tsx';
+
 
 
 const ScheduleUpdate = () => {
@@ -18,17 +18,24 @@ const ScheduleUpdate = () => {
     const count: string = location.search.substring(9);
 
     const matches: number = Number(count);
+
+    const zeroPad = (num: number): string => {
+        const x: string = num.toString();
+        if (x.length == 2)
+            return x;
+        return '0' + x;
+    }
    
     const {
         register,
         handleSubmit,
-        //formState: { errors },
+        formState: { errors },
 
     } = useForm<UpdateFormData>({
         resolver: zodResolver(UpdateFormDataSchema),
     });
 
-    const onSubmit: SubmitHandler<UpdateFormData> = (data) =>updateData(data)
+    const onSubmit: SubmitHandler<UpdateFormData> = async (data) =>updateData(data)
 
     const navigate = useNavigate();
 
@@ -52,7 +59,7 @@ const ScheduleUpdate = () => {
                     <td className="Label">Game Date:</td>
 
                     <td className="Field">
-                        <TextInput type="date" {...register('gameDate')} defaultValue={today()}/>
+                        <TextInput type="date" {...register('gameDate', { valueAsDate :false })} defaultValue={today()} />
                     </td>
                 </tr>
 
@@ -60,7 +67,8 @@ const ScheduleUpdate = () => {
                     <td className="Label">Game Date:</td>
 
                     <td className="Field">
-                        {convertDate(schedule.gameDate)}
+                        <input readOnly type="date" defaultValue={today()} {...register('gameDate')} />
+                        
                     </td>
                 </tr>
 
@@ -76,7 +84,7 @@ const ScheduleUpdate = () => {
                     <td className="Label">Playoffs:</td>
 
                     <td className="Field">
-                        {schedule.playOffs?"Yes":"No"}
+                        <Checkbox {...register('playOffs')} defaultChecked={schedule.playOffs} disabled/>
                     </td>
                 </tr>
 
@@ -92,14 +100,16 @@ const ScheduleUpdate = () => {
                         <SubmitButton/>
                     </td>
                 </tr>
+                <td colSpan={2}>
+                    {errors.leagueid && <p className="errorMessage">{errors.leagueid.message}</p>}
+                    {errors.gameDate && <p className="errorMessage">{errors.gameDate.message}</p>}
+                    {errors.cancelled && <p className="errorMessage">cancelled: {errors.cancelled.message}</p>}
+                    {errors.playOffs && <p className="errorMessage">playoffs: {errors.playOffs.message}</p>}
+                </td>
 
             </table>
-            {
-                matches > 0 && <input type="hidden" defaultValue={schedule.gameDate} {...register('gameDate')} />
-            }
-            {
-                matches > 0 && <input type="hidden" defaultValue={schedule.playOffs} {...register('playOffs')} />
-            }
+            
+            
             
         </form>
     
@@ -115,18 +125,16 @@ const ScheduleUpdate = () => {
 
     function GetData() {
    
-        const data: UpdateFormData[] = JSON.parse(localStorage.getItem("schedule") as string);
-        setSchedule( data.find(x => x.id == id));
+        const schedules: UpdateFormData[] = JSON.parse(localStorage.getItem("schedule") as string);
+        const results = schedules.find(x => x.id == id);
+        setSchedule(results)
     }
 
-    function updateData(data: UpdateFormData) {
+    async function updateData(data: UpdateFormData) {
         if (schedule != undefined) {
             
-           if(matches > 0)
-                data.gameDate=schedule.gameDate;
-
             const url = `${import.meta.env.VITE_SERVER_URL}api/Schedules/${id}`;
-            axios.put(url, data)
+            await axios.put(url, data)
                 .then(response => {
                     console.log('Record updated successfully: ', response.data);
                     navigate("/League/Schedule");
@@ -138,11 +146,17 @@ const ScheduleUpdate = () => {
 
     }
 
+    
+
     function today(): string {
-       
-        const date : Date = new Date(schedule? schedule.gameDate : new Date().toLocaleDateString());
-        return `${date.getFullYear()}-${date.getMonth() + 1}}-$(date.getDate()}`;
+        if (schedule === undefined)
+            return new Date().toLocaleDateString();
+
+        const date = new Date(schedule.gameDate);
+        return `${date.getFullYear()}-${zeroPad(date.getMonth() + 1)}-${zeroPad(date.getDate())}`;
     }
+
+    
 }
 
 

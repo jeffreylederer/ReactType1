@@ -29,19 +29,18 @@ namespace ReactType1.Server.Controllers
                         Id= user.Id,
                         IsActive = user.IsActive,
                         UserName = user.Username,
-                        DisplayName = user.DisplayName
+                        DisplayName = user.DisplayName,
+                        RoleId = user.RoleId
+                        
                     };
-                    UserRole? userRole = await _context.UserRoles.Where(x => x.UserId == item.Id).FirstOrDefaultAsync();
-                    if (userRole != null)
+                    switch (user.RoleId)
                     {
-                        switch (userRole.RoleId)
-                        {
-                            case 1: item.Role = "Observer"; break;
-                            case 2: item.Role = "Scorer"; break;
-                            case 3: item.Role = "Admin"; break;
-                            case 4: item.Role = "SiteAdmin"; break;
-                        }
+                        case 1: item.Role = "Observer"; break;
+                        case 2: item.Role = "Scorer"; break;
+                        case 3: item.Role = "Admin"; break;
+                        case 4: item.Role = "SiteAdmin"; break;
                     }
+                 
                     newList.Add(item);
                 }
             }
@@ -74,23 +73,17 @@ namespace ReactType1.Server.Controllers
                 Id = id.Value,
                 IsActive = item.IsActive,
                 UserName = item.Username,
-                DisplayName = item.DisplayName
+                DisplayName = item.DisplayName,
+                RoleId = item.RoleId
             };
 
-            var role = await _context.UserRoles.Where(x=>x.UserId == item.Id).FirstOrDefaultAsync();
-            if (role != null)
+            switch (item.RoleId)
             {
-                user.RoleId = role.Id;
-                user.Role = role.RoleId switch
-                {
-                    1 => "Observer",
-                    2 => "Scorer",
-                    3 => "Admin",
-                    4 => "SiteAdmin",
-                    _ => "Observer",
-                };
+                case 1: user.Role = "Observer"; break;
+                case 2: user.Role = "Scorer"; break;
+                case 3: user.Role = "Admin"; break;
+                case 4: user.Role = "SiteAdmin"; break;
             }
-            
             return user;
         }
 
@@ -109,14 +102,12 @@ namespace ReactType1.Server.Controllers
                     IsActive = item.IsActive,
                     Username = item.Username,
                     DisplayName = item.DisplayName,
+                    RoleId = item.RoleId
                 };
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                var userRole = new UserRole() { RoleId = item.RoleId, UserId=user.Id };
-
-                _context.UserRoles.Add(userRole);
-                await _context.SaveChangesAsync();
+               
             }
             catch (Exception ex)
             {
@@ -143,9 +134,10 @@ namespace ReactType1.Server.Controllers
 
             user.IsActive = item.IsActive;
             user.DisplayName = item.DisplayName;
-            _context.Entry(user).State = EntityState.Modified;
+            user.RoleId = item.RoleId;
 
-            
+            _context.Entry(user).State = EntityState.Modified;
+           
 
             try
             {
@@ -167,6 +159,7 @@ namespace ReactType1.Server.Controllers
                 return StatusCode(500, ex.Message);
             }
             return Ok();
+
         }
 
         [HttpPut("ChangePassword{id}")]

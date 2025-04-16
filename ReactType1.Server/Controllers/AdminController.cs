@@ -38,9 +38,8 @@ namespace ReactType1.Server.Controllers
             {
                 return null;
             }
-            UserRole? role = _context.UserRoles.Where(x=>x.UserId == user.Id).FirstOrDefault();
-            string? Role = "Observer";
-            switch (role?.RoleId)
+            string Role = "";
+            switch (user.RoleId)
             {
                 case 1: Role = "Observer"; break;
                 case 2: Role = "Scorer"; break;

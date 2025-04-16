@@ -33,6 +33,8 @@ public partial class DbLeagueApp : DbContext
 
     public virtual DbSet<Membership> Memberships { get; set; }
 
+    public virtual DbSet<OneMatchView> OneMatchViews { get; set; }
+
     public virtual DbSet<OneMatchWeekView> OneMatchWeekViews { get; set; }
 
     public virtual DbSet<OneTeamView> OneTeamViews { get; set; }
@@ -56,12 +58,6 @@ public partial class DbLeagueApp : DbContext
     public virtual DbSet<TotalScoreView> TotalScoreViews { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
-
-    public virtual DbSet<UserLeague> UserLeagues { get; set; }
-
-    public virtual DbSet<UserLeagueView> UserLeagueViews { get; set; }
-
-    public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -93,9 +89,9 @@ public partial class DbLeagueApp : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Players)
-                .HasMaxLength(101)
-                .IsUnicode(false);
-           
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("players");
         });
 
         modelBuilder.Entity<GetMatchAllView>(entity =>
@@ -261,6 +257,31 @@ public partial class DbLeagueApp : DbContext
                 .HasMaxLength(25)
                 .IsUnicode(false)
                 .HasColumnName("shortname");
+        });
+
+        modelBuilder.Entity<OneMatchView>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("OneMatchView");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Team1)
+                .HasMaxLength(154)
+                .IsUnicode(false)
+                .HasColumnName("team1");
+            entity.Property(e => e.Team2)
+                .HasMaxLength(154)
+                .IsUnicode(false)
+                .HasColumnName("team2");
+            entity.Property(e => e.Wheelchair1)
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .HasColumnName("wheelchair1");
+            entity.Property(e => e.Wheelchair2)
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .HasColumnName("wheelchair2");
         });
 
         modelBuilder.Entity<OneMatchWeekView>(entity =>
@@ -473,81 +494,18 @@ public partial class DbLeagueApp : DbContext
             entity.Property(e => e.Password)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.RoleId).HasDefaultValue(1);
             entity.Property(e => e.SerialNumber)
                 .HasMaxLength(450)
                 .IsUnicode(false);
             entity.Property(e => e.Username)
                 .HasMaxLength(450)
                 .IsUnicode(false);
-        });
 
-        modelBuilder.Entity<UserLeague>(entity =>
-        {
-            entity.ToTable("UserLeague");
-
-            entity.HasIndex(e => new { e.UserId, e.LeagueId }, "IX_UserLeague").IsUnique();
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Roles)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            entity.HasOne(d => d.League).WithMany(p => p.UserLeagues)
-                .HasForeignKey(d => d.LeagueId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserLeague_League");
-
-            entity.HasOne(d => d.User).WithMany(p => p.UserLeagues)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserLeague_User");
-        });
-
-        modelBuilder.Entity<UserLeagueView>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("UserLeagueView");
-
-            entity.Property(e => e.Active).HasColumnName("active");
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.LeagueName)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.LeagueRole)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("league role");
-            entity.Property(e => e.SiteRole)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("site role");
-            entity.Property(e => e.Username)
-                .HasMaxLength(200)
-                .IsUnicode(false)
-                .HasColumnName("username");
-        });
-
-        modelBuilder.Entity<UserRole>(entity =>
-        {
-            entity.HasKey(e => new { e.UserId, e.RoleId });
-
-            entity.ToTable("UserRole");
-
-            entity.HasIndex(e => new { e.UserId, e.RoleId }, "UQ_UserId_ContactID").IsUnique();
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.UserRoles)
+            entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserRole_Role");
-
-            entity.HasOne(d => d.User).WithMany(p => p.UserRoles)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_UserRole_UserRole");
+                .HasConstraintName("FK_User_Role");
         });
 
         OnModelCreatingPartial(modelBuilder);

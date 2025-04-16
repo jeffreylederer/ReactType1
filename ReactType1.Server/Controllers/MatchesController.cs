@@ -42,7 +42,7 @@ namespace ReactType1.Server.Controllers
             {
                m.Id
             };
-            var count =  query.ToList().Count();
+            var count =  query.ToList().Count;
             return count;
         }
 

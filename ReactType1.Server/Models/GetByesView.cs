@@ -9,8 +9,6 @@ public partial class GetByesView
 
     public string? Players { get; set; }
 
-    
-
     public short Division { get; set; }
 
     public int TeamNo { get; set; }
