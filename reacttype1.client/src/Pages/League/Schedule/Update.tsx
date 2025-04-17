@@ -2,8 +2,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
-import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
-import { zodResolver } from '@hookform/resolvers/zod';
+import { UpdateFormData} from "./UpdateFormData.tsx";
+
 import { Checkbox, TextInput } from "flowbite-react";
 import { League } from "@components/leagueObject.tsx";;
 import SubmitButton from '@components/Buttons.tsx';
@@ -12,7 +12,7 @@ import Layout from '@layouts/Layout.tsx';
 
 
 const ScheduleUpdate = () => {
-    const [schedule, setSchedule] = useState <UpdateFormData>();
+    const [schedule, setSchedule] = useState<UpdateFormData>();
     const location = useLocation();
     const id: number = location.state;
     const count: string = location.search.substring(9);
@@ -29,13 +29,11 @@ const ScheduleUpdate = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        //formState: { errors },
 
-    } = useForm<UpdateFormData>({
-        resolver: zodResolver(UpdateFormDataSchema),
-    });
+    } = useForm<UpdateFormData>();
 
-    const onSubmit: SubmitHandler<UpdateFormData> = async (data) =>updateData(data)
+    const onSubmit: SubmitHandler<UpdateFormData> = async (data) => updateData(data)
 
     const navigate = useNavigate();
 
@@ -76,7 +74,7 @@ const ScheduleUpdate = () => {
                     <td className="Label">Playoffs:</td>
 
                     <td className="Field">
-                        <Checkbox {...register('playOffs')} defaultChecked={schedule.playOffs} />
+                        <Checkbox id='playoff' defaultChecked={schedule.playOffs} name='playoff' />
                     </td>
                 </tr>
 
@@ -84,7 +82,7 @@ const ScheduleUpdate = () => {
                     <td className="Label">Playoffs:</td>
 
                     <td className="Field">
-                        <Checkbox {...register('playOffs')} defaultChecked={schedule.playOffs} disabled/>
+                        <Checkbox id='playOffs'  {...register('playOffs')} defaultChecked={schedule.playOffs} disabled name='playoff' />
                     </td>
                 </tr>
 
@@ -92,7 +90,7 @@ const ScheduleUpdate = () => {
                     <td className="Label">Cancelled:</td>
 
                     <td className="Field">
-                        <Checkbox {...register('cancelled')} defaultChecked={schedule.cancelled} />
+                        <Checkbox id='cancelled' {...register('cancelled')} defaultChecked={schedule.cancelled} />
                     </td>
                 </tr>
                 <tr>
@@ -100,13 +98,6 @@ const ScheduleUpdate = () => {
                         <SubmitButton/>
                     </td>
                 </tr>
-                <td colSpan={2}>
-                    {errors.leagueid && <p className="errorMessage">{errors.leagueid.message}</p>}
-                    {errors.gameDate && <p className="errorMessage">{errors.gameDate.message}</p>}
-                    {errors.cancelled && <p className="errorMessage">cancelled: {errors.cancelled.message}</p>}
-                    {errors.playOffs && <p className="errorMessage">playoffs: {errors.playOffs.message}</p>}
-                </td>
-
             </table>
             
             
@@ -131,8 +122,10 @@ const ScheduleUpdate = () => {
     }
 
     async function updateData(data: UpdateFormData) {
-        if (schedule != undefined) {
-            
+        if (schedule != undefined && data) {
+            const results: HTMLInputElement = document.getElementById("playoff") as HTMLInputElement;
+             data.playOffs = results.checked;
+           
             const url = `${import.meta.env.VITE_SERVER_URL}api/Schedules/${id}`;
             await axios.put(url, data)
                 .then(response => {
@@ -145,6 +138,8 @@ const ScheduleUpdate = () => {
         }
 
     }
+
+
 
     
 
