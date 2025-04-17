@@ -19,6 +19,13 @@ function ScheduleReport() {
     }
     else {
         console.log("got data");
+        if (data.indexOf("Exception: ",0) != -1) {
+            return (
+                <p>{data} </p>
+            );
+        }
+
+
         return (
             <embed src={data} type="application/pdf" width='1000' height='800' />
         );

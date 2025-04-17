@@ -65,7 +65,7 @@ const ScheduleUpdate = () => {
                     <td className="Label">Game Date:</td>
 
                     <td className="Field">
-                        <input readOnly type="date" defaultValue={today()} {...register('gameDate')} />
+                        <TextInput  type="date" defaultValue={today()} {...register('gameDate')} disabled/>
                         
                     </td>
                 </tr>
