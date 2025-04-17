@@ -22,7 +22,7 @@ function useFetchPDF(url: string): ApiResponse {
                     setLoading(false);
                 })
                 .catch(error => {
-                    setError(error);
+                    setError(`Exception: from use ${error}`);
                     console.log("fetch error", error);
                 })
         };

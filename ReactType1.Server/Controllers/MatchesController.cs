@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using ReactType1.Server.Code;
 using ReactType1.Server.Models;
-using System.Configuration;
-using System.Security.Cryptography;
+using System.Text;
 
 // https://medium.com/@hassanjabbar2017/performing-crud-operations-using-react-with-net-core-a-step-by-step-guide-0176efa86934
 namespace ReactType1.Server.Controllers
@@ -201,10 +199,22 @@ namespace ReactType1.Server.Controllers
             QuestPDF.Settings.License = LicenseType.Community;
             var site = _configuration.GetValue<string>("SiteInfo:clubname") ?? "Unknown club";
             var report = new ScheduleReport();
-            var document = report.CreateDocument(id.Value, _context, site);
-            byte[] pdfBytes = document.GeneratePdf();
-            var results = Convert.ToBase64String(pdfBytes);
-            return results;
+            try
+            {
+                var document = report.CreateDocument(id.Value, _context, site);
+                byte[] pdfBytes = document.GeneratePdf();
+                var results = Convert.ToBase64String(pdfBytes);
+                return results;
+            }
+            catch (Exception ex)
+            {
+                StringBuilder str = new(ex.Message);
+                while (ex.InnerException != null) {
+                    str.Append(", " +ex.InnerException.Message);
+                    ex = ex.InnerException;
+                }
+                return $"Exception: {str.ToString()}";
+            }
         }
 
         [HttpGet("ClearSchedule/{id}")]
