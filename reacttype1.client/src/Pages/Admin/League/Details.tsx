@@ -49,10 +49,10 @@ const LeagueDetails = () => {
                 <td className="Label">Points for a Bye:</td>
                 <td className="Field">{league.byePoints}</td>
             </tr>
-            <tr>
-                <td className="Label">Start Week:</td>
-                <td className="Field">{league.startWeek}</td>
-            </tr>
+            {/*<tr>*/}
+            {/*    <td className="Label">Start Week:</td>*/}
+            {/*    <td className="Field">{league.startWeek}</td>*/}
+            {/*</tr>*/}
             <tr>
                 <td className="Label">Points Limit:</td>
                 <td className="Field">{league.pointsLimit ? "Yes" : "No"}</td>

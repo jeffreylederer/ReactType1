@@ -56,7 +56,7 @@ const LeagueUpdate = () => {
         ? <p><em>Loading ...</em></p> :
 
         <form onSubmit={handleSubmit(onSubmit)} >
-
+            <input type="hidden" {...register('startWeek')} defaultValue="1" />
         <table>
 
                 <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={league.id} />
@@ -119,12 +119,12 @@ const LeagueUpdate = () => {
                 </td>
             </tr>
 
-            <tr>
-                <td className="Label">Start Week:</td>
+            {/*<tr>*/}
+            {/*    <td className="Label">Start Week:</td>*/}
 
-                    <td className="Field"><TextInput {...register('startWeek')}  defaultValue={league.startWeek} />
-                </td>
-            </tr>
+            {/*        <td className="Field"><TextInput {...register('startWeek')}  defaultValue={league.startWeek} />*/}
+            {/*    </td>*/}
+            {/*</tr>*/}
 
             <tr>
                     <td className="Label">Points are limited:</td>

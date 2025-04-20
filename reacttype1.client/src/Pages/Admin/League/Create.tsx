@@ -38,7 +38,7 @@ const LeagueCreate = () => {
 
             <h3>Add new league</h3>
             <form onSubmit={handleSubmit(onSubmit)} >
-               
+                <input type="hidden" {...register('startWeek')} defaultValue="1" />
                 <table>
                     <tr>
                         <td className="Label">League Name:</td>
@@ -99,12 +99,12 @@ const LeagueCreate = () => {
                         </td>
                     </tr>
 
-                    <tr>
-                        <td className="Label">Start Week:</td>
+                    {/*<tr>*/}
+                    {/*    <td className="Label">Start Week:</td>*/}
 
-                        <td className="Field"><TextInput {...register('startWeek')}  />
-                        </td>
-                    </tr>
+                    {/*    <td className="Field"><TextInput {...register('startWeek')}  />*/}
+                    {/*    </td>*/}
+                    {/*</tr>*/}
 
                     <tr>
                         <td className="Label">Points are limited:</td>
