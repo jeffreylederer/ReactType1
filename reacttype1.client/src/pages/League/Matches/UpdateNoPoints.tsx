@@ -2,23 +2,26 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
-import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
+import { UpdateFormDataNoPoints, UpdateFormDataSchemaNoPoints, UpdateFormData } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TextInput } from "flowbite-react";
+import { Checkbox } from "flowbite-react";
 import MatchFormData from "./MatchFormData.tsx";
 import { ReturnButton } from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 import convertDate from '@components/convertDate.tsx';
 import { useEffect } from 'react';
+import { League } from '@components/leagueObject.tsx';
 
 
 
-const MatchUpdate = () => {
+
+const MatchUpdateNoPoints = () => {
 
     const location = useLocation();
     const id: number = location.state;
     const [match, setMatch] = useState<MatchFormData>();
-    const [hidden, setHidden] = useState<boolean>(false);
+    const [error, setError] = useState<string>('');
+
 
     useEffect(() => {
         const data: MatchFormData[] = JSON.parse(localStorage.getItem("matches") as string);
@@ -28,26 +31,16 @@ const MatchUpdate = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        //formState: { errors },
 
-    } = useForm<UpdateFormData>({
-        resolver: zodResolver(UpdateFormDataSchema),
+    } = useForm<UpdateFormDataNoPoints>({
+        resolver: zodResolver(UpdateFormDataSchemaNoPoints),
 
     });
 
-    const ChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        //event.preventDefault();
-        const value = event.target.value;
-        if (value == '0') {
-            setHidden(false);
-        }
-        else {
-            setHidden(true);
-        }
 
-    }
 
-    const onSubmit: SubmitHandler<UpdateFormData> = (data) => updateData(data)
+    const onSubmit: SubmitHandler<UpdateFormDataNoPoints> = (data) => updateData(data)
 
     const navigate = useNavigate();
 
@@ -55,14 +48,16 @@ const MatchUpdate = () => {
     if (match) {
         return (
             <Layout>
-                <h3>Enter scrore for match </h3>
-                
+                <h3>Enter wins/loses for match </h3>
+                <span hidden={!League().tiesAllowed}>To mark a game as a tie, just select a win for both teams. When calculating the standings,
+                    this match is treated as a tie game. </span>
+                <span hidden={League().tiesAllowed}>There can only be one winner per game. </span>
+                <span>If one team forfeits, the other team wins. If both teams forfeit, neither team wins.</span><br /><br />
                 <form onSubmit={handleSubmit(onSubmit)} >
-                    
                     <table>
+
                         <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={match.id} />
-                        <input type="hidden" {...register("team1Win")} value="0" />
-                        <input type="hidden" {...register("team2Win")} value="0" />
+                        
                         <tr>
                             <td className="Label">Game Date:</td>
 
@@ -92,30 +87,24 @@ const MatchUpdate = () => {
                         </tr>
 
                         <tr>
-                            <td className="Label">Team 1 Score</td>
+                            <td className="Label">Team 1 Win</td>
 
                             <td className="Field">
-                                <TextInput {...register('team1Score')} defaultValue={match.team1Score} hidden={hidden} />
+                                <Checkbox {...register('team1Win')} defaultChecked={match.team1Win} />
                             </td>
                         </tr>
 
                         <tr>
-                            <td className="Label">Team 2 Score</td>
+                            <td className="Label">Team 2 Win</td>
 
                             <td className="Field">
-                                <TextInput {...register('team2Score')} defaultValue={match.team2Score} hidden={hidden} />
+                                <Checkbox {...register('team2Win')} defaultChecked={match.team2Win} />
                             </td>
                         </tr>
 
                         <tr>
-                            <td className="Label">Forfeit</td>
-
-                            <td className="Field">
-                                <select  {...register('forfeit')} defaultValue={match.forFeitId} onChange={ChangeSelect}>
-                                    <option value="0" >No Forfeit</option>
-                                    <option value={match.team1No}>{match.team1No}</option>
-                                    <option value={match.team2No}>{match.team2No}</option>
-                                </select>
+                            <td colSpan={2} >
+                                <p className="errorMessage">{error}</p>
                             </td>
                         </tr>
 
@@ -127,11 +116,7 @@ const MatchUpdate = () => {
                         </tr>
 
 
-                        <tr><td colSpan={1}>
-                            {errors.team1Score && <p className="errorMessage">{errors.team1Score.message}</p>}
-                            {errors.team2Score && <p className="errorMessage">{errors.team2Score.message}</p>}
-                            
-                        </td></tr>
+
 
 
                     </table>
@@ -140,24 +125,27 @@ const MatchUpdate = () => {
         );
     }
     else
-        <p>Loading...</p>
+        return (
+            <p>Loading...</p>
+        );
 
 
-    function updateData(data: UpdateFormData) {
+    function updateData(data: UpdateFormDataNoPoints) {
         const url: string = import.meta.env.VITE_SERVER_URL + 'api/Matches/'.concat(id.toString());
-        if (data.forfeit != 0) {
-            data.team1Score = 0;
-            data.team2Score = 0;
+        if (!League().tiesAllowed && data.team1Win && data.team2Win) {
+            setError("Both teams cannot win");
+            return;
         }
-       
-        axios.put(url, data)
+        const newData: UpdateFormData = { id: data.id, team1Score: 0, team2Score: 0, forfeit: 0, team1Win: data.team1Win ? 1 : 0, team2Win: data.team2Win ? 1 : 0 };
+              
+        axios.put(url, newData)
             .then(response => {
                 console.log('Record updated successfully: ', response.data);
                 const url: string = match ? `/League/Matches?id=${match.weekId}` : "/League/Matches";
                 navigate(url);
             })
             .catch(error => {
-                console.error('Error updating record: ', error);
+                setError('Error updating record: ' + error);
             });
     }
 
@@ -172,4 +160,4 @@ const MatchUpdate = () => {
 
 
 
-export default MatchUpdate;
+export default MatchUpdateNoPoints;
