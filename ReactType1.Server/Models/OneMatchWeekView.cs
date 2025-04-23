@@ -21,6 +21,10 @@ public partial class OneMatchWeekView
 
     public int Team2Score { get; set; }
 
+    public bool Team1Win { get; set; }
+
+    public bool Team2Win { get; set; }
+
     public int ForFeitId { get; set; }
 
     public int WeekId { get; set; }

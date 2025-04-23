@@ -37,6 +37,10 @@ public partial class MatchView
 
     public int Weekid { get; set; }
 
+    public bool Team1Win { get; set; }
+
+    public bool Team2Win { get; set; }
+
     public bool? Skip1W { get; set; }
 
     public bool? Vice1W { get; set; }

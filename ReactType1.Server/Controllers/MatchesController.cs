@@ -130,6 +130,8 @@ namespace ReactType1.Server.Controllers
             match.Team1Score = item.Team1Score;
             match.Team2Score = item.Team2Score;
             match.ForFeitId = item.Forfeit;
+            match.Team1Win = item.Team1Win == 1;
+            match.Team2Win = item.Team2Win == 1;
 
             _context.Entry(match).State = EntityState.Modified;
 
@@ -164,12 +166,27 @@ namespace ReactType1.Server.Controllers
             {
                 return null;
             }
+            Schedule? schedule = _context.Schedules.Find(id);
+            League? league = _context.Leagues.Find(schedule?.Leagueid);
             QuestPDF.Settings.License = LicenseType.Community;
-            var report = new StandingsReport();
-            var site = _configuration.GetValue<string>("SiteInfo:clubname") ?? "Unknown club";
-            var document = report.CreateDocument(id.Value, _context,site);
-            byte[] pdfBytes = document.GeneratePdf();
-            var results = Convert.ToBase64String(pdfBytes);
+            string results = "";
+            if (league.PointsCount)
+            {
+                var report = new StandingsReport();
+                var site = _configuration.GetValue<string>("SiteInfo:clubname") ?? "Unknown club";
+                var document = report.CreateDocument(id.Value, _context, site);
+                byte[] pdfBytes = document.GeneratePdf();
+                results = Convert.ToBase64String(pdfBytes);
+            }
+            else
+            {
+
+                var report = new StandingsNoPoinrsReport();
+                var site = _configuration.GetValue<string>("SiteInfo:clubname") ?? "Unknown club";
+                var document = report.CreateDocument(id.Value, _context, site);
+                byte[] pdfBytes1 = document.GeneratePdf();
+                results = Convert.ToBase64String(pdfBytes1);
+            }
             return results;
         }
 
@@ -355,6 +372,9 @@ namespace ReactType1.Server.Controllers
         public int Team1Score { get; set; }
         public int Team2Score { get; set; }
         public int Forfeit { get; set; }
+
+        public int Team1Win { get; set; }
+        public int Team2Win { get; set; }
     }
 
 }

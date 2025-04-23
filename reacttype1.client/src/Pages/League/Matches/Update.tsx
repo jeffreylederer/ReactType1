@@ -5,7 +5,7 @@ import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextInput } from "flowbite-react";
-import  MatchFormData  from "./MatchFormData.tsx";
+import MatchFormData from "./MatchFormData.tsx";
 import { ReturnButton } from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 import convertDate from '@components/convertDate.tsx';
@@ -23,7 +23,7 @@ const MatchUpdate = () => {
     useEffect(() => {
         const data: MatchFormData[] = JSON.parse(localStorage.getItem("matches") as string);
         setMatch(data.find(x => x.id == id));
-    },[]);
+    }, []);
 
     const {
         register,
@@ -56,12 +56,13 @@ const MatchUpdate = () => {
         return (
             <Layout>
                 <h3>Enter scrore for match </h3>
-
+                
                 <form onSubmit={handleSubmit(onSubmit)} >
-
+                    
                     <table>
-
                         <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={match.id} />
+                        <input type="hidden" {...register("team1Win")} value="0" />
+                        <input type="hidden" {...register("team2Win")} value="0" />
                         <tr>
                             <td className="Label">Game Date:</td>
 
@@ -127,8 +128,9 @@ const MatchUpdate = () => {
 
 
                         <tr><td colSpan={1}>
-                            {errors.team1Score && <p className="errorMessage">skip: {errors.team1Score.message}</p>}
-                            {errors.team2Score && <p className="errorMessage">viceskip: {errors.team2Score.message}</p>}
+                            {errors.team1Score && <p className="errorMessage">{errors.team1Score.message}</p>}
+                            {errors.team2Score && <p className="errorMessage">{errors.team2Score.message}</p>}
+                            
                         </td></tr>
 
 
@@ -138,15 +140,16 @@ const MatchUpdate = () => {
         );
     }
     else
-    <p>Loading...</p>
- 
+        <p>Loading...</p>
+
 
     function updateData(data: UpdateFormData) {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Matches/'.concat(id.toString());
+        const url: string = import.meta.env.VITE_SERVER_URL + 'api/Matches/'.concat(id.toString());
         if (data.forfeit != 0) {
             data.team1Score = 0;
             data.team2Score = 0;
         }
+       
         axios.put(url, data)
             .then(response => {
                 console.log('Record updated successfully: ', response.data);
