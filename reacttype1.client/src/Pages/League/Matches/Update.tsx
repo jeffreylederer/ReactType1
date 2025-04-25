@@ -61,8 +61,7 @@ const MatchUpdate = () => {
                     
                     <table>
                         <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={match.id} />
-                        <input type="hidden" {...register("team1Win")} value="0" />
-                        <input type="hidden" {...register("team2Win")} value="0" />
+                        
                         <tr>
                             <td className="Label">Game Date:</td>
 
