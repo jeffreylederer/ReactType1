@@ -109,21 +109,16 @@ function Matches() {
                         <th style={{ textAlign: "center" }}>
                             Team 2
                         </th>
-                        <th hidden={!League().pointsCount}>
+                        <th >
                             Team 1 Score
                         </th>
-                        <th hidden={!League().pointsCount}>
+                        <th >
                             Team 2 Score
                         </th>
-                        <th hidden={!League().pointsCount}>
+                        <th >
                             Team Forfeiting
                         </th>
-                        <th hidden={League().pointsCount}>
-                            Team 1 Win
-                        </th>
-                        <th hidden={League().pointsCount}>
-                            Team 2 Win
-                        </th>
+                        
                         <th hidden={allowed}></th>
                     </tr>
                 </thead>
@@ -140,15 +135,14 @@ function Matches() {
                             <td style={{ color: item.wheelchair2, textAlign: "right" }} >
                                 {item.team2No} ({item.team2})</td>
 
-                            <td style={{ textAlign: 'center' }} hidden={!League().pointsCount}>{item.forFeitId != 0? '' : item.team1Score}</td>
-                            <td style={{ textAlign: 'center' }} hidden={!League().pointsCount}>{item.forFeitId != 0 ? '': item.team2Score}</td>
-                            <td style={{ textAlign: 'center' }} hidden={!League().pointsCount}>{item.forFeitId == 0 ? '' : item.forFeitId}</td>
+                            <td style={{ textAlign: 'center' }} >{item.forFeitId != 0? '' : item.team1Score}</td>
+                            <td style={{ textAlign: 'center' }} >{item.forFeitId != 0 ? '': item.team2Score}</td>
+                            <td style={{ textAlign: 'center' }} >{item.forFeitId == 0 ? '' : item.forFeitId}</td>
 
-                            <td style={{ textAlign: 'center' }} hidden={League().pointsCount}>{IsTied(item.team1Win, item.team2Win)}</td>
-                            <td style={{ textAlign: 'center' }} hidden={League().pointsCount}>{IsTied(item.team2Win, item.team1Win)}</td>
+                            
 
-                            <td hidden={allowed || !League().pointsCount} ><Link to="/League/Matches/Update" state={item.id.toString()}>Score</Link></td>
-                            <td hidden={allowed || League().pointsCount} ><Link to="/League/Matches/UpdateNoPoints" state={item.id.toString()}>Score</Link></td>
+                            <td hidden={allowed} ><Link to="/League/Matches/Update" state={item.id.toString()}>Score</Link></td>
+                            
                         </tr>
                     )}
                 </tbody>
@@ -179,13 +173,7 @@ function Matches() {
         }
     }
 
-    function IsTied(team1: boolean, team2: boolean): string {
-        if (team1 && team2)
-            return "Tied";
-        if (team1)
-            return "X";
-        return "";
-    }
+   
     
 
     

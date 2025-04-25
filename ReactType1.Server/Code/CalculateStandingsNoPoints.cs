@@ -80,23 +80,8 @@ namespace ReactType1.Server.Code
                         .AsEnumerable()
                         .FirstOrDefault();
 
-
-
-
-                    //team 1 wins
-                    if (match.Team1Win && match.Rink != -1 && !match.Team2Win)
-                    {
-                        var winner = list.Find(x => x.Team == teamView?.Team);
-                        var loser = list.Find(x => x.Team == teamView?.Team1);
-                        if (winner != null && loser != null)
-                        {
-                            winner.Points += league.WinPoints;
-                            
-                        }
-                        
-                    }
-                    else //teams tied
-                    if (match.Team1Win && match.Rink != -1 && match.Team2Win)
+                    //teams tied
+                    if (match.Team1Score==match.Team2Score && match.Rink != -1 && match.ForFeitId == 0)
                     {
                         var winner = list.Find(x => x.Team == teamView?.Team);
                         var loser = list.Find(x => x.Team == teamView?.Team1);
@@ -106,24 +91,45 @@ namespace ReactType1.Server.Code
                             loser.Points += league.TiePoints;
 
                         }
-
                     }
+
+
+                    //team 1 wins
+                    else if (match.Team1Score > match.Team2Score && match.Rink != -1 && match.ForFeitId == 0)
+                    {
+                        var winner = list.Find(x => x.Team == teamView?.Team);
+                        var loser = list.Find(x => x.Team == teamView?.Team1);
+                        if (winner != null && loser != null)
+                        {
+                            winner.Points += league.WinPoints;
+                        }
+                    }
+
                     //team 2 wins
-                    else if (match.Team2Win && match.Rink != -1 && !match.Team1Win)
+                    else if (match.Team1Score < match.Team2Score && match.Rink != -1 && match.ForFeitId == 0)
                     {
                         var winner = list.Find(x => x.Team == teamView?.Team1);
                         var loser = list.Find(x => x.Team == teamView?.Team);
                         if (winner != null && loser != null)
                         {
                             winner.Points += league.WinPoints;
+                        }
+                    }
+                    // forfeit
+                    else if(match.Rink != -1 && match.ForFeitId != 0)
+                    {
+                        var winner = list.Find(x => x.Team != match.ForFeitId);
+                        var loser = list.Find(x => x.Team == match.ForFeitId);
+                        if (winner != null && loser != null)
+                        {
+                            winner.Points += league.WinPoints;
 
                         }
-
-
                     }
-
+                    // bye
                     else if (match.Rink == -1)
                     {
+                        
                         var winner = list.Find(x => x.Team == teamView?.Team);
                         if (winner != null)
                         {

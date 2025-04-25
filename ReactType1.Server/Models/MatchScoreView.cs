@@ -17,10 +17,6 @@ public partial class MatchScoreView
 
     public int? Rink { get; set; }
 
-    public bool Team1Win { get; set; }
-
-    public bool Team2Win { get; set; }
-
     public int Teamno1 { get; set; }
 
     public int Teamno2 { get; set; }

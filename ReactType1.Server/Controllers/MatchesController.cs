@@ -130,8 +130,7 @@ namespace ReactType1.Server.Controllers
             match.Team1Score = item.Team1Score;
             match.Team2Score = item.Team2Score;
             match.ForFeitId = item.Forfeit;
-            match.Team1Win = item.Team1Win == 1;
-            match.Team2Win = item.Team2Win == 1;
+           
 
             _context.Entry(match).State = EntityState.Modified;
 
@@ -373,8 +372,6 @@ namespace ReactType1.Server.Controllers
         public int Team2Score { get; set; }
         public int Forfeit { get; set; }
 
-        public int Team1Win { get; set; }
-        public int Team2Win { get; set; }
     }
 
 }

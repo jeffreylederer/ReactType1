@@ -46,7 +46,7 @@ import Byes from "@pages/League/Matches/Byes.tsx";
 import ScheduleReport from "@pages/League/Matches/ScheduleReport.tsx";
 import CreateMatches  from "@pages/League/Matches/CreateMatches.tsx";
 import ClearMatches from "@pages/League/Matches/ClearMatches.tsx";
-import MatchUpdateNoPoints from '@pages/League/Matches/UpdateNoPoints.tsx';
+
 
 
 
@@ -119,8 +119,7 @@ function RouteMenu() {
             <Route path="/League/ScheduleReport" element={<ScheduleReport />} />
             <Route path="/League/CreateMatches" element={<CreateMatches />} />
             <Route path="/League/ClearMatches" element={<ClearMatches />} />
-            <Route path="/League/Matches/UpdateNoPoints" element={<MatchUpdateNoPoints/>}/>
-                
+                           
 
                 
             <Route path="/Contact" element={<Contact />} />

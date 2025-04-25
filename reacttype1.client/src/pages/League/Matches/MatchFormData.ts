@@ -12,8 +12,7 @@ type MatchFormData = {
     team1No: number,
     team2No: number,
     gameDate: string,
-    team1Win: boolean,
-    team2Win: boolean
+
 };
 
 export default MatchFormData;

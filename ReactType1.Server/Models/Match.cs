@@ -21,10 +21,6 @@ public partial class Match
 
     public int ForFeitId { get; set; }
 
-    public bool Team1Win { get; set; }
-
-    public bool Team2Win { get; set; }
-
     public virtual Team TeamNo1Navigation { get; set; } = null!;
 
     public virtual Team? TeamNo2Navigation { get; set; }
