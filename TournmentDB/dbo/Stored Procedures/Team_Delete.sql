@@ -1,4 +1,4 @@
-﻿CREATE procedure dbo.Team_Delete
+﻿CREATE procedure [dbo].[Team_Delete]
 @idteam int
 as
 begin
@@ -19,7 +19,7 @@ begin
 		(order by id)
 			row_num,
 				id
-			FROM [Tournament].[dbo].[Team]
+			FROM [dbo].[Team]
 			WHERE LEAGUEID=@leagueid) AS X
 
 		update team 

@@ -1,4 +1,5 @@
-﻿create view dbo.MatchScheduleView
+﻿
+CREATE view [dbo].[MatchScheduleView]
 as
 select distinct s.GameDate, m.rink,  t1.teamno as team1, t2.teamno as team2, t1.divisionid
 from league l

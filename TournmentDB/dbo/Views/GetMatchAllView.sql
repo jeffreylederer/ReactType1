@@ -1,4 +1,5 @@
-﻿create view [dbo].[GetMatchAllView]
+﻿
+CREATE view [dbo].[GetMatchAllView]
 as
 select L.* from (
 select S.ID, M1.NickName as Skip1, m5.NickName as Vice1, M2.NickName as Lead1,  M3.NickName as Skip2, m6.NickName as Vice2,M4.NickName as Lead2, T1.TeamNo as Team1, T2.TeamNo as Team2, S.GameDate as Date, M.Rink, T1.DivisionId as Division1, T2.DivisionId as Division2

@@ -6,6 +6,8 @@
     [IsActive]     BIT                CONSTRAINT [DF_User_IsActive] DEFAULT ((1)) NOT NULL,
     [LastLoggedIn] DATETIMEOFFSET (7) NULL,
     [SerialNumber] VARCHAR (450)      NOT NULL,
-    CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([id] ASC)
+    [RoleId]       INT                CONSTRAINT [DF_User_RoleId] DEFAULT ((1)) NOT NULL,
+    CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([id] ASC),
+    CONSTRAINT [FK_User_Role] FOREIGN KEY ([RoleId]) REFERENCES [dbo].[Role] ([id])
 );
 

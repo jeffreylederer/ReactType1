@@ -11,4 +11,6 @@ from match m
 join team t on t.id = m.teamno1
 join team t1 on t1.id = m.teamno2
 inner join League l on t.Leagueid = l.id
+
 where m.WeekId=@weekid
+order by m.Rink

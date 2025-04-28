@@ -1,6 +1,9 @@
 ﻿
 
 
+
+
+
 CREATE view [dbo].[MatchScoreView]
 as
 select 
