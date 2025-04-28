@@ -3,6 +3,7 @@ import { LeagueType } from "@components/leagueObjectTypes.tsx";
 import { SetLeague, RemoveLeague } from "@components/leagueObject.tsx";
 import { useNavigate } from "react-router-dom";
 import Layout from "@layouts/Layout.tsx";
+import { IsUserNull } from '@components/leagueObject.tsx';
 
 
 
@@ -10,12 +11,16 @@ import Layout from "@layouts/Layout.tsx";
 function Home() {
 
     const navigate = useNavigate();
+    if (IsUserNull()) {
+        navigate("/Login");
+    }
     const { data, loading, error } = useFetch<LeagueType>(`${import.meta.env.VITE_SERVER_URL}api/leagues`);
+   
 
     const selected = (data: LeagueType) => {
 
         SetLeague(data);
-        navigate("/Welcome")
+        navigate("/Welcome");
     }
     
     
