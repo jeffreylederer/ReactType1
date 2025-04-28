@@ -35,7 +35,7 @@ namespace ReactType1.Server.Code
                          .AsEnumerable()
                          .FirstOrDefault();
 
-                string players = "";
+                string players = " ";
                 if (team1 != null)
                 {
                     switch (teamsize)
@@ -70,7 +70,7 @@ namespace ReactType1.Server.Code
                 if (week.Cancelled)
                     continue;
                 
-                var bye = false;
+               
 
                 foreach (var match in db.Matches.Where(x => x.WeekId == week.Id).Where(x => x.TeamNo1Navigation.DivisionId == DivisionId).ToList())
                 {

@@ -19,7 +19,7 @@ namespace ReactType1.Server.Repository
             return await _context.Set<Membership>().ToListAsync();
         }
 
-        public async Task<Membership> GetOne(int? id)
+        public async Task<Membership?> GetOne(int? id)
         {
             if (id == null)
             {

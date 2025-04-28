@@ -40,7 +40,7 @@ namespace ReactType1.Server.Code
                          .AsEnumerable()
                          .FirstOrDefault();
                 
-                string players = "";
+                string players = " ";
                 if (team1 != null)
                 {
                     switch (teamsize)
@@ -290,8 +290,8 @@ namespace ReactType1.Server.Code
                 OneTeamView? team1 = db.OneTeamViews
                 .FromSql($"EXEC OneTeam {league.Id}")
                 .AsEnumerable()
-                .FirstOrDefault();
-                string players = "";
+                .FirstOrDefault(); 
+                string players = " ";
                 if (team1 != null)
                 {
                     switch (teamsize)

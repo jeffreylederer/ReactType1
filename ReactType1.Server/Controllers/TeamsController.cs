@@ -115,7 +115,7 @@ namespace ReactType1.Server.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch
             {
                 return BadRequest();
             }
@@ -217,7 +217,7 @@ namespace ReactType1.Server.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch
             {
                 return BadRequest();
             }
