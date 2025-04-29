@@ -19,8 +19,8 @@ begin
 		(order by id)
 			row_num,
 				id
-			FROM [Tournament].[dbo].[Team]
-			WHERE LEAGUEID=@leagueid) AS X
+			FROM[dbo].[Team] T
+			WHERE T.leagueid=@leagueid) AS X
 
 		update team 
 		set teamno = row_num

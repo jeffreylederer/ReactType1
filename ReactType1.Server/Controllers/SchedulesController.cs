@@ -168,7 +168,7 @@ namespace ReactType1.Server.Controllers
     {
         public int Id { get; set; }
 
-        public string GameDate { get; set; }
+        public required string GameDate { get; set; }
 
         public int Leagueid { get; set; }
 

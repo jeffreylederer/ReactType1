@@ -5,8 +5,8 @@ using ReactType1.Server.Repository;
 // https://medium.com/@kaashok1993/net-6-web-api-mocking-dbcontext-dbset-using-moq-48d9e4929089
 public class MembershipRepositoryTest : IDisposable
 {
-    private IMembershipRepository membershipRepository;
-    private SetupMembershipRepository service;
+    private readonly IMembershipRepository membershipRepository;
+    private readonly SetupMembershipRepository service;
 
     public MembershipRepositoryTest()
     {
@@ -26,7 +26,7 @@ public class MembershipRepositoryTest : IDisposable
         
 
         //Act
-        IList<Membership> lstData = await membershipRepository.Get();
+        var lstData = await membershipRepository.Get();
 
 
         //Assert
@@ -45,7 +45,7 @@ public class MembershipRepositoryTest : IDisposable
          int id = 1;
 
         //Act
-        Membership data = await membershipRepository.GetOne(id);
+        Membership? data = await membershipRepository.GetOne(id);
 
         //Assert
         Assert.Multiple(() =>
@@ -80,21 +80,25 @@ public class MembershipRepositoryTest : IDisposable
     {
         //Arrange
         int id = 2;
-        Membership actualData = await membershipRepository.GetOne(id);
-        actualData.FirstName = "Fred";
-
-        //Act
-        Membership expectedData = await  membershipRepository.Edit(actualData);
-        
-        //Assert
-        Assert.Multiple(() =>
+        Membership? actualData = await membershipRepository.GetOne(id);
+        if (actualData != null)
         {
-              Assert.NotNull(expectedData);
-              Assert.Equal(expectedData, actualData);
-        });
+            actualData.FirstName = "Fred";
 
-        actualData.Id = 10;
-        await Assert.ThrowsAsync<System.InvalidOperationException>(() => membershipRepository.Edit(actualData));
+            //Act
+            Membership expectedData = await membershipRepository.Edit(actualData);
+
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.NotNull(expectedData);
+                Assert.Equal(expectedData, actualData);
+            });
+
+            actualData.Id = 10;
+            await Assert.ThrowsAsync<System.InvalidOperationException>(() => membershipRepository.Edit(actualData));
+        }
+        Assert.NotNull(actualData);
     }
 
     [Fact]
@@ -109,7 +113,7 @@ public class MembershipRepositoryTest : IDisposable
 
 
         //Assert
-        var item = await membershipRepository.GetOne(id);
+        Membership? item= await membershipRepository.GetOne(id);
 
         Assert.Null(item);
 

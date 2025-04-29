@@ -40,8 +40,8 @@ namespace ReactType1.Server.Code
                          .AsEnumerable()
                          .FirstOrDefault();
                 
-                string players = "";
-                if (team1 != null)
+                string players = " ";
+                if (team1 != null && team1.Skip != null)
                 {
                     switch (teamsize)
                     {
@@ -291,8 +291,8 @@ namespace ReactType1.Server.Code
                 .FromSql($"EXEC OneTeam {league.Id}")
                 .AsEnumerable()
                 .FirstOrDefault();
-                string players = "";
-                if (team1 != null)
+                string players = " ";
+                if (team1 != null && team1.Skip != null)
                 {
                     switch (teamsize)
                     {

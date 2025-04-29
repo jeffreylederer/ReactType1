@@ -4,7 +4,7 @@ namespace ReactType1.Server.Contracts
 {
     public interface IMembershipRepository
     {
-        Task<Membership> GetOne(int? MembershipId);
+        Task<Membership?> GetOne(int? MembershipId);
 
         Task<List<Membership>> Get();
 

@@ -169,7 +169,7 @@ namespace ReactType1.Server.Controllers
             League? league = _context.Leagues.Find(schedule?.Leagueid);
             QuestPDF.Settings.License = LicenseType.Community;
             string results = "";
-            if (league.PointsCount)
+            if (league != null && league.PointsCount)
             {
                 var report = new StandingsReport();
                 var site = _configuration.GetValue<string>("SiteInfo:clubname") ?? "Unknown club";
