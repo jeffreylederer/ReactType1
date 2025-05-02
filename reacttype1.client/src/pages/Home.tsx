@@ -1,24 +1,50 @@
-import useFetch from '@hooks/useFetch.tsx';;
+import { useState, useEffect } from 'react';
 import { LeagueType } from "@components/leagueObjectTypes.tsx";
-import { SetLeague, RemoveLeague } from "@components/leagueObject.tsx";
+import { SetLeague, RemoveLeague, IsUserNull } from "@components/leagueObject.tsx";
 import { useNavigate } from "react-router-dom";
 import Layout from "@layouts/Layout.tsx";
-
-
-
 
 function Home() {
 
     const navigate = useNavigate();
-    const { data, loading, error } = useFetch<LeagueType>(`${import.meta.env.VITE_SERVER_URL}api/leagues`);
+    const [data, setData] = useState<LeagueType[] | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     const selected = (data: LeagueType) => {
-
         SetLeague(data);
         navigate("/Welcome")
     }
-    
-    
+
+    const fetchData = async () => {
+        if (data) {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/leagues`);
+                if (!response.ok) {
+                    setError(`HTTP error! status: ${response.status}`);
+                }
+                const json = (await response.json()) as LeagueType[];
+                setData(json);
+                setLoading(false);
+            } catch (error) {
+                let message: string;
+                if (error instanceof Error)
+                    message = error.message
+                else
+                    message = String(error)
+                setError(message);
+                setLoading(false);
+            }
+        }
+    }
+
+
+    useEffect(() => {
+        if (IsUserNull())
+            navigate("/Login");
+        fetchData();
+    });
+
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -57,7 +83,7 @@ function Home() {
                                 <td>{data.teamSize}</td>
                                 <td>{data.divisions}</td>
                                 <td>{data.playOffs ? "Yes" : "No"}</td>
-                                <td><button onClick={()=>selected(data)} >
+                                <td><button onClick={() => selected(data)} >
                                     select
                                 </button>
                                 </td>
@@ -70,8 +96,8 @@ function Home() {
             </Layout>
         );
     }
-   
-   
+
+
 }
 
 
