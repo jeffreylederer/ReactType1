@@ -147,13 +147,14 @@ function Matches() {
                     )}
                 </tbody>
             </table>
+            <p style={{ color: 'red', textAlign: 'left' }} hidden={weekid == 0}>Teams with wheel chair members are in red</p>
         </>;   
         return(
         <Layout>
         <h3>Games in {League().leagueName} league</h3>
                 {contents}
                 {matchcontents}
-                <p style={{ color: 'red', textAlign: 'left' }} hidden={weekid==0}>Teams with wheel chair members are in red</p>
+               
         
          </Layout>
     );
