@@ -17,7 +17,7 @@ function Home() {
     }
 
     const fetchData = async () => {
-        if (data) {
+        if (!data) {
             try {
                 const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/leagues`);
                 if (!response.ok) {
@@ -69,7 +69,6 @@ function Home() {
                     <thead>
                         <tr>
                             <th>League Name</th>
-                            <th>Active</th>
                             <th>Team Size</th>
                             <th>Divisions</th>
                             <th>Playoffs</th>
