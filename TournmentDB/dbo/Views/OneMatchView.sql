@@ -1,6 +1,9 @@
 ﻿
-CREATE procedure [dbo].[OneMatch]
-@id as int
+
+
+
+
+CREATE View [dbo].[OneMatchView]
 as
 SELECT m.[id],
 
@@ -49,4 +52,3 @@ s.GameDate
 
   inner join schedule s on s.id = m.WeekId
   inner join league l on l.id = t1.Leagueid
-  where m.id=@id and m.Rink <>  -1

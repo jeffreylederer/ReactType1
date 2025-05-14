@@ -2,12 +2,12 @@
 @teamid int
 as
 SELECT T.[id]
-      ,m1.NickName as [skip]
-      ,m2.NickName as [ViceSkip]
-      ,m3.NickName as [Lead]
-	  ,p1.id as [skipid]
-      ,p2.id as [ViceSkipid]
-      ,p3.id as [Leadid]
+      ,isNull(m1.NickName,'') as [skip]
+      ,isNull(m2.NickName,'') as [ViceSkip]
+      ,isNull(m3.NickName,'') as [Lead]
+	  ,isNull(p1.id,0) as [skipid]
+      ,isNull(p2.id,0) as [ViceSkipid]
+      ,isNull(p3.id,0) as [Leadid]
       ,T.[Leagueid]
 	  ,t.DivisionId as Division
       ,[TeamNo]

@@ -20,6 +20,6 @@ SELECT T.[id]
   left outer join membership m2 on m2.id = p2.MembershipId
   left outer join membership m3 on m3.id = p3.MembershipId
   where t.Leagueid=@leagueid
-  order by teamno
+  order by divisionid,teamno
 
  -- exec TeamAllowDelete 1010

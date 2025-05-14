@@ -20,11 +20,11 @@ export function League(): LeagueType {
 }
 
 export function IsLeagueNull():boolean {
-    return League().id == 0;
+    return localStorage.getItem('league') === undefined || localStorage.getItem('league') === null ||  League().id == 0;
 }
 
 export function IsUserNull(): boolean {
-    return User().id == 0;
+    return localStorage.getItem('login') === undefined || localStorage.getItem('login') === null || User().id == 0;
 }
 
 export function SetUser( data: UserType): void
