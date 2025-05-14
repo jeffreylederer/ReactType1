@@ -85,13 +85,13 @@ namespace ReactType1.Server.Code
                                 return container.Border(1).BorderColor(Colors.Black).PaddingVertical(5).AlignCenter();
                             }
                             if (league?.Divisions > 1)
-                                table.Cell().Element(CellStyle2).Text("Division").SemiBold().FontSize(10);
-                            table.Cell().Element(CellStyle2).Text("Team #").SemiBold().FontSize(10);
-                            table.Cell().Element(CellStyle2).Text("Skip").SemiBold().FontSize(10);
+                                table.Cell().Element(CellStyle2).Text("Division").SemiBold().FontSize(8);
+                            table.Cell().Element(CellStyle2).Text("Team #").SemiBold().FontSize(8);
+                            table.Cell().Element(CellStyle2).Text("Skip").SemiBold().FontSize(8);
                             if (TeamSize == 3)
-                                table.Cell().Element(CellStyle2).Text("Vice Skip").SemiBold().FontSize(10);
+                                table.Cell().Element(CellStyle2).Text("Vice Skip").SemiBold().FontSize(8);
                             if (TeamSize > 1)
-                                table.Cell().Element(CellStyle2).Text("Lead").SemiBold().FontSize(10);
+                                table.Cell().Element(CellStyle2).Text("Lead").SemiBold().FontSize(8);
 
                             static IContainer CellStyle(IContainer container)
                             {
@@ -101,14 +101,14 @@ namespace ReactType1.Server.Code
                             foreach (var item in teams)
                             {
                                 if (league?.Divisions > 1)
-                                    table.Cell().Element(CellStyle).Text(item.Division.ToString()).FontSize(10);
-                                table.Cell().Element(CellStyle).Text(item.TeamNo.ToString()).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(item.Division.ToString()).FontSize(8);
+                                table.Cell().Element(CellStyle).Text(item.TeamNo.ToString()).FontSize(8);
                                 if (item.Skip != null)
-                                    table.Cell().Element(CellStyle).Text(item.Skip).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(item.Skip).FontSize(8);
                                 if (item.ViceSkip != null)
-                                    table.Cell().Element(CellStyle).Text(item.ViceSkip).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(item.ViceSkip).FontSize(8);
                                 if (item.Lead != null)
-                                    table.Cell().Element(CellStyle).Text(item.Lead).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(item.Lead).FontSize(8);
                             }
 
                         }); //table 1
@@ -148,11 +148,11 @@ namespace ReactType1.Server.Code
                             }
 
                             
-                            table.Cell().Element(CellStyle2).Text("Date").SemiBold().FontSize(10);
+                            table.Cell().Element(CellStyle2).Text("Date").SemiBold().FontSize(8);
 
                             for (int i = 0; i < rinks; i++)
                             {
-                                table.Cell().Element(CellStyle2).Text((i + 1).ToString()).SemiBold().FontSize(10);
+                                table.Cell().Element(CellStyle2).Text((i + 1).ToString()).SemiBold().FontSize(8);
                             }
 
                             static IContainer CellStyle(IContainer container)
@@ -166,22 +166,22 @@ namespace ReactType1.Server.Code
                             {
                                 if (schedule[w].PlayOffs)
                                 {
-                                    table.Cell().Element(CellStyle).Text(schedule[w].GameDate.ToShortDateString()).FontSize(10);
-                                    table.Cell().Element(CellStyle).Text("PO").FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(schedule[w].GameDate.ToShortDateString()).FontSize(8);
+                                    table.Cell().Element(CellStyle).Text("PO").FontSize(8);
                                     for (int r = 0; r < rinks - 1; r++)
                                     {
-                                        table.Cell().Element(CellStyle).Text("*").FontSize(10);
+                                        table.Cell().Element(CellStyle).Text("*").FontSize(8);
 
                                     }
                                     index += rinks;
                                 }
                                 else
                                 {
-                                    table.Cell().Element(CellStyle).Text(schedule[w].GameDate.ToShortDateString()).FontSize(10);
+                                    table.Cell().Element(CellStyle).Text(schedule[w].GameDate.ToShortDateString()).FontSize(8);
                                     for (int r = 0; r < rinks; r++)
                                     {
                                         var match = $"{matches[index].Team1}-{matches[index].Team2}";
-                                        table.Cell().Element(CellStyle).Text(match).FontSize(10);
+                                        table.Cell().Element(CellStyle).Text(match).FontSize(8);
                                         index++;
 
                                     }
