@@ -365,3 +365,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /reacttype1.client/src/Pages/Home.tsx
+/reacttype1.client/src/Pages/About.test.tsx
+/reacttype1.client/src/Pages/About.test.tsx
+/reacttype1.client/src/pages/About.test.tsx
