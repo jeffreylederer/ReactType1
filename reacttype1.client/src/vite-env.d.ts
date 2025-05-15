@@ -1,6 +1,7 @@
 interface ImportMetaEnv {
     readonly VITE_SERVER_URL: string;
     readonly VITE_SERVER_ClubName: string;
+    readonly VITE_SERVER_Website: string;
     // more env variables...
 }
 

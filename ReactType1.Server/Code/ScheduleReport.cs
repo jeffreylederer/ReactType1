@@ -189,6 +189,11 @@ namespace ReactType1.Server.Code
                             }
 
                         }); //table 2
+                        if(league.PlayOffs)
+                            column.Item().AlignCenter().Inlined(inlined =>
+                            {
+                                inlined.Item().Text("PO=Playoff Date").FontSize(8);
+                            });
                     }); //content
                 }); //container
             }); //return

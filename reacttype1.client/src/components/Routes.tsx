@@ -59,7 +59,7 @@ import NotLogin from "@pages/Admin/Login/NotLogin.tsx";
 
 
 import About from "@pages/About.tsx";
-import Contact from "@pages/Contact.tsx";
+
 
 
 import Welcome from "@pages/Welcome.tsx";
@@ -122,7 +122,7 @@ function RouteMenu() {
                            
 
                 
-            <Route path="/Contact" element={<Contact />} />
+            
             <Route path="/About" element={<About />} />
             <Route path="/Logoff" element={<Logoff />} />
             <Route path="/Login" element={<Login />} />

@@ -67,10 +67,7 @@ function Menu() {
                             <li className="nav-item">
                                 <NavLink className="nav-link " aria-current="page" to="/About">About</NavLink>
                             </li>
-                            <li className="nav-item">
-                                <NavLink className="nav-link " aria-current="page" to="/Contact">Contact</NavLink>
-                            </li>
-                       
+                                                   
                             <li className="nav-item">
                                 <span className="nav-link " aria-current="page" >Hello {username}!</span>
                             </li>
