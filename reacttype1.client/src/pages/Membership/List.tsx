@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import { ListData } from "./ListData.tsx";
-import { User } from "@components/leagueObject.tsx";
+import UserClass from "@components/UserClass.tsx";
 import Layout from '@layouts/Layout.tsx';
 import Table from './Table.tsx';
 import { useState, useEffect } from 'react';
 
 function Membership() {   
-    const allowed: boolean = (User().role == "SiteAdmin" || User().role == "Admin") ? false : true;
+    const user = new UserClass();
+    const allowed: boolean = (user.role == "SiteAdmin" || user.role == "Admin") ? false : true;
     const [data, setData] = useState<ListData[]>();
     const [error, setError] = useState<string>('');
 

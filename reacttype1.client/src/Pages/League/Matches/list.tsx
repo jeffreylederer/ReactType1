@@ -4,15 +4,18 @@ import axios from "axios";
 import { UpdateFormData } from "../Schedule/UpdateFormData.tsx";
 import { Link } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
-import { User, League } from '@components/leagueObject.tsx';
 import Layout from '@layouts/Layout.tsx';
 import uparrow from '@images/uparrow.png';
 import convertDate from '@components/convertDate.tsx';
+import LeagueClass from "@components/LeagueClass";
+import UserClass from "@components/UserClass";
 
 
 function Matches() {
+    const user = new UserClass();
+    const league = new LeagueClass();
     const [match, setMatch] = useState<MatchFormData[]>();
-    const permission: string = User().role;
+    const permission: string = user.role;
     const allowed: boolean = (permission == "SiteAdmin" || permission == "Admin" || permission == "Scorer") ? false : true;
     const admin: boolean = (permission == "SiteAdmin" || permission == "Admin" )? false : true;
     
@@ -41,7 +44,7 @@ function Matches() {
     };
 
     async function GetData(weekid: number) {
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/matches/".concat(weekid.toString());
+        const url: string = `${import.meta.env.VITE_SERVER_URL}api/matches/${weekid}`;
         axios.get(url)
             .then(response => {
 
@@ -151,7 +154,7 @@ function Matches() {
         </>;   
         return(
         <Layout>
-        <h3>Games in {League().leagueName} league</h3>
+        <h3>Games in {league.leagueName} league</h3>
                 {contents}
                 {matchcontents}
                
@@ -161,7 +164,7 @@ function Matches() {
    
     async function GetDates() {
         if (schedule === undefined) {
-            const url: string = import.meta.env.VITE_SERVER_URL+"api/Schedules/".concat(League().id.toString());
+            const url: string = `${import.meta.env.VITE_SERVER_URL}api/Schedules/${league.id}`;
             axios.get(url)
                 .then(response => {
                     const weeks: UpdateFormData[] = response.data;

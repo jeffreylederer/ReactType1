@@ -4,8 +4,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from 'react';
 import { TextInput, Button } from "flowbite-react";
 import axios from "axios";
-import { SetUser } from "@components/leagueObject.tsx";
-import { UserType } from "@components/leagueObjectTypes.tsx";
+import UserClass, { UserType } from "@components/UserClass";
+
 import { LoginType, LoginTypeSchema } from './LoginDataTypes.tsx';
 
 function Login() {
@@ -34,7 +34,8 @@ function Login() {
                  }
                 else {
                     const data: UserType = response.data;
-                    SetUser(data);
+                    const user = new UserClass();
+                    user.Initialize(data);
                     
                     navigate("/");
                 }

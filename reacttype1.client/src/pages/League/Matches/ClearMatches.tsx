@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import { League } from "@components/leagueObject.tsx";;
+import LeagueClass from "@components/LeagueClass.tsx";
 import Layout from '@layouts/Layout.tsx';
 
 
 
 const ClearMatches = () => {
+    const league = new LeagueClass();
+
     const [errorMsg, setErrorMsg] = useState('');
     useEffect(() => {
         GetData();
@@ -16,9 +18,9 @@ const ClearMatches = () => {
             <p style={{ textAlign: "center"} }>{errorMsg}</p>
         </Layout>
     );
-
+    
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL + "api/Matches/ClearSchedule/".concat(League().id.toString());
+        const url: string = import.meta.env.VITE_SERVER_URL + "api/Matches/ClearSchedule/".concat(league.id.toString());
         axios.get(url)
             .then(response => {
                 setErrorMsg("Schedule cleared");

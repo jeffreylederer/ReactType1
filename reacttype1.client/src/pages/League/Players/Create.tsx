@@ -5,7 +5,7 @@ import { PlayerFormData, PlayerFormDataSchema } from "./FormData.tsx";
 import { UpdateFormData } from "../../Membership/UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
-import { League } from "@components/leagueObject.tsx";
+import LeagueClass from '@components/LeagueClass.tsx';
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 
@@ -16,6 +16,7 @@ const PlayersCreate = () => {
     const onSubmit: SubmitHandler<PlayerFormData> = (data) => CreateData(data)
     const navigate = useNavigate();
     const [membership, setmembership] = useState<UpdateFormData[]>();
+    const league = new LeagueClass();
 
     function CreateData(data: PlayerFormData) {
         axios.post(import.meta.env.VITE_SERVER_URL+'api/Players/', data)
@@ -30,7 +31,8 @@ const PlayersCreate = () => {
     }
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL + "api/players/getMembers/".concat(League().id.toString());
+        const league = new LeagueClass();
+        const url: string = import.meta.env.VITE_SERVER_URL + "api/players/getMembers/".concat(league.id.toString());
         axios.get(url)
             .then(response => {
                 setmembership(response.data);
@@ -54,10 +56,10 @@ const PlayersCreate = () => {
 
     return (
         <Layout>
-            <h3>Create new player in league {League().leagueName} </h3>
+            <h3>Create new player in league {league.leagueName} </h3>
             <form onSubmit={handleSubmit(onSubmit)} >
                 <table>
-                    <input type="hidden" {...register("leagueid")} defaultValue={League().id }/>
+                    <input type="hidden" {...register("leagueid")} defaultValue={league.id }/>
                     <tr>
                         <td className="Label">Members:</td>
 

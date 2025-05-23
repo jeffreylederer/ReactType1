@@ -1,15 +1,18 @@
-import { League, User } from "@components//leagueObject.tsx";
+import LeagueClass from "@components//LeagueClass.tsx";
 import Layout from "@layouts/Layout.tsx";
+import UserClass from "@components/UserClass";
 
 
 function Welcome() {
+    const league = new LeagueClass();
+    const user = new UserClass();
         return (
             <Layout>
 
-                <h3>Welcome to {League().leagueName}</h3>
+                <h3>Welcome to {league.leagueName}</h3>
 
            <div className="toLeft">
-                    <h4>Current Role: {User().role} </h4>
+                    <h4>Current Role: {user.role} </h4>
 
                 <dl >
                     <dt>Observers</dt>

@@ -5,14 +5,14 @@ import { FormData, FormDataSchema } from "./FormData.tsx";
 import { Membership } from "./Membership.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
-import { League } from "@components/leagueObject.tsx";;
+import LeagueClass from '@components/LeagueClass.tsx';;
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 
 
 const TeamsCreate = () => {
    
-    
+    const league = new LeagueClass();
     const onSubmit: SubmitHandler<FormData> = (data) => CreateData(data)
     const [errorMsg, SeterrorMsg] = useState("");
 
@@ -21,7 +21,7 @@ const TeamsCreate = () => {
     const [membership, setMembership] = useState<Membership[]>();
 
     function CreateData(data: FormData) {
-        switch (League().teamSize) {
+        switch (league.teamSize) {
             case 1:
                 break;
             case 2:
@@ -58,7 +58,7 @@ const TeamsCreate = () => {
     }
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/Teams/NotOnTeam/".concat(League().id.toString());
+        const url: string = import.meta.env.VITE_SERVER_URL+"api/Teams/NotOnTeam/".concat(league.id.toString());
         axios.get(url)
             .then(response => {
                 setMembership(response.data);
@@ -82,10 +82,10 @@ const TeamsCreate = () => {
 
     return (
         <Layout>
-            <h3>Create new Team in league {League().leagueName} </h3>
+            <h3>Create new Team in league {league.leagueName} </h3>
             <form onSubmit={handleSubmit(onSubmit)} >
                 <table>
-                    <input type="hidden" {...register("leagueid")} defaultValue={League().id} />
+                    <input type="hidden" {...register("leagueid")} defaultValue={league.id} />
                     <input type="hidden" {...register("teamNo")} defaultValue={"1"} />
                     <input type="hidden" {...register("id")} defaultValue={"0"} />
                     <tr>
@@ -100,7 +100,7 @@ const TeamsCreate = () => {
                             </select></td>
                     </tr>
 
-                    <tr hidden={League().teamSize < 3}>
+                    <tr hidden={league.teamSize < 3}>
                         <td className="Label">Vice Skip:</td>
                         <td>
                             <select style={{ width: '85%' }} defaultValue="0" {...register("viceSkip")}>
@@ -112,7 +112,7 @@ const TeamsCreate = () => {
                             </select></td>
                     </tr> 
 
-                    <tr hidden={League().teamSize < 2}>
+                    <tr hidden={league.teamSize < 2}>
                         <td className="Label">Lead:</td>
                         <td>
                             <select style={{ width: '85%' }} defaultValue="0" {...register("lead")}>
@@ -129,8 +129,8 @@ const TeamsCreate = () => {
                             <select style={{ width: '85%' }} defaultValue="0" {...register("divisionId")}>
                                 <option value="0" key="0">Select Division</option>
                                 <option value="1" key="1">1</option>
-                                <option value="2" hidden={League().divisions < 2} key="2">2</option>
-                                <option value="3" hidden={League().divisions < 3} key="3">3</option>
+                                <option value="2" hidden={league.divisions < 2} key="2">2</option>
+                                <option value="3" hidden={league.divisions < 3} key="3">3</option>
                             </select></td>
                     </tr>
                     
@@ -155,10 +155,10 @@ const TeamsCreate = () => {
 
                 </table>
                 {
-                    League().teamSize < 3 && <input type="hidden" defaultValue="0" {...register("viceSkip")} />
+                    league.teamSize < 3 && <input type="hidden" defaultValue="0" {...register("viceSkip")} />
                 }
                 {
-                    League().teamSize < 2 && <input type="hidden" defaultValue="0" {...register("lead")} />
+                    league.teamSize < 2 && <input type="hidden" defaultValue="0" {...register("lead")} />
                 }
 
                 

@@ -5,13 +5,14 @@ import axios from "axios";
 import { UpdateFormData} from "./UpdateFormData.tsx";
 
 import { Checkbox, TextInput } from "flowbite-react";
-import { League } from "@components/leagueObject.tsx";;
+import LeagueClass from '@components/LeagueClass.tsx';;
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 
 
 
 const ScheduleUpdate = () => {
+    const league = new LeagueClass();
     const [schedule, setSchedule] = useState<UpdateFormData>();
     const location = useLocation();
     const id: number = location.state;
@@ -106,7 +107,7 @@ const ScheduleUpdate = () => {
     
     return (
         <Layout>
-            <h3>Update schedule for league {League().leagueName}</h3>
+            <h3>Update schedule for league {league.leagueName}</h3>
             {contents}
 
             

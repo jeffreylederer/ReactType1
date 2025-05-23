@@ -4,7 +4,7 @@ import axios from "axios";
 import { UpdatePasswordData, UpdatePasswordDataScheme } from "./LoginDataTypes.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextInput, Button } from "flowbite-react";
-import { User } from "@components/leagueObject.tsx";
+import UserClass from "@components/UserClass";
 
 
 
@@ -25,6 +25,7 @@ const UserUpdatePassword = () => {
     const onSubmit: SubmitHandler<UpdatePasswordData> = (data) => updateData(data)
 
     const navigate = useNavigate();
+    const user = new UserClass();
 
 
 
@@ -34,11 +35,11 @@ const UserUpdatePassword = () => {
 
             <table>
 
-                <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={User().id} />
+                <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={user.id} />
                 <tr>
                     <td className="Label">User Name:</td>
 
-                    <td className="Field"><TextInput defaultValue={User().userName} disabled />
+                    <td className="Field"><TextInput defaultValue={user.userName} disabled />
                     </td>
                 </tr>
 
@@ -93,7 +94,7 @@ const UserUpdatePassword = () => {
 
 
     function updateData(data: UpdatePasswordData) {
-        const url: string = import.meta.env.VITE_SERVER_URL + 'api/Admin/'.concat(User().id.toString());
+        const url: string = import.meta.env.VITE_SERVER_URL + 'api/Admin/'.concat(user.id.toString());
         axios.put(url, data)
             .then(response => {
                 console.log('Record updated successfully ', response.data);

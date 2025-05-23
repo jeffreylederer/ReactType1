@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 import { DetailsType } from "./DetailsType.tsx";
 import Layout from "@layouts/Layout.tsx";
-import { User } from "@components/leagueObject.tsx";
+import UserClass from "@components/UserClass.tsx";
 
 function Users() {
-    const permission: string = User().role;
+    const user = new UserClass();
+    const permission: string = user.role;
     const [Users, SetUsers] = useState<DetailsType[]>();
     const allowed: boolean = permission !== "SiteAdmin";
 

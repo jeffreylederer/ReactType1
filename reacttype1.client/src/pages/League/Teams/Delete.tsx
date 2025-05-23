@@ -2,12 +2,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import axios from "axios";
 import { TeamMember } from "./TeamMember.ts";
-import { League } from "@components/leagueObject.tsx";;
+import LeagueClass from '@components/LeagueClass.tsx';;
 import { DeleteButton } from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 
 
 const TeamsDelete = () => {
+    const league = new LeagueClass();
     const location = useLocation();
     const id: number = +location.search.substring(4);
    
@@ -35,12 +36,12 @@ const TeamsDelete = () => {
                 <td className="Field">{team?.skip}</td>
             </tr>
 
-            <tr hidden={League().teamSize < 3}>
+            <tr hidden={league.teamSize < 3}>
                 <td style={{ width: "200px" }}>Vice Skip:</td>
                 <td className="Field">{team?.viceSkip}</td>
             </tr>
 
-            <tr hidden={League().teamSize < 2}>
+            <tr hidden={league.teamSize < 2}>
                 <td style={{ width: "200px" }}>Lead:</td>
                 <td className="Field">{team?.lead}</td>
             </tr>
@@ -59,7 +60,7 @@ const TeamsDelete = () => {
         
     return (
         <Layout>
-            <h3>Delete Team from league {League().leagueName} </h3>
+            <h3>Delete Team from league {league.leagueName} </h3>
             {contents}
             <p className="errorMessage">{errorMsg}</p>
 

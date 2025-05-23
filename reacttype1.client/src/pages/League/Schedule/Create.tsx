@@ -4,7 +4,7 @@ import axios from "axios";
 import { FormData, FormDataSchema } from "./FormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
-import { League } from "@components/leagueObject.tsx";;
+import LeagueClass from '@components/LeagueClass.tsx';;
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 import { UpdateFormData } from "./UpdateFormData.tsx";
@@ -19,6 +19,7 @@ const ScheduleCreate = () => {
         resolver: zodResolver(FormDataSchema),
     });
     const navigate = useNavigate();
+    const league = new LeagueClass();
  
     const zeroPad = (num: number): string => {
         const x: string = num.toString();
@@ -46,10 +47,10 @@ const ScheduleCreate = () => {
 
     return (
         <Layout>
-            <h3>Create new game date for league {League().leagueName}</h3>
+            <h3>Create new game date for league {league.leagueName}</h3>
             <form onSubmit={handleSubmit(onSubmit)} >
                 <table>
-                    <input type="hidden" defaultValue={League().id} {...register('leagueid')} />
+                    <input type="hidden" defaultValue={league.id} {...register('leagueid')} />
                     <tr>
                         <td className="Label">Game Date:</td>
 

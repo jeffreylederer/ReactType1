@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, } from "react-router-dom";
-import { League } from '@components/leagueObject.tsx';
+import LeagueClass from "@components/LeagueClass";
 import { Button } from "flowbite-react";
 import Layout from '@layouts/Layout.tsx';
 import UpdateFormData from './UpdateFormData.tsx';
@@ -9,6 +9,7 @@ import axios from 'axios';
 const PlayersDelete = () => {
     const location = useLocation();
     const id: number = location.state;
+    const league = new LeagueClass();
 
     const navigate = useNavigate();
 
@@ -48,7 +49,7 @@ const PlayersDelete = () => {
 
     return (
         <Layout>
-            <h2>Delete player from league {League().leagueName} </h2>
+            <h2>Delete player from league {league.leagueName} </h2>
             {contests}
             <p>{error}</p>
         </Layout>

@@ -51,6 +51,19 @@ namespace ReactType1.Server.Code
 
                            });
 
+                    if (!matches.Any())
+                    {
+                        page.Content().PaddingVertical(20).Column(column =>
+                        {
+                            column.Item().Inlined(inlined =>
+                            {
+                                inlined.Spacing(20);
+                                inlined.Item().Text("No matches scheduled");
+                            });
+                        });
+                        return;
+                    }
+
                     page.Content().PaddingVertical(20).Column(column =>
                     {
 
@@ -160,30 +173,28 @@ namespace ReactType1.Server.Code
                                 return container.Border(1).BorderColor(Colors.Black).PaddingVertical(5).AlignCenter();
                             }
 
-                            int index = 0;
                             
-                            for (int w = 0; w < schedule.Count; w++)
+                            foreach(var s in schedule)
                             {
-                                if (schedule[w].PlayOffs)
+                                if(s.PlayOffs)
                                 {
-                                    table.Cell().Element(CellStyle).Text(schedule[w].GameDate.ToShortDateString()).FontSize(8);
+                                    table.Cell().Element(CellStyle).Text(s.GameDate.ToShortDateString()).FontSize(8);
                                     table.Cell().Element(CellStyle).Text("PO").FontSize(8);
                                     for (int r = 0; r < rinks - 1; r++)
                                     {
                                         table.Cell().Element(CellStyle).Text("*").FontSize(8);
 
                                     }
-                                    index += rinks;
                                 }
                                 else
                                 {
-                                    table.Cell().Element(CellStyle).Text(schedule[w].GameDate.ToShortDateString()).FontSize(8);
+                                    var thisweek = matches.Where(x => x.GameDate == s.GameDate).ToList();
+                                    table.Cell().Element(CellStyle).Text(s.GameDate.ToShortDateString()).FontSize(8);
                                     for (int r = 0; r < rinks; r++)
                                     {
-                                        var match = $"{matches[index].Team1}-{matches[index].Team2}";
+                                            
+                                        var match = $"{thisweek[r].Team1}-{thisweek[r].Team2}";
                                         table.Cell().Element(CellStyle).Text(match).FontSize(8);
-                                        index++;
-
                                     }
                                 }
                             }

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { UpdateFormData } from "./UpdateFormData.tsx";
-import { League, User} from "@components/leagueObject.tsx";
+import LeagueClass from "@components/LeagueClass";
+import UserClass from "@components/UserClass";
 import Layout from '@layouts/Layout.tsx';
 import convertDate from '@components/convertDate.tsx';
 import { useState, useEffect } from 'react';
@@ -8,11 +9,12 @@ import { useState, useEffect } from 'react';
 
 
 function Schedule() {
-    
+    const user = new UserClass();
+    const league = new LeagueClass();
     const [data, setData] = useState<UpdateFormData[]| null>(null);
     const [matches, setMatches] = useState<number | null>(null);
 
-    const permission: string = User().role;
+    const permission: string = user.role;
     const updateAllowed: boolean = (permission == "SiteAdmin" || permission == "Admin");
     const allowed: boolean =  updateAllowed && matches == 0;
     
@@ -21,7 +23,7 @@ function Schedule() {
     const fetchData = async () => {
         if (data == undefined) {
             try {
-                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/schedules/${League().id}`);
+                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/schedules/${league.id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -48,7 +50,7 @@ function Schedule() {
     const numberMatches = async () => {
         if (matches == undefined) {
             try {
-                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/matches/GetAllMatches/${League().id}`);
+                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/matches/GetAllMatches/${league.id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -101,7 +103,7 @@ function Schedule() {
            
         return (
         <Layout>
-            <h3 id="tableLabel">Schedule for League {League().leagueName}</h3>
+            <h3 id="tableLabel">Schedule for League {league.leagueName}</h3>
                 <Link to="/League/Schedule/Create" hidden={!allowed}>Add</Link>
                 {contents}
                 <p>{error}</p>

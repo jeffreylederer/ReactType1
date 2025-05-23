@@ -55,7 +55,7 @@ const MatchUpdate = () => {
     if (match) {
         return (
             <Layout>
-                <h3>Enter scrore for match </h3>
+                <h3>Enter score for match </h3>
                 
                 <form onSubmit={handleSubmit(onSubmit)} >
                     

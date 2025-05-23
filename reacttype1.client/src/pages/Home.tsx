@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { LeagueType } from "@components/leagueObjectTypes.tsx";
-import { SetLeague, RemoveLeague, IsUserNull } from "@components/leagueObject.tsx";
+
+import LeagueClass, { LeagueType } from "@components/LeagueClass.tsx";
+import UserClass from '@components/UserClass';
 import { useNavigate } from "react-router-dom";
 import Layout from "@layouts/Layout.tsx";
 
@@ -12,7 +13,8 @@ function Home() {
     const [error, setError] = useState<string | null>(null);
 
     const selected = (data: LeagueType) => {
-        SetLeague(data);
+        const league = new LeagueClass();
+        league.Initialize(data);
         navigate("/Welcome")
     }
 
@@ -40,8 +42,11 @@ function Home() {
 
 
     useEffect(() => {
-        if (IsUserNull())
+        const user = new UserClass();
+        if (user === undefined || user.id == 0)
             navigate("/Login");
+        const league = new LeagueClass();
+        league.Remove();
         fetchData();
     });
 
@@ -61,7 +66,8 @@ function Home() {
         )
     else {
         const leagues: LeagueType[] = data.filter((word) => word.active)
-        RemoveLeague();
+        const league = new LeagueClass();
+        league.Remove();
         return (
             <Layout>
                 <h3 id="tableLabel">Select League</h3>

@@ -1,9 +1,10 @@
-import { League } from "@components/leagueObject.tsx";;
+import LeagueClass from '@components/LeagueClass.tsx';;
 import useFetchPDF from '@hooks/useFetchPDF'
 
 
 function TeamReport() {
-    const { data, loading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Teams/TeamReport/${League().id}`);
+    const league = new LeagueClass();
+    const { data, loading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Teams/TeamReport/${league.id}`);
 
     if (loading) {
         return;

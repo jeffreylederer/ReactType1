@@ -1,24 +1,27 @@
 import { Link } from 'react-router-dom';
 import { TeamMember } from "./TeamMember.tsx";
-import { User, League } from "@components/leagueObject.tsx";
+import LeagueClass from "@components/LeagueClass";
+import UserClass from "@components/UserClass";
 import Layout from '@layouts/Layout.tsx';
 import { useState, useEffect } from 'react';
 import './Teams.css';
 
 
 function Teams() {
+    const user = new UserClass();
+    const league = new LeagueClass();
     const [data, setData] = useState<TeamMember[]| null>(null);
     const [matches, setMatches] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const permission: string = User().role;
+    const permission: string = user.role;
     const updateAllowed: boolean = (permission == "SiteAdmin" || permission == "Admin"); 
     const allowed: boolean = updateAllowed &&  matches == 0;
 
     const fetchData = async () => {
         if (data == undefined) {
             try {
-                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/Teams/${League().id}`);
+                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/Teams/${league.id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -39,7 +42,7 @@ function Teams() {
     const numberMatches = async () => {
         if (matches == undefined) {
             try {
-                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/matches/GetAllMatches/${League().id}`);
+                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/matches/GetAllMatches/${league.id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -75,8 +78,8 @@ function Teams() {
                 <tr>
                     <th>Team No</th>
                     <th>Skip</th>
-                    <th hidden={League().teamSize < 3}>Vice Skip</th>
-                    <th hidden={League().teamSize < 2}>Lead</th>
+                    <th hidden={league.teamSize < 3}>Vice Skip</th>
+                    <th hidden={league.teamSize < 2}>Lead</th>
                     <th>Division</th>
                     <td hidden={allowed}></td>
                 </tr>
@@ -86,8 +89,8 @@ function Teams() {
                     <tr key={item.id}>
                         <td>{item.teamNo}</td>
                         <td>{item.skip}</td>
-                        <td hidden={League().teamSize < 3}>{item.viceSkip}</td>
-                        <td hidden={League().teamSize < 2}>{item.lead}</td>
+                        <td hidden={league.teamSize < 3}>{item.viceSkip}</td>
+                        <td hidden={league.teamSize < 2}>{item.lead}</td>
                         <td>{item.division}</td>
                         <td hidden={!updateAllowed}><Link to={`/league/Teams/Update?matches=${matches}`} state={item.id.toString()} >Update</Link><span hidden={!allowed}>|</span>
                             <Link hidden={!allowed} to={`/league/Teams/Delete/?id=${item.id}`} >Delete</Link>
@@ -101,7 +104,7 @@ function Teams() {
 
         return (
             <Layout>
-                <h3 id="tableLabel">Teams for League {League().leagueName}</h3>
+                <h3 id="tableLabel">Teams for League {league.leagueName}</h3>
                 <Link to="/league/Teams/Create" hidden={!allowed}>Add</Link><br/>
                 <Link to="/league/Teams/Report" target="blank">Teams Report</Link>
                 {contents}

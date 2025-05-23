@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import { League } from "@components/leagueObject.tsx";;
 import Layout from '@layouts/Layout.tsx';
+import LeagueClass from "@components/LeagueClass";;
 
 
 
 const CreateMatches = () => {
     const [errorMsg, setErrorMsg] = useState('Matches created');
+    const league = new LeagueClass();
     useEffect(() => {
         GetData();
     });
@@ -18,7 +19,7 @@ const CreateMatches = () => {
     );
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL + "api/Matches/CreateSchedule/".concat(League().id.toString());
+        const url: string = import.meta.env.VITE_SERVER_URL + "api/Matches/CreateSchedule/".concat(league.id.toString());
         axios.get(url)
             .then(response => {
                 console.log(response.data);

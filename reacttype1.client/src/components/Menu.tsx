@@ -1,17 +1,21 @@
 
-import { IsUserNull, User, IsLeagueNull } from "@components/leagueObject.tsx";
+import LeagueClass from "@components/LeagueClass";
+import UserClass  from "@components/UserClass";
 import { NavLink, useNavigate } from "react-router-dom";
 
 function Menu() {
     const navigate = useNavigate();
-    const showSiteAdmin:boolean =!IsUserNull() && (User()?.role == "SiteAdmin") ;
-    const showAdmin: boolean = !IsUserNull() &&  (User()?.role == "Admin" || showSiteAdmin );
-   
-    const showLeague: boolean = !IsLeagueNull();
-    const username: string =User().userName;
+    const user = new UserClass();
+    const league = new LeagueClass();
+    const showSiteAdmin:boolean = user && (user.role == "SiteAdmin") ;
+    const showAdmin: boolean = user && ( user.role == "Admin" || showSiteAdmin );
 
     
-    if (!User()) {
+    const showLeague: boolean = (league.id > 0);
+    const username: string = user.id > 0? user.userName:  "Unknown User";
+
+    
+    if (user.id === 0) {
         navigate("/Login");
     }
        
