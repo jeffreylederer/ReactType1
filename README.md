@@ -66,7 +66,7 @@ A member cannot be deleted from the membership list if that person is assigned t
 
 # Schedule
 
-A league requires one or more scheduled weeks of play. Each week needs date. As you add additional weeks, the add method automatically increments the week’s number by one and the week’s date by 7 days. A week's record can be updated to mark as cancelled; then all scores for that week are set to zero and that week is not counted in the league’s standings.
+A league requires one or more scheduled weeks of play. Each week needs a date. As you add additional weeks, the add method automatically increments the week’s number by one and the week’s date by 7 days. A week's record can be updated to mark as cancelled; then all scores for that week are set to zero and that week is not counted in the league’s standings.
 
 If the league allows playoffs, a week (probably the last few) can be marked as playoff weeks. During these weeks, no games will be scheduled. The league administrator can manually make up the schedules for these weeks.
 
