@@ -26,8 +26,6 @@ A league cannot be deleted if there are any players or scheduled weeks assigned 
 
 Each league has the following properties:
 
-- Start Week - no longer being used
-
 - Team Size – how many players on each team
 
 - Divisions - number of divisions, the default is 1 and the maximum is 2.
