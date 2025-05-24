@@ -53,9 +53,9 @@ If points scored are allowed to help determine standings, then the total points 
 
 - A maximum of 20 points are awarded to any team for determining standings if that points limit are selected when the league is created if this option is selected.
 
-- For byes, the team with a bye is 14 poinra and a win for determining standings.
+- For byes, the team with a bye is 14 points and a win for determining standings.
 
-- For forfeits, the team not forfeiting is awarded 14 points and a win for determining standings. The forfeiting team receives no scored points for that week and a lose.
+- For forfeits, the team not forfeiting is awarded 14 points and a win for determining standings. The forfeiting team receives no scored points for that week and a lose. The other team gets 14 points.
 
 
 # Membership
