@@ -7,7 +7,7 @@ import prettier from "prettier";
 import { Plugin, ResolvedConfig } from "vite";
 
 // https://dev.to/rezamoosavidweb/css-module-type-vite-5hlm
-function isDir(dir:string) {
+function isDir(dir: string) {
     try {
         return fs.statSync(dir).isDirectory();
     } catch {
@@ -15,11 +15,11 @@ function isDir(dir:string) {
     }
 }
 
-function isCSSSelectorValid(selector:string):boolean {
+function isCSSSelectorValid(selector: string): boolean {
     try {
         selectorParse().processSync(selector);
         return true; // If no errors occurred, the selector is valid
-    } catch  {
+    } catch {
         console.error(`Invalid CSS selector: ${selector}`);
         return false; // If an error occurred, the selector is not valid
     }
@@ -28,7 +28,7 @@ const changingFilePath = (config: ResolvedConfig, file: string): string =>
     path.join(config.build.outDir, path.relative(config.publicDir, file));
 
 const removeDupStrFromArray = (arr: string[]): string[] => {
-    const uniqueArray:string[] = [];
+    const uniqueArray: string[] = [];
 
     for (const str of arr) {
         if (!uniqueArray.includes(str)) {
@@ -49,10 +49,10 @@ const typeDeceleration = async (classArray: string[]) => {
     return formattedData;
 };
 
-function createUniquesClassName(fullPath:string): Promise<string[]> {
+function createUniquesClassName(fullPath: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
         const css = fs.readFileSync(fullPath);
-        const classNames:string[] = [];
+        const classNames: string[] = [];
         postcss()
             .process(css, { from: fullPath, to: fullPath?.replace(".css", ".d.css") })
             .then(async (result) => {
@@ -71,7 +71,7 @@ function createUniquesClassName(fullPath:string): Promise<string[]> {
             .catch(reject);
     });
 }
-async function createDecelerationFile(fullPath:string) {
+async function createDecelerationFile(fullPath: string) {
     const uniquesClassName = await createUniquesClassName(fullPath);
 
     if (uniquesClassName?.length > 0) {
@@ -88,7 +88,7 @@ async function createDecelerationFile(fullPath:string) {
         }
     }
 }
-function getCssModulesFiles(pathDir:string) {
+function getCssModulesFiles(pathDir: string) {
     const directory = pathDir;
 
     if (isDir(directory)) {
@@ -125,41 +125,41 @@ export function CssModuleTypes(): Plugin {
                         console.error(err);
                         return;
                     }
-                    else 
-                    postcss()
-                        .process(css, {
-                            from: changingFilePath(config, file),
-                        })
-                        .then(async (result) => {
-                            const classNames:string[] = [];
-                            try {
-                                result.root.walkRules((rule) => {
-                                    if (!isCSSSelectorValid(rule.selector)) return;
-                                    selectorParse((selectors) => {
-                                        selectors.walkClasses((selector) => {
-                                            classNames.push(selector.value);
-                                        });
-                                    }).process(rule.selector);
-                                });
+                    else
+                        postcss()
+                            .process(css, {
+                                from: changingFilePath(config, file),
+                            })
+                            .then(async (result) => {
+                                const classNames: string[] = [];
+                                try {
+                                    result.root.walkRules((rule) => {
+                                        if (!isCSSSelectorValid(rule.selector)) return;
+                                        selectorParse((selectors) => {
+                                            selectors.walkClasses((selector) => {
+                                                classNames.push(selector.value);
+                                            });
+                                        }).process(rule.selector);
+                                    });
 
-                                const uniquesClassName = removeDupStrFromArray(classNames);
+                                    const uniquesClassName = removeDupStrFromArray(classNames);
 
-                                if (uniquesClassName?.length > 0) {
-                                    const newDestPath = changingFilePath(config, file)?.replace(
-                                        ".module.css",
-                                        ".module.css.d.ts"
-                                    );
-                                    fs.writeFile(
-                                        newDestPath,
-                                        await typeDeceleration(uniquesClassName),
-                                        (error) => console.log("error:", error)
-                                    );
+                                    if (uniquesClassName?.length > 0) {
+                                        const newDestPath = changingFilePath(config, file)?.replace(
+                                            ".module.css",
+                                            ".module.css.d.ts"
+                                        );
+                                        fs.writeFile(
+                                            newDestPath,
+                                            await typeDeceleration(uniquesClassName),
+                                            (error) => console.log("error:", error)
+                                        );
+                                    }
+                                } catch (error) {
+                                    console.log(`error in ${result.opts.from}:`, error);
                                 }
-                            } catch (error) {
-                                console.log(`error in ${result.opts.from}:`, error);
-                            }
-                        })
-                        
+                            })
+
                 });
             }
         },

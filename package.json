@@ -1,7 +1,11 @@
 {
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
+    "fs": "^0.0.1-security",
     "happy-dom": "^17.2.2",
+    "path": "^0.12.7",
+    "postcss": "^8.5.3",
+    "postcss-selector-parser": "^7.1.0",
     "prettier": "^3.5.3",
     "sass": "^1.85.1",
     "universal-cookie": "^7.2.2",

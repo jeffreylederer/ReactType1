@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import child_process from 'child_process';
 import { env } from 'process';
-import { CssModuleTypes } from "./watching-css-modules";
+import { CssModuleTypes } from "./watching-css-modules.ts";
 
 
 const baseFolder =

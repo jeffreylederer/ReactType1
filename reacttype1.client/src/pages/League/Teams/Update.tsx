@@ -111,6 +111,9 @@ const TeamUpdate = () => {
                                 <option value="3" key="3" hidden={league.divisions < 3}>3</option>
                             </select></td>
                     </tr>
+                    <tr hidden={matches == 0} >
+                        <input type="hidden" value={team.division} {...register("divisionId")} />
+                    </tr>
                    
                     <tr>
                         <td colSpan={2}>
