@@ -1,14 +1,16 @@
-import axios from "axios";
-function CreateData<T>(data: T, url: string): boolean {
-    axios.post(url, data)
-        .then((response) => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.log('Error creating record: ', error);
-            return false;
-        });
-    return true;
+async function createData<T>(data: T, url: string): Promise<any> {
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText} `);
+    }
+
+    return response.json();
 }
 
-export default CreateData;
+export default createData;

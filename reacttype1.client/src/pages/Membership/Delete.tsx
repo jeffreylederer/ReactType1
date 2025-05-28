@@ -3,7 +3,7 @@ import { ListData } from "./ListData.tsx";
 import Layout from '@layouts/Layout.tsx';
 import { DeleteButton } from '@components/Buttons.tsx';
 import useFetch from '@hooks/useFetch.tsx';
-import Delete from '@components/Delete.tsx';
+import Delete from '@components/deleteData.tsx';
 import { useState } from 'react';
 
 

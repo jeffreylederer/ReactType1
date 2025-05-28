@@ -6,21 +6,14 @@ import { Checkbox, TextInput, } from "flowbite-react";
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 import useFetch from '@hooks/useFetch.tsx';
-import UpdateData from '@components/UpdateData.tsx';
-import GetData from './GetData.ts'; 
+import updateData from '@components/updateData.tsx';
+import { useState } from 'react';
 
 
 const MembershipUpdate = () => {
+    const [errorMsg,setErrorMsg] = useState<string>('');
+   
 
-    let membership: GetData = {
-        id: 0,
-        firstName: '',
-        lastName: '',
-        shortname: '',
-        fullName: '',
-        nickName: '',
-        wheelchair: false
-    };
 
     const navigate = useNavigate();
 
@@ -34,7 +27,7 @@ const MembershipUpdate = () => {
     } = useForm<UpdateFormData>({
         resolver: zodResolver(UpdateFormDataSchema),
     });
-    const onSubmit: SubmitHandler<UpdateFormData> = (data) => updateData(data,id)
+const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data,id)
  
    
     const { data, isLoading, error } =useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
@@ -55,7 +48,7 @@ const MembershipUpdate = () => {
             </Layout>
         );
     if (data) {
-        membership = data;
+       
 
 
 
@@ -66,32 +59,32 @@ const MembershipUpdate = () => {
 
 
 
-                    <input type="hidden" {...register("id", { valueAsNumber: true })} value={membership.id} />
+                    <input type="hidden" {...register("id", { valueAsNumber: true })} value={data.id} />
                     <TextInput {...register("nickName")} type="hidden" />
                     <TextInput {...register("fullName")} type="hidden" />
                     <table>
                         <tr>
                             <td className="Label">First Name:</td>
 
-                            <td className="Field"><TextInput type="text" {...register('firstName')} style={{ width: '85%' }} defaultValue={membership.firstName} />
+                            <td className="Field"><TextInput type="text" {...register('firstName')} style={{ width: '85%' }} defaultValue={data.firstName} />
                             </td>
                         </tr>
                         <tr>
                             <td className="Label">Last Name:</td>
 
-                            <td className="Field"><TextInput  {...register('lastName')} style={{ width: '85%' }} defaultValue={membership.lastName} />
+                            <td className="Field"><TextInput  {...register('lastName')} style={{ width: '85%' }} defaultValue={data.lastName} />
                             </td>
                         </tr>
                         <tr>
                             <td className="Label">Short Name:</td>
-                            <td className="Field"><TextInput {...register('shortname')} style={{ width: '85%' }} defaultValue={membership.shortname} />
+                            <td className="Field"><TextInput {...register('shortname')} style={{ width: '85%' }} defaultValue={data.shortname} />
                             </td>
                         </tr>
                         <tr>
                             <td className="Label">Wheel Chair:</td>
 
                             <td className="Field">
-                                <Checkbox {...register('wheelchair')} defaultChecked={membership.wheelchair} />
+                                <Checkbox {...register('wheelchair')} defaultChecked={data.wheelchair} />
                             </td>
                         </tr>
                         <tr className="center-td">
@@ -105,6 +98,7 @@ const MembershipUpdate = () => {
                             {errors.lastName && <p className="errorMessage">{errors.lastName.message}</p>}
                             {errors.shortname && <p className="errorMessage">{errors.shortname.message}</p>}
                             {errors.id && <p className="errorMessage">{errors.id.message}</p>}
+                            <p className="errorMessage">{errorMsg}</p>
                         </td></tr>
                     </table>
                 </form>
@@ -114,9 +108,14 @@ const MembershipUpdate = () => {
         );
     }
 
-    function updateData(data: UpdateFormData, id:number) {
-        if (UpdateData<UpdateFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`))
-            navigate("/Membership");
+    async function update(data: UpdateFormData, id:number) {
+        try {
+            await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
+            navigate("/Membership");;
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
     }
 
 

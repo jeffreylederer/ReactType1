@@ -4,7 +4,7 @@ import { FormData } from "./FormData.tsx";
 import {DeleteButton} from '@components/Buttons.tsx';
 import Layout from "@layouts/Layout.tsx";
 import useFetch from '@hooks/useFetch.tsx';
-import Delete from '@components/Delete.tsx';
+import Delete from '@components/deleteData.tsx';
 
 
 

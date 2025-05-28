@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import CreateData from '@components/CreateData.tsx';
+import createData from '@components/createData.tsx';
 import { FormData, FormDataSchema } from "./FormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
 import Layout from '@layouts/Layout.tsx';
 import SubmitButton from '@components/Buttons.tsx';
+import { useState } from 'react';
 
 const MembershipCreate = () => {
    
@@ -17,7 +18,9 @@ const MembershipCreate = () => {
         resolver: zodResolver(FormDataSchema),
     });
 
-    const onSubmit: SubmitHandler<FormData> = (data) => createData(data)
+    const [errorMsg, setErrorMsg] = useState<string>('');
+
+    const onSubmit: SubmitHandler<FormData> = (data) => create(data)
        
     const navigate = useNavigate();
 
@@ -63,7 +66,8 @@ const MembershipCreate = () => {
                     <tr><td colSpan={1}>
                     {errors.firstName && <p className="errorMessage">{errors.firstName.message}</p>}
                     {errors.lastName && <p className="errorMessage">{errors.lastName.message}</p>}
-                    {errors.shortname && <p className="errorMessage">{errors.shortname.message}</p>}
+                        {errors.shortname && <p className="errorMessage">{errors.shortname.message}</p>}
+                        <p className="errorMessage">{errorMsg}</p>
                     </td>
                     </tr>
                     
@@ -74,9 +78,14 @@ const MembershipCreate = () => {
         </Layout>
     );
 
-    function createData(data: FormData) {
-        if (CreateData<FormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Memberships`))
-            navigate("/Membership");
+    async function create(data: FormData) {
+        try {
+            await createData(data, `${import.meta.env.VITE_SERVER_URL}api/Membership`);
+            navigate("/Membership");;
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
     }
 }
 

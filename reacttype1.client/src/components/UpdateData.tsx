@@ -1,17 +1,16 @@
-
-
-    
-async function UpdateData<T>(data: T, url:string) {
-    fetch(url, {
+async function updateData<T>(data: T, url: string): Promise<any> {
+    const response = await fetch(url, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
-    })
-        .then(response => response.json())
-        .then(result => console.log(result));
-        
-};
-    
+    });
 
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${ response.status } - ${ errorText } `);
+    }
 
-export default UpdateData;
+    return response.json();
+}
+
+export default updateData;
