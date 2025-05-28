@@ -36,7 +36,7 @@ function Players() {
 
         useEffect(() => {
             fetchData();
-        },[data]);
+        },[]);
 
         const content = data === undefined ? <p>Loading...</p> : <Table data={data} rowsPerPage={15} allowed={allowed} />;
 
