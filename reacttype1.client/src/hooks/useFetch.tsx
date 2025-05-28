@@ -9,9 +9,9 @@ function useFetch<T>(url: string): { data: T | null; error: string | null; isLoa
         let isMounted = true;
         const abortController = new AbortController();
 
-        setIsLoading(true);
         setData(null);
         setError(null);
+        setIsLoading(true);
 
         fetch(url, { signal: abortController.signal })
             .then((response) => {
