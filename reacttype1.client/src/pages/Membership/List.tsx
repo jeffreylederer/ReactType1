@@ -7,35 +7,33 @@ import useFetch from '@hooks/useFetch.tsx';
 
 function Membership() {   
     const user = new UserClass();
-    const hide: boolean = !(user.role == "SiteAdmin" || user.role == "Admin");
+    const hideAddButton: boolean = !(user.role == "SiteAdmin" || user.role == "Admin");
   
-    const { data, loading, error } = useFetch<ListData>(`${import.meta.env.VITE_SERVER_URL}api/memberships`);
+    const { data, loading, error } = useFetch<ListData[]>(`${import.meta.env.VITE_SERVER_URL}api/memberships`);
 
     if (loading)
-        return <p>Loading...</p>;
+        return <p aria-label="Loading">Loading...</p>;
 
     if (error)
-        <p>Return Error: {error}</p>;
+        return <p aria-label="Error">Return Error: {error}</p>;
 
-    if (data === null)
+    if( data===null || (Array.isArray(data) && data.length === 0))
         return (
 
             <Layout>
-                <h3 id="tableLabel">Membership</h3>
-                <Link to="/Membership/Create" hidden={hide}>Add</Link>
+                <h3 aria-label="Header">Membership</h3>
+                <Link to="/Membership/Create" hidden={hideAddButton}>Add</Link>
                 No Members
-                <p>{error}</p>
             </Layout>
         );
 
     return (
 
-            <Layout>
-            <h3 id="tableLabel">Membership</h3>
-            <Link to="/Membership/Create" hidden={ hide}>Add</Link>
-             <Table data={data} rowsPerPage={15} hide={hide} />
-            <p>{error}</p>
-            </Layout>
+          <Layout>
+            <h3 aria-label="Header">Membership</h3>
+            <Link to="/Membership/Create" hidden={hideAddButton}>Add</Link>
+            <Table data={data} rowsPerPage={15} hide={hideAddButton} />
+          </Layout>
     );
 
    

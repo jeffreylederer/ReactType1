@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 
 interface ApiResponse<T> {
-    data: T[] | null;
+    data: T | null;
     loading: boolean;
     error: string | null;
 }
 
 function useFetch<T>(url: string): ApiResponse<T> {
-    const [data, setData] = useState<T[] | null>(null);
+    const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -18,7 +18,7 @@ function useFetch<T>(url: string): ApiResponse<T> {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const json = (await response.json()) as T[];
+                const json = (await response.json()) as T;
                 setData(json);
                 setLoading(false);
             } catch (error) {
