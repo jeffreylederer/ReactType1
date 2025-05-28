@@ -26,8 +26,6 @@ A league cannot be deleted if there are any players or scheduled weeks assigned 
 
 Each league has the following properties:
 
-- Start Week - no longer being used
-
 - Team Size – how many players on each team
 
 - Divisions - number of divisions, the default is 1 and the maximum is 2.
@@ -45,7 +43,7 @@ Each league has the following properties:
 - Bye Multiplier – how many points a bye is worth to the team with a bye in the standings.
 - Limit Points to 20 - if checked, when calculating a teams standings a team can only be created with up to 20 points in a game.
 
-Loses are always worth 0 points. Forfeits is a lose for the team that forfeits and a win for the other team.
+Loses are always worth 0 points. Forfeits is a lose for the team that forfeits and a win for the other team. If point count, the other team gets 14 points.
 
 A league’s properties can only be set when the league is created. The only property that can be changed later is the league’s title.
 
@@ -55,9 +53,9 @@ If points scored are allowed to help determine standings, then the total points 
 
 - A maximum of 20 points are awarded to any team for determining standings if that points limit are selected when the league is created if this option is selected.
 
-- For byes, the team with a bye is 14 poinra and a win for determining standings.
+- For byes, the team with a bye is 14 points and a win for determining standings.
 
-- For forfeits, the team not forfeiting is awarded 14 points and a win for determining standings. The forfeiting team receives no scored points for that week and a lose.
+- For forfeits, the team not forfeiting is awarded 14 points and a win for determining standings. The forfeiting team receives no scored points for that week and a lose. The other team gets 14 points.
 
 
 # Membership
@@ -68,7 +66,7 @@ A member cannot be deleted from the membership list if that person is assigned t
 
 # Schedule
 
-A league requires one or more scheduled weeks of play. Each week needs date. As you add additional weeks, the add method automatically increments the week’s number by one and the week’s date by 7 days. A week's record can be updated to mark as cancelled; then all scores for that week are set to zero and that week is not counted in the league’s standings.
+A league requires one or more scheduled weeks of play. Each week needs a date. As you add additional weeks, the add method automatically the week’s date by 7 days. A week's record can be updated to mark as cancelled; then all scores for that week are set to zero and that week is not counted in the league’s standings.
 
 If the league allows playoffs, a week (probably the last few) can be marked as playoff weeks. During these weeks, no games will be scheduled. The league administrator can manually make up the schedules for these weeks.
 
