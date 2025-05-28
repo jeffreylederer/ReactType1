@@ -1,40 +1,48 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 
-interface ApiResponse<T> {
-    data: T | null;
-    loading: boolean;
-    error: string | null;
-}
 
-function useFetch<T>(url: string): ApiResponse<T> {
+function useFetch<T>(url: string): { data: T | null; error: string | null; isLoading: boolean } {
     const [data, setData] = useState<T | null>(null);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const abortControllerRef = useRef<AbortController | null>(null);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(url);
+        // Initialize the AbortController
+        const abortController = new AbortController();
+        abortControllerRef.current = abortController;
+
+        setIsLoading(true);
+
+        fetch(url, { signal: abortController.signal })
+            .then((response) => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    setError(`Error: ${response.statusText}`);
+                    return;
                 }
-                const json = (await response.json()) as T;
-                setData(json);
-                setLoading(false);
-            } catch (error) {
-                let message: string;
-                if (error instanceof Error)
-                    message = error.message
-                else
-                    message = String(error)
-                setError(message);
-                setLoading(false);
-            }
+                return response.json();
+            })
+            .then((result) => {
+                setData(result);
+            })
+            .catch((err) => {
+                if (err.name === 'AbortError') {
+                    setError('Fetch aborted');
+                } else {
+                    setError(err.message);
+                }
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+
+        // Cleanup function to abort fetch on unmount
+        return () => {
+            abortController.abort();
         };
-        fetchData();
     }, [url]);
 
-    return { data, loading, error };
+    return { data, error, isLoading };
 }
 
 
