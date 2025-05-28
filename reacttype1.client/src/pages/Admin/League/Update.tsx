@@ -1,5 +1,4 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
@@ -7,30 +6,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
 import { Button } from "flowbite-react";
 import Layout from "@layouts/Layout.tsx";
-
+import useFetch from '@hooks/useFetch.tsx';
 
 
 
 const LeagueUpdate = () => {
 
-    const [league, SetLeague] = useState(
-        {
-            id: 0,
-            leagueName: '',
-            active: false,
-            teamSize: 0,
-            tiesAllowed: false,
-            pointsCount: false,
-            winPoints: 0,
-            tiePoints: 0,
-            byePoints: 0,
-            startWeek: 0,
-            pointsLimit: false,
-            divisions: 0,
-            playOffs: false
-           
-        }
-    );
+    
     const location = useLocation();
     const id: number = location.state;
 
@@ -48,162 +30,156 @@ const LeagueUpdate = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        GetData();
-    });
+    const { data, isLoading, error } = useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}/api/leagues/${id}`);
 
-    const contents = league.id === 0
-        ? <p><em>Loading ...</em></p> :
+    if (error)
+        return (
+            <Layout>
+                <h3>Update membership record</h3>
+                {error}
+            </Layout>
+        );
 
-        <form onSubmit={handleSubmit(onSubmit)} >
-            <input type="hidden" {...register('startWeek')} defaultValue="1" />
-        <table>
+    if (isLoading)
+        return (
+            <Layout>
+                <h3>Update membership record</h3>
+                <p>Loading...</p>
+            </Layout>
+        );
 
-                <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={league.id} />
-            <tr>
-                <td className="Label">League Name:</td>
+       
+    if (data) {
+        return (
+            <Layout>
 
-                    <td className="Field"><TextInput {...register('leagueName')} defaultValue={league.leagueName} style={{width: "400px"} } />
-                </td>
-            </tr>
+                <h3>Update record for league {data.leagueName}</h3>
+                <form onSubmit={handleSubmit(onSubmit)} >
+                    <input type="hidden" {...register('startWeek')} defaultValue="1" />
+                    <table>
 
-            <tr>
-              <td className="Label">Active:</td>
+                        <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={data.id} />
+                        <tr>
+                            <td className="Label">League Name:</td>
 
-                <td  className="Field">
-                        <Checkbox {...register('active')} defaultChecked={league.active} />
-                </td>
-            </tr>
+                            <td className="Field"><TextInput {...register('leagueName')} defaultValue={data.leagueName} style={{ width: "400px" }} />
+                            </td>
+                        </tr>
 
-            <tr>
-                <td className="Label">Team Size:</td>
+                        <tr>
+                            <td className="Label">Active:</td>
 
-                    <td className="Field"><TextInput type="number" {...register('teamSize')}  defaultValue={league.teamSize} />
-                </td>
-            </tr>
+                            <td className="Field">
+                                <Checkbox {...register('active')} defaultChecked={data.active} />
+                            </td>
+                        </tr>
 
-            <tr>
-                    <td className="Label">Ties Allowed:</td>
+                        <tr>
+                            <td className="Label">Team Size:</td>
 
-                <td  className="Field">
-                        <Checkbox {...register('tiesAllowed')} defaultChecked={league.tiesAllowed} />
-                </td>
-            </tr>
+                            <td className="Field"><TextInput type="number" {...register('teamSize')} defaultValue={data.teamSize} />
+                            </td>
+                        </tr>
 
-            <tr>
-                <td className="Label">Points Count:</td>
+                        <tr>
+                            <td className="Label">Ties Allowed:</td>
 
-                    <td className="Field">
-                        <Checkbox {...register('pointsCount')} defaultChecked={league.pointsCount} />
-                </td>
-            </tr>
+                            <td className="Field">
+                                <Checkbox {...register('tiesAllowed')} defaultChecked={data.tiesAllowed} />
+                            </td>
+                        </tr>
 
-            <tr>
-                <td className="Label">Points for a Win:</td>
+                        <tr>
+                            <td className="Label">Points Count:</td>
 
-                    <td className="Field"><TextInput {...register('winPoints')}  defaultValue={league.winPoints} />
-                </td>
-            </tr>
+                            <td className="Field">
+                                <Checkbox {...register('pointsCount')} defaultChecked={data.pointsCount} />
+                            </td>
+                        </tr>
 
-            <tr>
-                <td className="Label">Points for a Tie:</td>
+                        <tr>
+                            <td className="Label">Points for a Win:</td>
 
-                    <td className="Field"><TextInput {...register('tiePoints')}  defaultValue={league.tiePoints} />
-                </td>
-            </tr>
+                            <td className="Field"><TextInput {...register('winPoints')} defaultValue={data.winPoints} />
+                            </td>
+                        </tr>
 
-            <tr>
-                <td className="Label">Points for a Bye:</td>
+                        <tr>
+                            <td className="Label">Points for a Tie:</td>
 
-                    <td className="Field"><TextInput {...register('byePoints')}  defaultValue={league.byePoints} />
-                </td>
-            </tr>
+                            <td className="Field"><TextInput {...register('tiePoints')} defaultValue={data.tiePoints} />
+                            </td>
+                        </tr>
 
-            {/*<tr>*/}
-            {/*    <td className="Label">Start Week:</td>*/}
+                        <tr>
+                            <td className="Label">Points for a Bye:</td>
 
-            {/*        <td className="Field"><TextInput {...register('startWeek')}  defaultValue={league.startWeek} />*/}
-            {/*    </td>*/}
-            {/*</tr>*/}
+                            <td className="Field"><TextInput {...register('byePoints')} defaultValue={data.byePoints} />
+                            </td>
+                        </tr>
 
-            <tr>
-                    <td className="Label">Points are limited:</td>
+                        {/*<tr>*/}
+                        {/*    <td className="Label">Start Week:</td>*/}
 
-                <td  className="Field">
-                        <Checkbox {...register('pointsLimit')} defaultChecked={league.pointsLimit} />
-                </td>
-            </tr>
+                        {/*        <td className="Field"><TextInput {...register('startWeek')}  defaultValue=data.startWeek} />*/}
+                        {/*    </td>*/}
+                        {/*</tr>*/}
 
-            <tr>
-                <td className="Label"># of Divisions:</td>
+                        <tr>
+                            <td className="Label">Points are limited:</td>
 
-                    <td className="Field"><TextInput {...register('divisions')}  defaultValue={league.divisions} />
-                </td>
-            </tr>
+                            <td className="Field">
+                                <Checkbox {...register('pointsLimit')} defaultChecked={data.pointsLimit} />
+                            </td>
+                        </tr>
 
-            <tr>
-                    <td className="Label">Playoffs:</td>
+                        <tr>
+                            <td className="Label"># of Divisions:</td>
 
-                <td  className="Field">
-                        <Checkbox {...register('playOffs')} defaultChecked={league.playOffs} />
-                </td>
-            </tr>
+                            <td className="Field"><TextInput {...register('divisions')} defaultValue={data.divisions} />
+                            </td>
+                        </tr>
 
-            <tr>
-                    <td colSpan={2} >
-                        <div className="flex flex-wrap gap-2" >
-                            <Button outline color="Default" type="submit" >Submit</Button>
-                            <Button outline color="Default" onClick={() => navigate("/Admin/Leagues")}>Go back to list</Button>
-                        </div>
-                </td>
-            </tr>
+                        <tr>
+                            <td className="Label">Playoffs:</td>
 
+                            <td className="Field">
+                                <Checkbox {...register('playOffs')} defaultChecked={data.playOffs} />
+                            </td>
+                        </tr>
 
-                <tr><td colSpan={1}>
-            {errors.leagueName && <p className="errorMessage">{errors.leagueName.message}</p>}
-            {errors.teamSize && <p className="errorMessage">{errors.teamSize.message}</p>}
-            {errors.winPoints && <p className="errorMessage">{errors.winPoints.message}</p>}
-            {errors.tiePoints && <p className="errorMessage">{errors.tiePoints.message}</p>}
-            {errors.byePoints && <p className="errorMessage">{errors.byePoints.message}</p>}
-            {errors.startWeek && <p className="errorMessage">{errors.startWeek.message}</p>}
-            {errors.divisions && <p className="errorMessage">{errors.divisions.message}</p>}
-                </td></tr>
-
-
-            </table>
-        </form>
-
-    return (
-        <Layout>
-
-            <h3>Update record for league {league.leagueName}</h3>
-            {contents}
+                        <tr>
+                            <td colSpan={2} >
+                                <div className="flex flex-wrap gap-2" >
+                                    <Button outline color="Default" type="submit" >Submit</Button>
+                                    <Button outline color="Default" onClick={() => navigate("/Admin/Leagues")}>Go back to list</Button>
+                                </div>
+                            </td>
+                        </tr>
 
 
-        </Layout>
-    );
+                        <tr><td colSpan={1}>
+                            {errors.leagueName && <p className="errorMessage">{errors.leagueName.message}</p>}
+                            {errors.teamSize && <p className="errorMessage">{errors.teamSize.message}</p>}
+                            {errors.winPoints && <p className="errorMessage">{errors.winPoints.message}</p>}
+                            {errors.tiePoints && <p className="errorMessage">{errors.tiePoints.message}</p>}
+                            {errors.byePoints && <p className="errorMessage">{errors.byePoints.message}</p>}
+                            {errors.startWeek && <p className="errorMessage">{errors.startWeek.message}</p>}
+                            {errors.divisions && <p className="errorMessage">{errors.divisions.message}</p>}
+                        </td></tr>
 
 
-    async function GetData() {
-        if (league.id === 0) {
-            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Leagues/';
-            const num: string = id.toString();
-            const fullUrl = url.concat(num);
-            axios.get(fullUrl)
-                .then(response => {
-
-                    SetLeague(response.data);
+                    </table>
+                </form>
 
 
-                    console.log('Record aquired successfully: ', response.data);
-                })
-                .catch(error => {
-                    console.error('Error aquiring record: ', error);
-                });
-        }
+            </Layout>
 
+        );
     }
 
+
+    
     function updateData(data: UpdateFormData) {
         const url: string = import.meta.env.VITE_SERVER_URL+'api/Leagues/';
         const num: string = id.toString();

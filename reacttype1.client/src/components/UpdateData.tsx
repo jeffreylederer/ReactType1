@@ -1,17 +1,15 @@
-import axios from "axios";
 
-     
-function UpdateData<T>(data: T, url:string):boolean {
-    axios.put(url, data)
-        .then(response => {
-            console.log('Record updated successfully: ', response.data);
-         
-        })
-        .catch(error => {
-            console.error('Error updating record: ', error);
-            return false;
-        });
-    return true;
+
+    
+async function UpdateData<T>(data: T, url:string) {
+    fetch(url, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+        .then(result => console.log(result));
+        
 };
     
 

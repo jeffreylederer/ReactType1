@@ -1,121 +1,118 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from 'react';
-import axios from "axios";
+import { useState } from 'react';
 import { FormData } from "./FormData.tsx";
 import {DeleteButton} from '@components/Buttons.tsx';
 import Layout from "@layouts/Layout.tsx";
+import useFetch from '@hooks/useFetch.tsx';
+import Delete from '@components/Delete.tsx';
 
 
 
 const LeagueDelete = () => {
     const location = useLocation();
     const id: number = location.state;
-    const [errorMsg, SeterrorMsg] = useState("");
+    const [errorMsg, setErrorMsg] = useState('');
+    
 
-    const [league, SetLeague] = useState<FormData>();
+    
+    const { data, isLoading, error } = useFetch<FormData>(`${import.meta.env.VITE_SERVER_URL}/api/leagues/${id}`);
 
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        GetData();
-    });
+    if (error)
+        return (
+            <Layout>
+                <h3>Update membership record</h3>
+                {error}
+            </Layout>
+        );
 
-    const contents = league === undefined
-        ? <p><em>Loading ...</em></p> :
+    if (isLoading)
+        return (
+            <Layout>
+                <h3>Update membership record</h3>
+                <p>Loading...</p>
+            </Layout>
+        );
+    if (data) {
 
-        <table className="toLeft">
-            
-            <tr>
-                <td className="Label">Active:</td>
-                <td className="Field">{league.active ? "Yes" : "No"}</td>
 
-            </tr>
-            <tr>
-                <td className="Label">Team Size:</td>
-                <td className="Field">{league.teamSize}</td>
-            </tr>
-            <tr>
-                <td className="Label">Ties Allowed:</td>
-                <td className="Field">{league.tiesAllowed ? "Yes" : "No"}</td>
-            </tr>
-            <tr>
-                <td className="Label">Points Count:</td>
-                <td className="Field">{league.pointsCount ? "Yes" : "No"}</td>
-            </tr>
-            <tr>
-                <td className="Label">Points for a Win:</td>
-                <td className="Field">{league.winPoints}</td>
-            </tr>
-            <tr>
-                <td className="Label">Points for a Tie:</td>
-                <td className="Field">{league.tiePoints}</td>
-            </tr>
-            <tr>
-                <td className="Label">Points for a Bye:</td>
-                <td className="Field">{league.byePoints}</td>
-            </tr>
-            {/*<tr>*/}
-            {/*    <td className="Label">Start Week:</td>*/}
-            {/*    <td className="Field">{league.startWeek}</td>*/}
-            {/*</tr>*/}
-            <tr>
-                <td className="Label">Points Limit:</td>
-                <td className="Field">{league.pointsLimit ? "Yes" : "No"}</td>
-            </tr>
-            <tr>
-                <td className="Label">Divisions:</td>
-                <td className="Field">{league.divisions}</td>
-            </tr>
-            <tr>
-                <td className="Label">Playoffs:</td>
-                <td className="Field">{league.playOffs ? "Yes" : "No"}</td>
-            </tr>
-            <tr>
-                <td colSpan={2} >
-               
-                    <DeleteButton DeleteItem={DeleteItem}/>
-                </td>
-            </tr>
-        </table>
 
-    return (
-        <Layout>
-            <h3>Delete league {league?.leagueName}</h3>
-            {contents}
-            <p className="errorMessage">{errorMsg}</p>
-        </Layout>
-    );
+        return (
+            <Layout>
+                <h3>Delete league {data.leagueName}</h3>
+                <table className="toLeft">
 
-    async function GetData() {
-        if (league === undefined) {
-            const url: string = import.meta.env.VITE_SERVER_URL + 'api/leagues/';
-            const num: string = id.toString();
-            const fullUrl = url.concat(num);
-            axios.get(fullUrl)
-                .then(response => {
-                    SetLeague(response.data);
-                    console.log('Record aquired successfully: ', response.data);
-                })
-                .catch(error => {
-                    console.error('Error aquiring record: ', error);
-                });
-        }
+                    <tr>
+                        <td className="Label">Active:</td>
+                        <td className="Field">{data.active ? "Yes" : "No"}</td>
 
+                    </tr>
+                    <tr>
+                        <td className="Label">Team Size:</td>
+                        <td className="Field">{data.teamSize}</td>
+                    </tr>
+                    <tr>
+                        <td className="Label">Ties Allowed:</td>
+                        <td className="Field">{data.tiesAllowed ? "Yes" : "No"}</td>
+                    </tr>
+                    <tr>
+                        <td className="Label">Points Count:</td>
+                        <td className="Field">{data.pointsCount ? "Yes" : "No"}</td>
+                    </tr>
+                    <tr>
+                        <td className="Label">Points for a Win:</td>
+                        <td className="Field">{data.winPoints}</td>
+                    </tr>
+                    <tr>
+                        <td className="Label">Points for a Tie:</td>
+                        <td className="Field">{data.tiePoints}</td>
+                    </tr>
+                    <tr>
+                        <td className="Label">Points for a Bye:</td>
+                        <td className="Field">{data.byePoints}</td>
+                    </tr>
+                    {/*<tr>*/}
+                    {/*    <td className="Label">Start Week:</td>*/}
+                    {/*    <td className="Field">data.startWeek}</td>*/}
+                    {/*</tr>*/}
+                    <tr>
+                        <td className="Label">Points Limit:</td>
+                        <td className="Field">{data.pointsLimit ? "Yes" : "No"}</td>
+                    </tr>
+                    <tr>
+                        <td className="Label">Divisions:</td>
+                        <td className="Field">{data.divisions}</td>
+                    </tr>
+                    <tr>
+                        <td className="Label">Playoffs:</td>
+                        <td className="Field">{data.playOffs ? "Yes" : "No"}</td>
+                    </tr>
+                    <tr>
+                        <td colSpan={2} >
+
+                            <DeleteButton DeleteItem={DeleteItem} />
+                        </td>
+                    </tr>
+                </table>
+                <p className="errorMessage">{errorMsg}</p>
+            </Layout>
+        );
     }
 
+   
+
     async function DeleteItem() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/leagues/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        axios.delete(fullUrl)
-            .then(response => {
-                console.log(response.statusText);
-                navigate("/Admin/leagues");
-            })
-            .catch(error => {
-                SeterrorMsg(error.response.data);
-            })
+        try {
+            await Delete(`${import.meta.env.VITE_SERVER_URL}/api/leagues/${id}`);
+            navigate("/Admin/leagues");
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
+
+      
     }
 }
 

@@ -2,18 +2,20 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ListData } from "./ListData.tsx";
 import Layout from '@layouts/Layout.tsx';
 import { DeleteButton } from '@components/Buttons.tsx';
-import useFetchOne from '@hooks/useFetchOne.tsx';
-import DeleteItem from '@components/DeleteItem.tsx';
+import useFetch from '@hooks/useFetch.tsx';
+import Delete from '@components/Delete.tsx';
+import { useState } from 'react';
 
 
 const MembershipDelete = () => {
     const location = useLocation();
     const id: number = location.state;
-   
+    const [errorMsg, setErrorMsg] = useState('');
    
     const navigate = useNavigate();
 
-    const { data, loading, error } = useFetchOne<ListData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships` ,id);
+    const { data, isLoading, error } = useFetch<ListData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships/{id}`);
+
     if (error)
         return (
             <Layout>
@@ -22,7 +24,7 @@ const MembershipDelete = () => {
             </Layout>
         );
 
-    if (loading)
+    if (isLoading)
         return (
             <Layout>
                 <h3>Delete Member</h3>
@@ -62,15 +64,23 @@ const MembershipDelete = () => {
                         </td>
                     </tr>
                 </table>
-                
+                <p>{errorMsg}</p>
             </Layout>
         );
+
+        async function deleteItem() {
+
+            try {
+                await Delete(`${import.meta.env.VITE_SERVER_URL}/api/Memberships/${id}`);
+                navigate("/Membership");
+            }
+            catch (error) {
+                setErrorMsg(`${error}`);
+            }
+        }
     }
 
-    function deleteItem() {
-        if (DeleteItem(`${import.meta.env.VITE_SERVER_URL}api/Memberships`, id))
-            navigate("/Membership");
-    }
+    
 }
 
 export default MembershipDelete;

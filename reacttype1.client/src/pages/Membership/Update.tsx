@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput, } from "flowbite-react";
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
-import useFetchOne from '@hooks/useFetchOne.tsx';
+import useFetch from '@hooks/useFetch.tsx';
 import UpdateData from '@components/UpdateData.tsx';
 import GetData from './GetData.ts'; 
 
@@ -37,7 +37,7 @@ const MembershipUpdate = () => {
     const onSubmit: SubmitHandler<UpdateFormData> = (data) => updateData(data,id)
  
    
-    const { data, loading, error } = useFetchOne<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships`, id);
+    const { data, isLoading, error } =useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
 
     if (error)
         return (
@@ -47,7 +47,7 @@ const MembershipUpdate = () => {
             </Layout>
         );
 
-    if (loading)
+    if (isLoading)
         return (
             <Layout>
                 <h3>Update membership record</h3>
