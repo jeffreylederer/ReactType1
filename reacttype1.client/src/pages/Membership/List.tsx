@@ -21,8 +21,8 @@ function Membership() {
         return (
 
             <Layout>
-                <h3 aria-label="Header">Membership</h3>
-                <Link to="/Membership/Create" hidden={hideAddButton}>Add</Link>
+                <h3 aria-label="Membership table">Membership</h3>
+                <Link to="/Membership/Create" hidden={hideAddButton} aria-label="Add Membership">Add</Link>
                 No Members
             </Layout>
         );
@@ -30,8 +30,8 @@ function Membership() {
     return (
 
           <Layout>
-            <h3 aria-label="Header">Membership</h3>
-            <Link to="/Membership/Create" hidden={hideAddButton}>Add</Link>
+            <h3 aria-label="Membership table">Membership</h3>
+            <Link to="/Membership/Create" hidden={hideAddButton} aria-label="Add Membership">Add</Link>
             <Table data={data} rowsPerPage={15} hide={hideAddButton} />
           </Layout>
     );
