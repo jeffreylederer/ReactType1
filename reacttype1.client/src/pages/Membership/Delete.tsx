@@ -3,7 +3,7 @@ import { ListData } from "./ListData.tsx";
 import Layout from '@layouts/Layout.tsx';
 import { DeleteButton } from '@components/Buttons.tsx';
 import useFetch from '@hooks/useFetch.tsx';
-import Delete from '@components/deleteData.tsx';
+import deleteData from '@components/deleteData.tsx';
 import { useState } from 'react';
 
 
@@ -14,7 +14,7 @@ const MembershipDelete = () => {
    
     const navigate = useNavigate();
 
-    const { data, isLoading, error } = useFetch<ListData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships/{id}`);
+    const { data, isLoading, error } = useFetch<ListData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
 
     if (error)
         return (
@@ -71,7 +71,7 @@ const MembershipDelete = () => {
         async function deleteItem() {
 
             try {
-                await Delete(`${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
+                await deleteData(`${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
                 navigate("/Membership");
             }
             catch (error) {

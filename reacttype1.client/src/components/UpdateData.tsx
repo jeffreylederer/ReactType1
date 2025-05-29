@@ -1,4 +1,4 @@
-async function updateData<T>(data: T, url: string): Promise<any> {
+async function updateData<T>(data: T, url: string): Promise<T> {
     const response = await fetch(url, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -7,10 +7,10 @@ async function updateData<T>(data: T, url: string): Promise<any> {
 
     if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`HTTP error! status: ${ response.status } - ${ errorText } `);
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
     }
 
-    return response.json();
+    return (await response.json()) as T;
 }
 
 export default updateData;

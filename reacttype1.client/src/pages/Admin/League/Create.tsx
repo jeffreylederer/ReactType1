@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
 import { FormData, FormDataSchema } from "./FormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from "@layouts/Layout.tsx";
+import createData from '@components/CreateData.tsx';
+import { useState } from 'react';
 
 const LeagueCreate = () => {
 
@@ -17,20 +18,9 @@ const LeagueCreate = () => {
         resolver: zodResolver(FormDataSchema),
     });
 
-    const onSubmit: SubmitHandler<FormData> = (data) => CreateData(data)
+    const [errorMsg, setErrorMsg] = useState<string>('');
+    const onSubmit: SubmitHandler<FormData> = (data) => create(data)
     const navigate = useNavigate();
-
-    function CreateData(data: FormData) {
-        axios.post(import.meta.env.VITE_SERVER_URL+'api/Leagues', data)
-            .then((response) => {
-                console.log(response.data);
-                navigate("/Admin/Leagues");
-                console.log('Record created successfully: ', response.data);
-            })
-            .catch(error => {
-                console.log('Error creating record: ', error);
-            });
-    }
 
 
     return (
@@ -138,15 +128,18 @@ const LeagueCreate = () => {
                     </tr>
                    
 
-                    <tr><td colSpan={1}>
-                    {errors.leagueName && <p className="errorMessage">{errors.leagueName.message}</p>}
-                    {errors.teamSize && <p className="errorMessage">{errors.teamSize.message}</p>}
-                    {errors.winPoints && <p className="errorMessage">{errors.winPoints.message}</p>}
-                    {errors.tiePoints && <p className="errorMessage">{errors.tiePoints.message}</p>}
-                    {errors.byePoints && <p className="errorMessage">{errors.byePoints.message}</p>}
-                    {errors.startWeek && <p className="errorMessage">{errors.startWeek.message}</p>}
-                    {errors.divisions && <p className="errorMessage">{errors.divisions.message}</p>}
-                    </td></tr>
+                    <tr>
+                        <td colSpan={2}>
+                        {errors.leagueName && <p className="errorMessage">{errors.leagueName.message}</p>}
+                        {errors.teamSize && <p className="errorMessage">{errors.teamSize.message}</p>}
+                        {errors.winPoints && <p className="errorMessage">{errors.winPoints.message}</p>}
+                        {errors.tiePoints && <p className="errorMessage">{errors.tiePoints.message}</p>}
+                        {errors.byePoints && <p className="errorMessage">{errors.byePoints.message}</p>}
+                        {errors.startWeek && <p className="errorMessage">{errors.startWeek.message}</p>}
+                        {errors.divisions && <p className="errorMessage">{errors.divisions.message}</p>}
+                        <p className="errorMessage">{errorMsg}</p>
+                        </td>
+                    </tr>
 
 
                 </table>
@@ -156,6 +149,15 @@ const LeagueCreate = () => {
         </Layout>
     );
 
+    async function create(data: FormData) {
+        try {
+            await createData(data, `${import.meta.env.VITE_SERVER_URL}api/league`);
+            navigate("/Admin/Leagues")
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
+    }
 
 
 

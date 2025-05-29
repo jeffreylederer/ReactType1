@@ -27,6 +27,7 @@ const LeagueUpdate = () => {
 
     });
 
+   
     const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data)
 
     const navigate = useNavigate();
@@ -181,9 +182,9 @@ const LeagueUpdate = () => {
     }
 
 
-    async function update(data: UpdateFormData, id: number) {
+    async function update(data: UpdateFormData) {
         try {
-            await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Leagues/${id}`);
+            await updateData<UpdateFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/leagues/${id}`);
             navigate("/Admin/Leagues");;
         }
         catch (error) {

@@ -66,7 +66,7 @@ namespace ReactType1.Server.Controllers
 
         // GET: Leagues/Edit/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, League item)
+        public async Task<ActionResult<League>> Edit(int id, League item)
         {
             if (id != item.Id)
             {
@@ -94,7 +94,7 @@ namespace ReactType1.Server.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-            return NoContent();
+            return Ok(item);
         }
 
         // GET: Leagues/Delete/5

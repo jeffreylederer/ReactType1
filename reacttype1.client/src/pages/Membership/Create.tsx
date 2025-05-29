@@ -80,7 +80,7 @@ const MembershipCreate = () => {
 
     async function create(data: FormData) {
         try {
-            await createData(data, `${import.meta.env.VITE_SERVER_URL}api/Membership`);
+            await createData(data, `${import.meta.env.VITE_SERVER_URL}api/Memberships`);
             navigate("/Membership");;
         }
         catch (error) {

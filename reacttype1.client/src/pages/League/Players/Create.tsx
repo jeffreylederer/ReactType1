@@ -1,51 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
 import { PlayerFormData, PlayerFormDataSchema } from "./FormData.tsx";
 import { UpdateFormData } from "../../Membership/UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LeagueClass from '@components/LeagueClass.tsx';
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
+import createData from '@components/CreateData.tsx';
+import useFetch from '@hooks/useFetch.tsx';
 
 
 const PlayersCreate = () => {
    
-    
-    const onSubmit: SubmitHandler<PlayerFormData> = (data) => CreateData(data)
+    const [errorMsg, setErrorMsg] = useState<string>('');
+    const onSubmit: SubmitHandler<PlayerFormData> = (data) => create(data)
     const navigate = useNavigate();
-    const [membership, setmembership] = useState<UpdateFormData[]>();
+
     const league = new LeagueClass();
-
-    function CreateData(data: PlayerFormData) {
-        axios.post(import.meta.env.VITE_SERVER_URL+'api/Players/', data)
-            .then((response) => {
-                console.log(response.data);
-                navigate("/League/Players");
-                console.log('Record created successfully: ', response.data);
-             })
-            .catch(error => {
-                console.log('Error creating record: ', error);
-            });
-    }
-
-    async function GetData() {
-        const league = new LeagueClass();
-        const url: string = import.meta.env.VITE_SERVER_URL + "api/players/getMembers/".concat(league.id.toString());
-        axios.get(url)
-            .then(response => {
-                setmembership(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching data: ', error);
-            })
-    }
-
-    useEffect(() => {
-        GetData();
-    });
-  
     const {
         register,
         handleSubmit,
@@ -53,6 +25,25 @@ const PlayersCreate = () => {
     } = useForm<PlayerFormData>({
         resolver: zodResolver(PlayerFormDataSchema),
     });
+
+    const { data, isLoading, error } = useFetch<UpdateFormData[]>(`${import.meta.env.VITE_SERVER_URL}api/players/getMembers/${league.id}`);
+
+    if (error)
+        return (
+            <Layout>
+               
+                {error}
+            </Layout>
+        );
+
+    if (isLoading)
+        return (
+            <Layout>
+               
+                <p>Loading...</p>
+            </Layout>
+        );
+    
 
     return (
         <Layout>
@@ -66,7 +57,7 @@ const PlayersCreate = () => {
                         <td className="Field">
                             <select defaultValue="0" {...register("membershipId")}>
                                 <option value="0" key="0">Select member</option>
-                                {membership?.map((item) => (
+                                {data?.map((item) => (
                                     <option value={item.id.toString()} key={item.id}>{item.fullName}</option>
                                 ))}
                                 )
@@ -83,7 +74,9 @@ const PlayersCreate = () => {
                     <tr>
                         <td colSpan={2}>
                             {errors.membershipId && <p className="errorMessage">{errors.membershipId.message}</p>}
+                            <p className="errorMessage">{errorMsg}</p>
                         </td>
+                        
                     </tr>
                     
                     
@@ -94,7 +87,15 @@ const PlayersCreate = () => {
         </Layout>
     );
 
-
+    async function create(data: PlayerFormData) {
+        try {
+            await createData<PlayerFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Players/${league.id}`);
+            navigate("/League/Players");
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
+    }
     
 
 }
