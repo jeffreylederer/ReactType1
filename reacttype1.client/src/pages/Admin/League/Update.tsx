@@ -1,18 +1,19 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput } from "flowbite-react";
 import { Button } from "flowbite-react";
 import Layout from "@layouts/Layout.tsx";
 import useFetch from '@hooks/useFetch.tsx';
+import updateData from '@components/UpdateData.tsx';
+import { useState } from 'react';
 
 
 
 const LeagueUpdate = () => {
 
-    
+    const [errorMsg, setErrorMsg] = useState<string>('');
     const location = useLocation();
     const id: number = location.state;
 
@@ -26,11 +27,11 @@ const LeagueUpdate = () => {
 
     });
 
-    const onSubmit: SubmitHandler<UpdateFormData> = (data) => updateData(data)
+    const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data)
 
     const navigate = useNavigate();
 
-    const { data, isLoading, error } = useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}/api/leagues/${id}`);
+    const { data, isLoading, error } = useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/leagues/${id}`);
 
     if (error)
         return (
@@ -166,6 +167,7 @@ const LeagueUpdate = () => {
                             {errors.byePoints && <p className="errorMessage">{errors.byePoints.message}</p>}
                             {errors.startWeek && <p className="errorMessage">{errors.startWeek.message}</p>}
                             {errors.divisions && <p className="errorMessage">{errors.divisions.message}</p>}
+                            <p className="errorMessage">{errorMsg}</p>
                         </td></tr>
 
 
@@ -179,22 +181,14 @@ const LeagueUpdate = () => {
     }
 
 
-    
-    function updateData(data: UpdateFormData) {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Leagues/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        data.id = id;
-        axios.put(fullUrl, data)
-            .then(response => {
-                console.log('Record updated successfully: ', response.data);
-                navigate("/Admin/Leagues");
-            })
-            .catch(error => {
-                console.error('Error updating record: ', error);
-            });
-
-
+    async function update(data: UpdateFormData, id: number) {
+        try {
+            await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Leagues/${id}`);
+            navigate("/Admin/Leagues");;
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
     }
 }
 

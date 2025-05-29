@@ -71,7 +71,7 @@ const MembershipDelete = () => {
         async function deleteItem() {
 
             try {
-                await Delete(`${import.meta.env.VITE_SERVER_URL}/api/Memberships/${id}`);
+                await Delete(`${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
                 navigate("/Membership");
             }
             catch (error) {

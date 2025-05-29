@@ -6,7 +6,7 @@ import { Checkbox, TextInput, } from "flowbite-react";
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 import useFetch from '@hooks/useFetch.tsx';
-import updateData from '@components/updateData.tsx';
+import updateData from '@components/UpdateData.tsx';
 import { useState } from 'react';
 
 
