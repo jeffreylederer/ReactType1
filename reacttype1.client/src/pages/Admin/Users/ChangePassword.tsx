@@ -6,7 +6,7 @@ import { TextInput } from "flowbite-react";
 import Layout from "@layouts/Layout.tsx";
 import SubmitButton from '@components/Buttons.tsx';
 import useFetch from '@hooks/useFetch.tsx';
-import axios from "axios";
+import updateData from '@components/UpdateData.tsx';
 import { useState } from 'react';
 
 
@@ -107,19 +107,16 @@ const ChangePassword = () => {
     }
 
 
-    function update(data: ChangePasswordType) {
-        const url: string = import.meta.env.VITE_SERVER_URL + 'api/Users/ChangePassword';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        data.id = id;
-        axios.put(fullUrl, data)
-            .then(response => {
-                console.log('Record updated successfully: ', response.data);
-                navigate("/Admin/Users");
-            })
-            .catch(error => {
-                setErrorMsg(`Error updating record: ${error}`);
-            });
+   
+
+    async function update(data: ChangePasswordType) {
+        try {
+            await updateData<ChangePasswordType>(data, `${import.meta.env.VITE_SERVER_URL}api/Users/ChangePassword${id}`);
+            navigate("/Admin/Users");
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
     }
 
 

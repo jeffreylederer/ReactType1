@@ -66,7 +66,7 @@ function Users() {
                         </tr>
                     )}
                 </tbody>
-            </table>;
+            </table>
         </Layout>
     );
 
