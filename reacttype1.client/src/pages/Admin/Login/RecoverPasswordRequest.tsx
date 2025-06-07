@@ -3,7 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from 'react';
 import { TextInput, Button } from "flowbite-react";
-import createData from '@components/CreateData.tsx';
+import axios from 'axios';
+
 
 
 
@@ -17,10 +18,10 @@ function RecoverPasswordRequest() {
         resolver: zodResolver(RecoverPasswordRequestDataSchema),
     });
 
-
+    const addr: string = window.location.href.replace("RecoverPasswordRequest", "");
    
 
-    const onSubmit: SubmitHandler<RecoverPasswordRequestData> = (data) => create(data)
+    const onSubmit: SubmitHandler<RecoverPasswordRequestData> = (data) => SendData(data)
     const [errorMsg, setErrorMsg] = useState('');
 
     return (
@@ -31,7 +32,7 @@ function RecoverPasswordRequest() {
             minutes to response or the ticket will expire.
             </p>
             <form onSubmit={handleSubmit(onSubmit)} >
-                <input type="hidden" {...register("url")} defaultValue={import.meta.env.VITE_SERVER_URL} />
+                <input type="hidden" {...register("url")} defaultValue={addr} />
                 <table>
                     <tbody>
                         <tr>
@@ -60,15 +61,17 @@ function RecoverPasswordRequest() {
         </>
     );
 
-    async function create(data: RecoverPasswordRequestData) {
-        try {
-            const message = await createData<RecoverPasswordRequestData>(data, `${import.meta.env.VITE_SERVER_URL}api/Admin/RecoverPasswordRequest`) as string;
-            setErrorMsg(message);
-        }
-        catch (error) {
-            setErrorMsg(`${error}`);
-        }
+    function SendData(data: RecoverPasswordRequestData) {
+        axios.post(import.meta.env.VITE_SERVER_URL + 'api/Admin/RecoverPasswordRequest', data)
+            .then((response) => {
+                setErrorMsg(response.data);
+            })
+            .catch(error => {
+                setErrorMsg("Send data not successful" + error);
+            });
     }
+
+   
 }
 
 export default RecoverPasswordRequest;

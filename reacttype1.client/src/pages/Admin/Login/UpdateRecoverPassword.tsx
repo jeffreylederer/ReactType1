@@ -15,6 +15,7 @@ const UpdateRecoverPassword = () => {
     const location = useLocation();
     const id: string = location.search.substring(4);   
     const [errorMsg, setErrorMsg] = useState<string | null>('');
+
     
 
     const {
@@ -41,65 +42,67 @@ const UpdateRecoverPassword = () => {
 
     
    
+    if (data  != null) {
 
-    return (
-        <>
-            <h3>Update your password for {import.meta.env.VITE_SERVER_ClubName} league application</h3>
-            <h4>Your time has expired. <Link to="/RecoverPasswordRequest">Try again</Link></h4>
-            :
-
-            <form onSubmit={handleSubmit(onSubmit)} >
-                <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={data} />
-                <table>
+        return (
+            <>
+                <h3>Update your password for {import.meta.env.VITE_SERVER_ClubName} league application</h3>
+                <p hidden={data > 0 }>Your time has expired. <Link to="/RecoverPasswordRequest">Try again</Link></p>
 
 
-                    <tr>
-                        <td className="Label">Password:</td>
-
-                        <td className="Field">
-                            <TextInput type="password" {...register('password')} />
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td className="Label">Confirm Password:</td>
-
-                        <td className="Field">
-                            <TextInput type="password" {...register('confirmPassword')} />
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colSpan={2} >
-
-                            <div className="flex flex-wrap gap-5"  >
-                                <br />
-                                <Button color="gray" type="submit" >Submit</Button>&nbsp;&nbsp;
+                <form onSubmit={handleSubmit(onSubmit)} >
+                    <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={data} />
+                    <table>
 
 
-                            </div>
-                        </td>
-                    </tr>
-                    <tr><td colSpan={2}>
+                        <tr>
+                            <td className="Label">Password:</td>
+
+                            <td className="Field">
+                                <TextInput type="password" {...register('password')} />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className="Label">Confirm Password:</td>
+
+                            <td className="Field">
+                                <TextInput type="password" {...register('confirmPassword')} />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colSpan={2} >
+
+                                <div className="flex flex-wrap gap-5"  >
+                                    <br />
+                                    <Button color="gray" type="submit" >Submit</Button>&nbsp;&nbsp;
 
 
-                        {errors.password && <p className="errorMessage">{errors.password.message}</p>}
-                        {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
-                        <p>{errorMsg}</p>
-
-                    </td></tr>
-
-                </table>
-            </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr><td colSpan={2}>
 
 
-        </>
-    );
+                            {errors.password && <p className="errorMessage">{errors.password.message}</p>}
+                            {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
+                            <p>{errorMsg}</p>
+
+                        </td></tr>
+
+                    </table>
+                </form>
+
+
+            </>
+        );
+    }
 
 
     async function update(data: UpdatePasswordData) {
         try {
-            await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Admin/${userid}`);
+            await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Admin/${data.id}`);
             navigate("/Login");
         }
         catch (error) {
