@@ -27,7 +27,7 @@ const MembershipUpdate = () => {
     } = useForm<UpdateFormData>({
         resolver: zodResolver(UpdateFormDataSchema),
     });
-const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data,id)
+const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data)
  
    
     const { data, isLoading, error } =useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
@@ -47,11 +47,11 @@ const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data,id)
                 <p>Loading...</p>
             </Layout>
         );
-    if (data) {
+    
        
 
 
-
+    if (data) {
         return (
             <Layout>
                 <h3>Update membership record</h3>
@@ -59,32 +59,32 @@ const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data,id)
 
 
 
-                    <input type="hidden" {...register("id", { valueAsNumber: true })} value={data.id} />
+                    <input type="hidden" {...register("id", { valueAsNumber: true })} value={data?.id} />
                     <TextInput {...register("nickName")} type="hidden" />
                     <TextInput {...register("fullName")} type="hidden" />
                     <table>
                         <tr>
                             <td className="Label">First Name:</td>
 
-                            <td className="Field"><TextInput type="text" {...register('firstName')} style={{ width: '85%' }} defaultValue={data.firstName} />
+                            <td className="Field"><TextInput type="text" {...register('firstName')} style={{ width: '85%' }} defaultValue={data?.firstName} />
                             </td>
                         </tr>
                         <tr>
                             <td className="Label">Last Name:</td>
 
-                            <td className="Field"><TextInput  {...register('lastName')} style={{ width: '85%' }} defaultValue={data.lastName} />
+                            <td className="Field"><TextInput  {...register('lastName')} style={{ width: '85%' }} defaultValue={data?.lastName} />
                             </td>
                         </tr>
                         <tr>
                             <td className="Label">Short Name:</td>
-                            <td className="Field"><TextInput {...register('shortname')} style={{ width: '85%' }} defaultValue={data.shortname} />
+                            <td className="Field"><TextInput {...register('shortname')} style={{ width: '85%' }} defaultValue={data?.shortname} />
                             </td>
                         </tr>
                         <tr>
                             <td className="Label">Wheel Chair:</td>
 
                             <td className="Field">
-                                <Checkbox {...register('wheelchair')} defaultChecked={data.wheelchair} />
+                                <Checkbox {...register('wheelchair')} defaultChecked={data?.wheelchair} />
                             </td>
                         </tr>
                         <tr className="center-td">
@@ -103,12 +103,13 @@ const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data,id)
                     </table>
                 </form>
 
-                
+
             </Layout>
         );
     }
+ 
 
-    async function update(data: UpdateFormData, id:number) {
+    async function update(data: UpdateFormData) {
         try {
             await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
             navigate("/Membership");;
@@ -117,7 +118,6 @@ const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data,id)
             setErrorMsg(`${error}`);
         }
     }
-
 
     
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using ReactType1.Server.Code;
+using ReactType1.Server.DTOs.Admin;
 using ReactType1.Server.Models;
 using System.Collections.Generic;
 using static QuestPDF.Helpers.Colors;
@@ -95,7 +96,7 @@ namespace ReactType1.Server.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(TeamTypeCreate item)
+        public async Task<ActionResult<TeamTypeCreate>> Create(TeamTypeCreate item)
         {
 
             var teamNo = await _context.Teams.Where(x => x.Leagueid == item.Leagueid).CountAsync() + 1;
@@ -119,11 +120,12 @@ namespace ReactType1.Server.Controllers
             {
                 return BadRequest();
             }
-            return await Reorder(item.Leagueid);
+            await Reorder(item.Leagueid);
+            return (item);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, TeamType item)
+        public async Task<ActionResult<TeamType>> Edit(int id, TeamType item)
         {
             if (id != item.Id)
             {
@@ -164,7 +166,7 @@ namespace ReactType1.Server.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-            return NoContent();
+            return Ok(item);
         }
 
 

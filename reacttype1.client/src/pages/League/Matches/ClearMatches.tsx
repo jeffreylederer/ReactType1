@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import LeagueClass from "@components/LeagueClass.tsx";
 import Layout from '@layouts/Layout.tsx';
-
+import { SetCount } from '@components/CountMatches.tsx';
 
 
 const ClearMatches = () => {
@@ -24,6 +24,7 @@ const ClearMatches = () => {
         axios.get(url)
             .then(response => {
                 setErrorMsg("Schedule cleared");
+                SetCount(0);
                 console.log(response.data);
 
             })

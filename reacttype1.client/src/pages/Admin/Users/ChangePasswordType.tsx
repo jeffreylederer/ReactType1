@@ -15,7 +15,17 @@ export const ChangePasswordTypeSchema = z
                 path: ['confirmPassword'],
             })
         }
-    })
-    ;
+    });
 
 export type ChangePasswordType = z.infer<typeof ChangePasswordTypeSchema>;
+
+export type PasswordType = {
+
+    id: number;
+    roleId: number;
+    userName: string;
+    password: string;
+    displayName: string;
+    isActive: boolean;
+
+};

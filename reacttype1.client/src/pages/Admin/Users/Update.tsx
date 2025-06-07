@@ -1,28 +1,21 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput, Select } from "flowbite-react";
 import Layout from "@layouts/Layout.tsx";
 import SubmitButton from '@components/Buttons.tsx';
-
+import { PasswordType } from './ChangePasswordType.tsx';
+ 
+import useFetch from '@hooks/useFetch.tsx';
+import updateData from '@components/UpdateData.tsx';
+import { useState } from 'react';
 
 
 
 const UsersUpdate = () => {
+    const [errorMsg, setErrorMsg] = useState<string>('');
 
-    const [users, SetUsers] = useState(
-        {
-            id: 0,
-            roleId:1,
-            userName: '',
-            password: '',
-            displayName: '',
-            isActive: false          
-        }
-    );
     const location = useLocation();
     const id: number = location.state;
 
@@ -36,123 +29,113 @@ const UsersUpdate = () => {
 
     });
 
-    const onSubmit: SubmitHandler<UpdateFormData> = (data) => updateData(data)
+    const onSubmit: SubmitHandler<UpdateFormData> = (newData) => update(newData);
 
     const navigate = useNavigate();
 
+    const { data, isLoading, error } = useFetch<PasswordType>(`${import.meta.env.VITE_SERVER_URL}api/Users/${id}`);
 
 
+    if (error)
+        return (
+            <Layout>
+                <h3>Update membership record</h3>
+                {error}
+            </Layout>
+        );
 
-    useEffect(() => {
-        GetData();
-    });
+    if (isLoading)
+        return (
+            <Layout>
+                <h3>Update membership record</h3>
+                <p>Loading...</p>
+            </Layout>
+        );
 
-    const contents = users.id === 0
-        ? <p><em>Loading ...</em></p> :
+   
 
-        <form onSubmit={handleSubmit(onSubmit)} >
+        
+    if (data) {
+        return (
+            <Layout>
+                <h3>Update user record</h3>
+                <form onSubmit={handleSubmit(onSubmit)} >
 
-        <table>
+                    <table>
 
-            <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={users.id} />
-            <tr>
-                <td className="Label">User Name:</td>
+                        <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={data.id.toString()} />
+                        <tr>
+                            <td className="Label">User Name:</td>
 
-                    <td className="Field">{users.userName}
-                </td>
-            </tr>
+                            <td className="Field">{data?.userName}
+                            </td>
+                        </tr>
 
-            <tr>
-                <td className="Label">Active:</td>
+                        <tr>
+                            <td className="Label">Active:</td>
 
-                    <td className="Field">
-                        <Checkbox {...register('isActive')} defaultChecked={users.isActive} />
-                </td>
-            </tr>
+                            <td className="Field">
+                                <Checkbox {...register('isActive')} defaultChecked={data.isActive} />
+                            </td>
+                        </tr>
 
-            <tr>
-                    <td className="Label">Display Name:</td>
+                        <tr>
+                            <td className="Label">Display Name:</td>
 
-                    <td className="Field"><TextInput {...register('displayName')} style={{ width: '85%' }} defaultValue={users.displayName} />
-                </td>
-            </tr>
+                            <td className="Field"><TextInput {...register('displayName')} style={{ width: '85%' }} defaultValue={data.displayName} />
+                            </td>
+                        </tr>
 
-                <tr>
-                    <td className="Label">Role:</td>
+                        <tr>
+                            <td className="Label">Role:</td>
 
-                    <td className="Field">
-                        <Select style={{ width: '85%' }}  {...register('roleId')} defaultValue={users.roleId }>
-                            
-                            <option value="1">Observer</option>
-                            <option value="2">Scorer</option>
-                            <option value="3">Admin</option>
-                            <option value="4">SiteAdmin</option>
-                           
-                        </Select>
-                       
-                    </td>
-                </tr>
-            
+                            <td className="Field">
+                                <Select style={{ width: '85%' }}  {...register('roleId')} defaultValue={data.roleId}>
 
-            <tr>
-                <td colSpan={2}  style={{ textAlign: "center" }}>
-                        <SubmitButton/>
-                </td>
-            </tr>
-                <tr><td colSpan={1}>
+                                    <option value="1">Observer</option>
+                                    <option value="2">Scorer</option>
+                                    <option value="3">Admin</option>
+                                    <option value="4">SiteAdmin</option>
 
+                                </Select>
 
-                {errors.displayName && <p className="errorMessage">{errors.displayName.message}</p>}
-
-                </td></tr>
-
-            </table>
-        </form>
-
-    return (
-        <Layout>
-            <h3>Update user record</h3>
-            {contents}
+                            </td>
+                        </tr>
 
 
-        </Layout>
-    );
+                        <tr>
+                            <td colSpan={2} style={{ textAlign: "center" }}>
+                                <SubmitButton />
+                            </td>
+                        </tr>
+                        <tr><td colSpan={1}>
 
 
-    async function GetData() {
-        if (users.id === 0) {
-            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Users/';
-            const num: string = id.toString();
-            const fullUrl = url.concat(num);
-            axios.get(fullUrl)
-                .then(response => {
+                            {errors.displayName && <p className="errorMessage">{errors.displayName.message}</p>}
+                            <p className="errorMessage">{errorMsg}</p>
 
-                    SetUsers(response.data);
+                        </td></tr>
+
+                    </table>
+                </form>
 
 
-                    console.log('Record aquired successfully: ', response.data);
-                })
-                .catch(error => {
-                    console.error('Error aquiring record: ', error);
-                });
+            </Layout>
+        );
+    }
+
+
+    async function update(data: UpdateFormData) {
+        try {
+            await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Users/${id}`);
+            navigate("/Admin/Users");
         }
-
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
     }
 
-    function updateData(data: UpdateFormData) {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Users/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        data.id = id;
-        axios.put(fullUrl, data)
-            .then(response => {
-                console.log('Record updated successfully: ', response.data);
-                navigate("/Admin/Users");
-            })
-            .catch(error => {
-                console.error('Error updating record: ', error);
-            });
-    }
+   
 
     
 }

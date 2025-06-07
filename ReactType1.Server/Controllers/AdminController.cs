@@ -62,7 +62,7 @@ namespace ReactType1.Server.Controllers
 
         // UserUpdatePassword.tsx
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, UserUpdateDto? item)
+        public async Task<ActionResult<UserUpdateDto>> Edit(int id, UserUpdateDto? item)
         {
             if (item == null || id != item.Id)
             {
@@ -94,7 +94,7 @@ namespace ReactType1.Server.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-            return Ok();
+            return Ok(item);
         }
 
         // RecoverPasswordRequest.tsx

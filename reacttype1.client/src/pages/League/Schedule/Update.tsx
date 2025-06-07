@@ -1,13 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
 import { UpdateFormData} from "./UpdateFormData.tsx";
 
 import { Checkbox, TextInput } from "flowbite-react";
 import LeagueClass from '@components/LeagueClass.tsx';;
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
+import updateData from '@components/UpdateData.tsx';
+import { GetCount } from '@components/CountMatches.tsx';
 
 
 
@@ -16,9 +17,10 @@ const ScheduleUpdate = () => {
     const [schedule, setSchedule] = useState<UpdateFormData>();
     const location = useLocation();
     const id: number = location.state;
-    const count: string = location.search.substring(9);
+    
+    const [errorMsg, setErrorMsg] = useState<string>('');
 
-    const matches: number = Number(count);
+    
 
     const zeroPad = (num: number): string => {
         const x: string = num.toString();
@@ -34,7 +36,7 @@ const ScheduleUpdate = () => {
 
     } = useForm<UpdateFormData>();
 
-    const onSubmit: SubmitHandler<UpdateFormData> = async (data) => updateData(data)
+    const onSubmit: SubmitHandler<UpdateFormData> = async (data) => update(data)
 
     const navigate = useNavigate();
 
@@ -54,7 +56,7 @@ const ScheduleUpdate = () => {
             <input type="hidden" {...register("leagueid", { valueAsNumber: true })} defaultValue={schedule.leagueid} />
            
             <table>
-                <tr hidden={matches > 0} >
+                <tr hidden={GetCount() > 0} >
                     <td className="Label">Game Date:</td>
 
                     <td className="Field">
@@ -62,7 +64,7 @@ const ScheduleUpdate = () => {
                     </td>
                 </tr>
 
-                <tr hidden={matches == 0}>
+                <tr hidden={GetCount() == 0}>
                     <td className="Label">Game Date:</td>
 
                     <td className="Field">
@@ -71,7 +73,7 @@ const ScheduleUpdate = () => {
                     </td>
                 </tr>
 
-                <tr hidden={matches > 0} >
+                <tr hidden={GetCount() > 0} >
                     <td className="Label">Playoffs:</td>
 
                     <td className="Field">
@@ -79,7 +81,7 @@ const ScheduleUpdate = () => {
                     </td>
                 </tr>
 
-                <tr hidden={matches == 0} >
+                <tr hidden={GetCount() == 0} >
                     <td className="Label">Playoffs:</td>
 
                     <td className="Field">
@@ -101,7 +103,7 @@ const ScheduleUpdate = () => {
                 </tr>
             </table>
             
-            
+            <p className="errorMessage">{errorMsg}</p>
             
         </form>
     
@@ -122,23 +124,24 @@ const ScheduleUpdate = () => {
         setSchedule(results)
     }
 
-    async function updateData(data: UpdateFormData) {
+    async function update(data: UpdateFormData) {
         if (schedule != undefined && data) {
             const results: HTMLInputElement = document.getElementById("playoff") as HTMLInputElement;
              data.playOffs = results.checked;
            
-            const url = `${import.meta.env.VITE_SERVER_URL}api/Schedules/${id}`;
-            await axios.put(url, data)
-                .then(response => {
-                    console.log('Record updated successfully: ', response.data);
-                    navigate("/League/Schedule");
-                })
-                .catch(error => {
-                    console.error('Error updating record: ', error);
-                });
+            try {
+                await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Schedules/${id}`);
+                navigate("/League/Schedule");
+            }
+            catch (error) {
+                setErrorMsg(`${error}`);
+            }
         }
 
     }
+
+    
+    
 
 
 

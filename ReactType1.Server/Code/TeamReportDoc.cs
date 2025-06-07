@@ -73,7 +73,8 @@ namespace ReactType1.Server.Code
                             // step 1
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(60);
+                                if (league?.Divisions > 1)
+                                    columns.ConstantColumn(60);
                                 columns.ConstantColumn(30);
                                 columns.ConstantColumn(120);
                                 if (TeamSize.HasValue && TeamSize.Value == 3)
@@ -93,7 +94,8 @@ namespace ReactType1.Server.Code
                             }
 
                             // step 3
-                            table.Cell().Element(CellStyle2).Text("Division").SemiBold().FontSize(10);
+                            if(league?.Divisions >1)
+                                table.Cell().Element(CellStyle2).Text("Division").SemiBold().FontSize(10);
                             table.Cell().Element(CellStyle2).Text("Team No").SemiBold().FontSize(10);
                             table.Cell().Element(CellStyle2).Text("Skip").SemiBold().FontSize(10);
                             if (TeamSize.HasValue && TeamSize.Value == 3)
@@ -113,8 +115,8 @@ namespace ReactType1.Server.Code
                             foreach (var item in list)
                             {
 
-
-                                table.Cell().Element(CellStyle).Text(item.Division.ToString()).FontSize(10).AlignCenter();
+                                if (league?.Divisions > 1)
+                                    table.Cell().Element(CellStyle).Text(item.Division.ToString()).FontSize(10).AlignCenter();
                                 table.Cell().Element(CellStyle).Text(item.TeamNo.ToString()).FontSize(10).AlignCenter();
                                 table.Cell().Element(CellStyle).Text(item.Skip).FontSize(10).AlignLeft();
                                 if (TeamSize.HasValue && TeamSize.Value == 3)

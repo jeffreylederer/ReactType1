@@ -1,77 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
+import createData from '@components/CreateData.tsx';
 import { FormData, FormDataSchema } from "./FormData.tsx";
 import { Membership } from "./Membership.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LeagueClass from '@components/LeagueClass.tsx';;
 import SubmitButton from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
-
+import useFetch from '@hooks/useFetch.tsx'
 
 const TeamsCreate = () => {
-   
-    const league = new LeagueClass();
-    const onSubmit: SubmitHandler<FormData> = (data) => CreateData(data)
-    const [errorMsg, SeterrorMsg] = useState("");
-
-
-    const navigate = useNavigate();
-    const [membership, setMembership] = useState<Membership[]>();
-
-    function CreateData(data: FormData) {
-        switch (league.teamSize) {
-            case 1:
-                break;
-            case 2:
-                if (data.skip != 0 && data.lead != 0 && data.skip == data.lead) {
-                    SeterrorMsg("Skip and Lead have to be  different members");
-                    return;
-                }
-                break;
-            case 3:
-                if (data.skip != 0 && data.lead != 0 && data.skip == data.lead) {
-                    SeterrorMsg("Skip and Lead have to be  different members");
-                    return;
-                }
-                if (data.skip != 0 && data.viceSkip != 0 && data.skip == data.viceSkip) {
-                    SeterrorMsg("Skip and Vice Skip have to be  different members");
-                    return;
-                }
-                if (data.viceSkip != 0 && data.lead != 0 && data.viceSkip == data.lead) {
-                    SeterrorMsg("Vice Skip and Lead have to be  different members");
-                    return;
-                }
-                break;
-        }
-        SeterrorMsg("");
-        axios.post(import.meta.env.VITE_SERVER_URL+'api/Teams/', data)
-            .then((response) => {
-                console.log(response.data);
-                navigate("/League/Teams");
-                console.log('Record created successfully: ', response.data);
-             })
-            .catch(error => {
-                console.log('Error creating record: ', error);
-            });
-    }
-
-    async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/Teams/NotOnTeam/".concat(league.id.toString());
-        axios.get(url)
-            .then(response => {
-                setMembership(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching data: ', error);
-            })
-    }
-
-    useEffect(() => {
-        GetData();
-    });
-  
     const {
         register,
         handleSubmit,
@@ -79,13 +18,27 @@ const TeamsCreate = () => {
     } = useForm<FormData>({
         resolver: zodResolver(FormDataSchema),
     });
+    const league = new LeagueClass();
+    const onSubmit: SubmitHandler<FormData> = (data) => create(data);
+    const [errorMsg, setErrorMsg] = useState("");
 
+    const navigate = useNavigate();
+
+    const { data, isLoading, error } = useFetch<Membership[]>(`${import.meta.env.VITE_SERVER_URL}api/Teams/NotOnTeam/${league.id}`);
+
+    if (error)
+        return <p>{error}</p>;
+ 
+    if (isLoading)
+        return  <p>Loading...</p>;
+
+     
     return (
         <Layout>
             <h3>Create new Team in league {league.leagueName} </h3>
             <form onSubmit={handleSubmit(onSubmit)} >
                 <table>
-                    <input type="hidden" {...register("leagueid")} defaultValue={league.id} />
+                    <input type="hidden" {...register("leagueid")} defaultValue={league.id.toString()} />
                     <input type="hidden" {...register("teamNo")} defaultValue={"1"} />
                     <input type="hidden" {...register("id")} defaultValue={"0"} />
                     <tr>
@@ -93,7 +46,7 @@ const TeamsCreate = () => {
                         <td>
                             <select style={{ width: '85%' }} defaultValue="0" {...register("skip")}>
                                 <option value="0" key="0">Select member</option>
-                                {membership?.map((item) => (
+                                {data?.map((item) => (
                                     <option value={item.id.toString()} key={item.id }>{item.fullName}</option>
                                 ))}
                                 )
@@ -105,7 +58,7 @@ const TeamsCreate = () => {
                         <td>
                             <select style={{ width: '85%' }} defaultValue="0" {...register("viceSkip")}>
                                 <option value="0" key="0">Select member</option>
-                                {membership?.map((item) => (
+                                {data?.map((item) => (
                                     <option value={item.id.toString()} key={item.id}>{item.fullName}</option>
                                 ))}
                                 )
@@ -117,7 +70,7 @@ const TeamsCreate = () => {
                         <td>
                             <select style={{ width: '85%' }} defaultValue="0" {...register("lead")}>
                                 <option value="0" key="0">Select Member</option>
-                                {membership?.map((item) => (
+                                {data?.map((item) => (
                                     <option value={item.id.toString()} key={item.id}>{item.fullName}</option>
                                 ))}
                                 )
@@ -167,6 +120,40 @@ const TeamsCreate = () => {
         </Layout>
     );
 
+    async function create(data: FormData) {
+        switch (league.teamSize) {
+            case 1:
+                break;
+            case 2:
+                if (data.skip != 0 && data.lead != 0 && data.skip == data.lead) {
+                    setErrorMsg("Skip and Lead have to be  different members");
+                    return;
+                }
+                break;
+            case 3:
+                if (data.skip != 0 && data.lead != 0 && data.skip == data.lead) {
+                    setErrorMsg("Skip and Lead have to be  different members");
+                    return;
+                }
+                if (data.skip != 0 && data.viceSkip != 0 && data.skip == data.viceSkip) {
+                    setErrorMsg("Skip and Vice Skip have to be  different members");
+                    return;
+                }
+                if (data.viceSkip != 0 && data.lead != 0 && data.viceSkip == data.lead) {
+                    setErrorMsg("Vice Skip and Lead have to be  different members");
+                    return;
+                }
+                break;
+        }
+        try {
+            await createData < FormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Teams`);
+            navigate("/League/Teams");
+
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
+    }
 
     
 

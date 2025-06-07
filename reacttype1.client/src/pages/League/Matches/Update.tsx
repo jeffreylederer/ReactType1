@@ -1,7 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextInput } from "flowbite-react";
@@ -10,6 +9,9 @@ import { ReturnButton } from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
 import convertDate from '@components/convertDate.tsx';
 import { useEffect } from 'react';
+import updateData from '@components/UpdateData.tsx';
+
+
 
 
 
@@ -19,6 +21,7 @@ const MatchUpdate = () => {
     const id: number = location.state;
     const [match, setMatch] = useState<MatchFormData>();
     const [hidden, setHidden] = useState<boolean>(false);
+    const [errorMsg, setErrorMsg] = useState<string>('');
 
     useEffect(() => {
         const data: MatchFormData[] = JSON.parse(localStorage.getItem("matches") as string);
@@ -47,7 +50,7 @@ const MatchUpdate = () => {
 
     }
 
-    const onSubmit: SubmitHandler<UpdateFormData> = (data) => updateData(data)
+    const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data)
 
     const navigate = useNavigate();
 
@@ -56,12 +59,12 @@ const MatchUpdate = () => {
         return (
             <Layout>
                 <h3>Enter score for match </h3>
-                
+
                 <form onSubmit={handleSubmit(onSubmit)} >
-                    
+
                     <table>
                         <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={match.id} />
-                        
+
                         <tr>
                             <td className="Label">Game Date:</td>
 
@@ -129,7 +132,7 @@ const MatchUpdate = () => {
                         <tr><td colSpan={1}>
                             {errors.team1Score && <p className="errorMessage">{errors.team1Score.message}</p>}
                             {errors.team2Score && <p className="errorMessage">{errors.team2Score.message}</p>}
-                            
+                            <p className="errorMessage">{errorMsg}</p>
                         </td></tr>
 
 
@@ -139,25 +142,22 @@ const MatchUpdate = () => {
         );
     }
     else
-        <p>Loading...</p>
+        return <p>Loading...</p>;
 
 
-    function updateData(data: UpdateFormData) {
-        const url: string = import.meta.env.VITE_SERVER_URL + 'api/Matches/'.concat(id.toString());
+    async function update(data: UpdateFormData) {
         if (data.forfeit != 0) {
             data.team1Score = 0;
             data.team2Score = 0;
         }
-       
-        axios.put(url, data)
-            .then(response => {
-                console.log('Record updated successfully: ', response.data);
-                const url: string = match ? `/League/Matches?id=${match.weekId}` : "/League/Matches";
-                navigate(url);
-            })
-            .catch(error => {
-                console.error('Error updating record: ', error);
-            });
+        try {
+            await updateData<UpdateFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Matches/${id}`);
+            const url: string = match ? `/League/Matches?id=${match.weekId}` : "/League/Matches";
+            navigate(url);
+        }
+        catch(error) {
+            setErrorMsg(`${error}`);
+       };
     }
 
     function Goback() {

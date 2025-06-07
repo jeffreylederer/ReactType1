@@ -1,10 +1,9 @@
 import { RecoverPasswordRequestData, RecoverPasswordRequestDataSchema } from "./LoginDataTypes.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
-
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from 'react';
 import { TextInput, Button } from "flowbite-react";
-import axios from "axios";
+import createData from '@components/CreateData.tsx';
 
 
 
@@ -19,17 +18,9 @@ function RecoverPasswordRequest() {
     });
 
 
-    function SendData(data: RecoverPasswordRequestData) {
-        axios.post(import.meta.env.VITE_SERVER_URL + 'api/Admin/RecoverPasswordRequest', data)
-            .then((response) => {
-                setErrorMsg(response.data);
-            })
-            .catch(error => {
-                setErrorMsg("Send data not successful" + error);
-            });
-    }
+   
 
-    const onSubmit: SubmitHandler<RecoverPasswordRequestData> = (data) => SendData(data)
+    const onSubmit: SubmitHandler<RecoverPasswordRequestData> = (data) => create(data)
     const [errorMsg, setErrorMsg] = useState('');
 
     return (
@@ -69,7 +60,15 @@ function RecoverPasswordRequest() {
         </>
     );
 
-
+    async function create(data: RecoverPasswordRequestData) {
+        try {
+            const message = await createData<RecoverPasswordRequestData>(data, `${import.meta.env.VITE_SERVER_URL}api/Admin/RecoverPasswordRequest`) as string;
+            setErrorMsg(message);
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
+    }
 }
 
 export default RecoverPasswordRequest;

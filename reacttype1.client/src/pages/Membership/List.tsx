@@ -23,7 +23,7 @@ function Membership() {
             <Layout>
                 <h3 aria-label="Membership table">Membership</h3>
                 <Link to="/Membership/Create" hidden={hideAddButton} aria-label="Add Membership">Add</Link>
-                No Members
+                <p>No Members</p>
             </Layout>
         );
 

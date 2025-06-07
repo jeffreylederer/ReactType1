@@ -4,6 +4,7 @@ import LeagueClass, { LeagueType } from "@components/LeagueClass.tsx";
 import UserClass from '@components/UserClass';
 import { useNavigate } from "react-router-dom";
 import Layout from "@layouts/Layout.tsx";
+import { SetCount } from '@components/CountMatches.tsx';
 
 function Home() {
 
@@ -47,6 +48,7 @@ function Home() {
             navigate("/Login");
         const league = new LeagueClass();
         league.Remove();
+        SetCount(0);
         fetchData();
     });
 

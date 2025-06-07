@@ -13,7 +13,7 @@ function Players() {
     const allowed: boolean = (permission == "SiteAdmin" || permission == "Admin") ? false : true;
     
     
-    const { data, isLoading, error } = useFetch<UpdateFormData[]>(`${import.meta.env.VITE_SERVER_URL}}api/players/${league.id}`);
+    const { data, isLoading, error } = useFetch<UpdateFormData[]>(`${import.meta.env.VITE_SERVER_URL}api/players/${league.id}`);
 
     if (isLoading)
         return <p aria-label="Loading">Loading...</p>;

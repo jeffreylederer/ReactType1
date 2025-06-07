@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ReactType1.Server.Code;
 using ReactType1.Server.Models;
 
 // https://medium.com/@hassanjabbar2017/performing-crud-operations-using-react-with-net-core-a-step-by-step-guide-0176efa86934
@@ -68,7 +69,7 @@ namespace ReactType1.Server.Controllers
 
 
         [HttpPost]
-        public async Task Create(ScheduleTypeCreate item)
+        public async Task<ActionResult<ScheduleTypeCreate>> Create(ScheduleTypeCreate item)
         {
             var schedule = new Schedule()
             {
@@ -79,18 +80,14 @@ namespace ReactType1.Server.Controllers
                 Leagueid = int.Parse(item.Leagueid)
             };
             _context.Schedules.Add(schedule);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch { }
-       
+           
+            await _context.SaveChangesAsync();
 
-
+            return item;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, ScheduleType item)
+        public async Task<ActionResult<ScheduleType>> Edit(int id, ScheduleType item)
         {
             if (id != item.Id)
             {
@@ -127,7 +124,7 @@ namespace ReactType1.Server.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-            return NoContent();
+            return Ok(item);
         }
 
 

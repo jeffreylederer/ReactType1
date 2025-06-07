@@ -1,11 +1,12 @@
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
+import updateData from '@components/UpdateData.tsx';
 import { UpdatePasswordData, UpdatePasswordDataScheme } from "./LoginDataTypes.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextInput, Button } from "flowbite-react";
-import { useEffect, useState } from 'react';
-
+import { useState } from 'react';
+import useFetch from '@hooks/useFetch.tsx';
+    ;
 
 
 
@@ -13,7 +14,6 @@ const UpdateRecoverPassword = () => {
 
     const location = useLocation();
     const id: string = location.search.substring(4);   
-    const [userid, setUserid] = useState<number>(-1);
     const [errorMsg, setErrorMsg] = useState<string | null>('');
     
 
@@ -27,25 +27,29 @@ const UpdateRecoverPassword = () => {
 
     });
 
-    const onSubmit: SubmitHandler<UpdatePasswordData> = (data) => updateData(data)
+    const onSubmit: SubmitHandler<UpdatePasswordData> = (data) => update(data)
 
     const navigate = useNavigate();
 
-    useEffect(() => {
+    const { data, isLoading, error } = useFetch<number>(`${import.meta.env.VITE_SERVER_URL}api/Admin/UpdatePassword/${id}`);
 
+    if (isLoading)
+        return <p aria-label="Loading">Loading...</p>;
 
-        GetUserid();
-    });
+    if (error)
+        return <p aria-label="Error">Return Error: {error}</p>;
 
     
-    const contents = userid ==-1
-        ? <p><em>Loading ...</em></p>
-        : (userid == 0 ?
+   
+
+    return (
+        <>
+            <h3>Update your password for {import.meta.env.VITE_SERVER_ClubName} league application</h3>
             <h4>Your time has expired. <Link to="/RecoverPasswordRequest">Try again</Link></h4>
             :
 
             <form onSubmit={handleSubmit(onSubmit)} >
-                <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={userid} />
+                <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={data} />
                 <table>
 
 
@@ -86,45 +90,25 @@ const UpdateRecoverPassword = () => {
                     </td></tr>
 
                 </table>
-            </form>);
-
-    return (
-        <>
-            <h3>Update your password for {import.meta.env.VITE_SERVER_ClubName} league application</h3>
-            {contents}
+            </form>
 
 
         </>
     );
 
 
-    
-
-    function updateData(data: UpdatePasswordData) {
-        const url: string = `${import.meta.env.VITE_SERVER_URL}api/Admin/${userid}`;
-        axios.put(url, data)
-            .then(response => {
-                console.log('Record updated successfully ', response.data);
-                navigate("/Login");
-            })
-            .catch(error => {
-                setErrorMsg('Error updating record: ' + error);
-            });
+    async function update(data: UpdatePasswordData) {
+        try {
+            await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Admin/${userid}`);
+            navigate("/Login");
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
     }
 
     
-    function GetUserid() {
-        const url: string = `${import.meta.env.VITE_SERVER_URL}api/Admin/UpdatePassword/${id}`;
-        axios.get(url)
-            .then(response => {
-
-                setUserid(response.data);
-
-            })
-            .catch(error => {
-                setErrorMsg('Error aquiring record: '+ error.message);
-            });
-    }
+   
        
     
 

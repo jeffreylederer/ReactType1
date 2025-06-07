@@ -3,7 +3,7 @@ import axios from "axios";
 import Layout from '@layouts/Layout.tsx';
 import LeagueClass from "@components/LeagueClass";;
 
-
+import { SetCount } from '@components/CountMatches.tsx';
 
 const CreateMatches = () => {
     const [errorMsg, setErrorMsg] = useState('Matches created');
@@ -22,6 +22,7 @@ const CreateMatches = () => {
         const url: string = import.meta.env.VITE_SERVER_URL + "api/Matches/CreateSchedule/".concat(league.id.toString());
         axios.get(url)
             .then(response => {
+                SetCount(1);
                 console.log(response.data);
             })
             .catch(error => {

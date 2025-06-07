@@ -3,6 +3,7 @@ import LeagueClass from "@components/LeagueClass";
 import UserClass  from "@components/UserClass";
 import { NavLink, useNavigate } from "react-router-dom";
 
+
 function Menu() {
     const navigate = useNavigate();
     const user = new UserClass();

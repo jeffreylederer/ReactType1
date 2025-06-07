@@ -9,9 +9,9 @@ function ScoreCard() {
 
 
 
-    const { data, loading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Matches/ScoreCard/${id}`);
+    const { data, isLoading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Matches/ScoreCard/${id}`);
 
-    if (loading) {
+    if (isLoading) {
         return;
     }
     if (error) {

@@ -1,28 +1,20 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
-import { ChangePasswordType, ChangePasswordTypeSchema } from "./ChangePasswordType.tsx";
+import { ChangePasswordType, ChangePasswordTypeSchema, PasswordType } from "./ChangePasswordType.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextInput } from "flowbite-react";
 import Layout from "@layouts/Layout.tsx";
 import SubmitButton from '@components/Buttons.tsx';
+import useFetch from '@hooks/useFetch.tsx';
+import axios from "axios";
+import { useState } from 'react';
 
 
 
 
 const ChangePassword = () => {
 
-    const [users, SetUsers] = useState(
-        {
-            id: 0,
-            roleId: 1,
-            userName: '',
-            password: '',
-            displayName: '',
-            isActive: false
-        }
-    );
+  
     const location = useLocation();
     const id: number = location.state;
 
@@ -36,95 +28,86 @@ const ChangePassword = () => {
 
     });
 
-    const onSubmit: SubmitHandler<ChangePasswordType> = (data) => updateData(data)
+    const onSubmit: SubmitHandler<ChangePasswordType> = (data) => update(data)
 
     const navigate = useNavigate();
+    const [errorMsg, setErrorMsg] = useState<string>('');
+
+    const { data, isLoading, error } = useFetch<PasswordType>(`${import.meta.env.VITE_SERVER_URL}api/Users/${id}`);
+
+    if (error)
+        return (
+            <Layout>
+                <h3>Update membership record</h3>
+                {error}
+            </Layout>
+        );
+
+    if (isLoading)
+        return (
+            <Layout>
+                <h3>Update membership record</h3>
+                <p>Loading...</p>
+            </Layout>
+        );
+
+        
+    if (data) {
+        return (
+            <Layout>
+                <h3>Change user's password</h3>
+                <form onSubmit={handleSubmit(onSubmit)} >
+
+                    <table>
+
+                        <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={data.id.toString()} />
+                        <tr>
+                            <td className="Label">User Name:</td>
+
+                            <td className="Field">{data.userName}
+                            </td>
+                        </tr>
 
 
 
+                        <tr>
+                            <td className="Label">Password:</td>
 
-    useEffect(() => {
-        GetData();
-    });
+                            <td className="Field"><TextInput type="password" {...register('password')} style={{ width: '85%' }} />
+                            </td>
+                        </tr>
 
-    const contents = users.id === 0
-        ? <p><em>Loading ...</em></p> :
+                        <tr>
+                            <td className="Label">Confirm Password:</td>
 
-        <form onSubmit={handleSubmit(onSubmit)} >
+                            <td className="Field"><TextInput type="password" {...register('confirmPassword')} style={{ width: '85%' }} />
+                            </td>
+                        </tr>
+                        <tr>
 
-            <table>
-
-                <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={users.id} />
-                <tr>
-                    <td className="Label">User Name:</td>
-
-                    <td className="Field">{users.userName}
-                    </td>
-                </tr>
-
-               
-
-                <tr>
-                    <td className="Label">Password:</td>
-
-                    <td className="Field"><TextInput type="password" {...register('password')} style={{ width: '85%' }}  />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td className="Label">Confirm Password:</td>
-
-                    <td className="Field"><TextInput type="password" {...register('confirmPassword')} style={{ width: '85%' }} />
-                    </td>
-                </tr>
-                <tr>
-               
-                    <td colSpan={2} style={{ textAlign: "center" }}>
-                        <SubmitButton />
-                    </td>
-                </tr>
-                <tr><td colSpan={2}>
+                            <td colSpan={2} style={{ textAlign: "center" }}>
+                                <SubmitButton />
+                            </td>
+                        </tr>
+                        <tr><td colSpan={2}>
 
 
-                    {errors.password && <p className="errorMessage">{errors.password.message}</p>}
-                    {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
+                            {errors.password && <p className="errorMessage">{errors.password.message}</p>}
+                            {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
+                            {errors.id && <p className="errorMessage">{errors.id.message}</p>}
+                            <p className="errorMessage">{errorMsg}</p>
+                        </td></tr>
 
-                </td></tr>
-
-            </table>
-        </form>
-
-    return (
-        <Layout>
-            <h3>Change user's password</h3>
-            {contents}
+                    </table>
+                </form>
 
 
-        </Layout>
-    );
-
-
-    async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL + 'api/Users/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        if (users.id == 0) {
-            axios.get(fullUrl)
-                .then(response => {
-
-                    SetUsers(response.data);
-
-
-                    console.log('Record aquired successfully: ', response.data);
-                })
-                .catch(error => {
-                    console.error('Error aquiring record: ', error);
-                });
-        }
-
+            </Layout>
+        );
     }
 
-    function updateData(data: ChangePasswordType) {
+
+    function update(data: ChangePasswordType) {
         const url: string = import.meta.env.VITE_SERVER_URL + 'api/Users/ChangePassword';
         const num: string = id.toString();
         const fullUrl = url.concat(num);
@@ -135,7 +118,7 @@ const ChangePassword = () => {
                 navigate("/Admin/Users");
             })
             .catch(error => {
-                console.error('Error updating record: ', error);
+                setErrorMsg(`Error updating record: ${error}`);
             });
     }
 

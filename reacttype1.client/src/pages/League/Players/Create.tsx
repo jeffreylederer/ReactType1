@@ -21,7 +21,7 @@ const PlayersCreate = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        
     } = useForm<PlayerFormData>({
         resolver: zodResolver(PlayerFormDataSchema),
     });
@@ -73,7 +73,7 @@ const PlayersCreate = () => {
                     </tr>
                     <tr>
                         <td colSpan={2}>
-                            {errors.membershipId && <p className="errorMessage">{errors.membershipId.message}</p>}
+                            
                             <p className="errorMessage">{errorMsg}</p>
                         </td>
                         
@@ -89,7 +89,7 @@ const PlayersCreate = () => {
 
     async function create(data: PlayerFormData) {
         try {
-            await createData<PlayerFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Players/${league.id}`);
+            await createData<PlayerFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/players`);
             navigate("/League/Players");
         }
         catch (error) {

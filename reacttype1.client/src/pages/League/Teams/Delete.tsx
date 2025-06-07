@@ -1,10 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from 'react';
-import axios from "axios";
+import { useState, useEffect } from 'react';
 import { TeamMember } from "./TeamMember.ts";
 import LeagueClass from '@components/LeagueClass.tsx';;
 import { DeleteButton } from '@components/Buttons.tsx';
 import Layout from '@layouts/Layout.tsx';
+import deleteData from '@components/deleteData.tsx';
 
 
 const TeamsDelete = () => {
@@ -12,7 +12,7 @@ const TeamsDelete = () => {
     const location = useLocation();
     const id: number = +location.search.substring(4);
    
-    const [errorMsg, SeterrorMsg] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
     const [team, setTeam] = useState<TeamMember>();
 
     
@@ -72,18 +72,20 @@ const TeamsDelete = () => {
         setTeam(data.find(x => x.id == id));
     }
 
+    
+
     async function DeleteItem() {
-        const url: string = `${import.meta.env.VITE_SERVER_URL}api/Teams/${id}`;
-        axios.delete(url)
-            .then(response => {
-                console.log(response.statusText);
-                navigate("/League/Teams");
-            })
-            .catch(error => {
-                SeterrorMsg(error.response.data);
-            })
+
+        try {
+            await deleteData(`${import.meta.env.VITE_SERVER_URL}api/Teams/${id}`);
+            navigate("/League/Teams");
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
     }
 }
+
 
 
 export default TeamsDelete;

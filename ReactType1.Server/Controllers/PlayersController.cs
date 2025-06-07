@@ -90,7 +90,7 @@ namespace ReactType1.Server.Controllers
 
 
         [HttpPost]
-        public async Task Create(CreateType item)
+        public async Task<ActionResult<CreateType>> Create(CreateType item)
         {
             var player = new Player()
             {
@@ -99,8 +99,7 @@ namespace ReactType1.Server.Controllers
             };
             _context.Players.Add(player);
             await _context.SaveChangesAsync();
-
-           
+            return Ok(item);           
         }
 
 

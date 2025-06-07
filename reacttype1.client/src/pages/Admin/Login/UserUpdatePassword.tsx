@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
 import { UpdatePasswordData, UpdatePasswordDataScheme } from "./LoginDataTypes.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextInput, Button } from "flowbite-react";
 import UserClass from "@components/UserClass";
-
+import { useState } from 'react';
+import updateData from '@components/UpdateData.tsx';
 
 
 
@@ -22,11 +22,11 @@ const UserUpdatePassword = () => {
 
     });
 
-    const onSubmit: SubmitHandler<UpdatePasswordData> = (data) => updateData(data)
+    const onSubmit: SubmitHandler<UpdatePasswordData> = (data) => update(data);
 
     const navigate = useNavigate();
     const user = new UserClass();
-
+    const [errorMsg, setErrorMsg] = useState<string>('');
 
 
     const contents =
@@ -75,6 +75,7 @@ const UserUpdatePassword = () => {
 
                     {errors.password && <p className="errorMessage">{errors.password.message}</p>}
                     {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
+                    <p className="errorMessage">{errorMsg}</p>
 
                 </td></tr>
 
@@ -91,25 +92,15 @@ const UserUpdatePassword = () => {
     );
 
 
-
-
-    function updateData(data: UpdatePasswordData) {
-        const url: string = import.meta.env.VITE_SERVER_URL + 'api/Admin/'.concat(user.id.toString());
-        axios.put(url, data)
-            .then(response => {
-                console.log('Record updated successfully ', response.data);
-                navigate(-1);
-            })
-            .catch(error => {
-                console.log('Error updating record: ', error);
-            });
+    async function update(data: UpdatePasswordData) {
+        try {
+            await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Admin/${user.id}`);
+            navigate(-1);
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
     }
-
-
-    
-
-
-
 
 }
 

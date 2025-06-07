@@ -4,9 +4,9 @@ import LeagueClass from "@components/LeagueClass.tsx";
 
 function ScheduleReport() {
     const league = new LeagueClass();
-    const { data, loading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Matches/ScheduleReport/${league.id}`);
+    const { data, isLoading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Matches/ScheduleReport/${league.id}`);
 
-    if (loading) {
+    if (isLoading) {
         return;
     }
     if (error) {
@@ -18,19 +18,10 @@ function ScheduleReport() {
         alert(`Error: No PDF generated`);
         return;
     }
-    else {
-        console.log("got data");
-        if (data.indexOf("Exception: ",0) != -1) {
-            return (
-                <p>{data} </p>
-            );
-        }
-
-
-        return (
+    return (
             <embed src={data} type="application/pdf" width='1000' height='800' />
         );
-    }
+  
 }
 
 

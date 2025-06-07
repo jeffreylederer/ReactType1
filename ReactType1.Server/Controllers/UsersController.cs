@@ -89,7 +89,7 @@ namespace ReactType1.Server.Controllers
 
         // GET: Users/Create
         [HttpPost]
-        public async Task<IActionResult> Create(DTOUserRoleCreate item)
+        public async Task<ActionResult<DTOUserRoleCreate>> Create(DTOUserRoleCreate item)
         {
             string password = GetSha256Hash.Encode(item.Password);
             try
@@ -113,13 +113,13 @@ namespace ReactType1.Server.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-            return Ok();
+            return Ok(item);
 
         }
 
         // GET: Users/Edit/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, DTOUserRoleUpdate item)
+        public async Task<ActionResult<DTOUserRoleUpdate>> Edit(int id, DTOUserRoleUpdate item)
         {
             if (id != item.Id)
             {
@@ -158,12 +158,12 @@ namespace ReactType1.Server.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-            return Ok();
+            return Ok(item);
 
         }
 
         [HttpPut("ChangePassword{id}")]
-        public async Task<IActionResult> ChangePassword(int id, DTOChangePassword item)
+        public async Task<ActionResult<DTOChangePassword>> ChangePassword(int id, DTOChangePassword item)
         {
             if (id != item.Id)
             {
@@ -200,7 +200,7 @@ namespace ReactType1.Server.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-            return Ok();
+            return Ok(item);
         }
 
         // GET: Users/Delete/5

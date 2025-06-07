@@ -1,93 +1,85 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from 'react';
-import axios from "axios";
+import { useState } from 'react';
 import { DetailsType } from "./DetailsType.tsx";
 import Layout from "@layouts/Layout.tsx";
-import {DeleteButton} from '@components/Buttons.tsx';
+import { DeleteButton } from '@components/Buttons.tsx';
+import useFetch from '@hooks/useFetch.tsx';
+import deleteData from '@components/deleteData.tsx';
 
 
 const UsersDelete = () => {
     const location = useLocation();
     const id: number = location.state;
 
-    const [Users, SetUsers] = useState<DetailsType>();
-
+    const [errorMsg, setErrorMsg] = useState('');
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        GetData();
-    });
+    const { data, isLoading, error } = useFetch<DetailsType>(`${import.meta.env.VITE_SERVER_URL}api/Users/${id}`);
 
-    const contents = Users === undefined
-        ? <p><em>Loading ...</em></p> :
+    if (error)
+        return (
+            <Layout>
+                <h3>Delete Member</h3>
+                {error}
+            </Layout>
+        );
 
-        <table>
-            <tr>
-                <td className="Label">Users Name:</td>
-
-                <td className="Field">{Users.userName}</td>
-            </tr>
-            <tr>
-                <td className="Label">Active:</td>
-                <td className="Field">{Users.isActive ? "Yes" : "No"}</td>
-
-            </tr>
-            <tr>
-                <td className="Label">Display Name:</td>
-                <td className="Field">{Users.displayName}</td>
-            </tr>
-
-            <tr>
-                <td className="Label">Role:</td>
-                <td className="Field">{Users.role}</td>
-            </tr>
-
-            <tr>
-                <td colSpan={2} >
-                    <DeleteButton DeleteItem={DeleteItem} />
-                </td>
-            </tr>
-        </table>
+    if (isLoading)
+        return (
+            <Layout>
+                <h3>Delete Member</h3>
+                <p>Loading...</p>
+            </Layout>
+        );        
 
     return (
         <Layout>
              <h3>Delete user</h3>
-            {contents}
+            <table>
+                <tr>
+                    <td className="Label">Users Name:</td>
+
+                    <td className="Field">{data?.userName}</td>
+                </tr>
+                <tr>
+                    <td className="Label">Active:</td>
+                    <td className="Field">{data?.isActive ? "Yes" : "No"}</td>
+
+                </tr>
+                <tr>
+                    <td className="Label">Display Name:</td>
+                    <td className="Field">{data?.displayName}</td>
+                </tr>
+
+                <tr>
+                    <td className="Label">Role:</td>
+                    <td className="Field">{data?.role}</td>
+                </tr>
+
+                <tr>
+                    <td colSpan={2} >
+                        <DeleteButton DeleteItem={deleteItem} />
+                    </td>
+                </tr>
+            </table>
+            <p>{errorMsg}</p>
         </Layout>
     );
 
-    async function GetData() {
-        if (Users === undefined) { 
-        const url: string = import.meta.env.VITE_SERVER_URL + 'api/Users/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        axios.get(fullUrl)
-            .then(response => {
-                SetUsers(response.data);
-                console.log('Record aquired successfully: ', response.data);
-            })
-            .catch(error => {
-                console.error('Error aquiring record: ', error);
-            });
+
+    async function deleteItem() {
+
+        try {
+            await deleteData(`${import.meta.env.VITE_SERVER_URL}api/Users/${id}`);
+            navigate("/Admin/Users");
         }
-
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
     }
 
-    async function DeleteItem() {
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Users/';
-        const num: string = id.toString();
-        const fullUrl = url.concat(num);
-        axios.delete(fullUrl)
-            .then(response => {
-                console.log(response.statusText);
-                navigate("/Admin/Users");
-            })
-            .catch(error => {
-                console.error('Error fetching data: ', error);
-            })
-    }
-}
+};
 
 
 export default UsersDelete;

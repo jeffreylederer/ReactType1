@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
+import createData from '@components/CreateData.tsx';
 import { FormData, FormDataSchema } from "./FormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, TextInput, Select, } from "flowbite-react";
 import Layout from "@layouts/Layout.tsx";
 import SubmitButton from '@components/Buttons.tsx';
+import { useState } from 'react';
 
 const UserCreate = () => {
 
@@ -17,21 +18,11 @@ const UserCreate = () => {
         resolver: zodResolver(FormDataSchema),
     });
 
-    const onSubmit: SubmitHandler<FormData> = (data) => CreateData(data)
-
+    const onSubmit: SubmitHandler<FormData> = (data) => create(data)
+    const [errorMsg, setErrorMsg] = useState('');
     const navigate = useNavigate();
 
-    function CreateData(data: FormData) {
-        axios.post(import.meta.env.VITE_SERVER_URL+'api/Users', data)
-            .then((response) => {
-                console.log(response.data);
-                navigate("/Admin/Users");
-                console.log('Record created successfully: ', response.data);
-            })
-            .catch(error => {
-                console.log('Error creating record: ', error);
-            });
-    }
+   
 
     return (
         <Layout>
@@ -91,7 +82,8 @@ const UserCreate = () => {
                     {errors.userName && <p className="errorMessage">{errors.userName.message}</p>}
                     {errors.displayName && <p className="errorMessage">{errors.displayName.message}</p>}
                     {errors.password && <p className="errorMessage">{errors.password.message}</p>}
-                    {errors.roleId && <p className="errorMessage">{errors.roleId.message}</p>}
+                        {errors.roleId && <p className="errorMessage">{errors.roleId.message}</p>}
+                        <p className='errorMessage'>{errorMsg}</p>
                     </td></tr>
 
 
@@ -102,7 +94,15 @@ const UserCreate = () => {
         </Layout>
     );
 
-
+    async function create(data: FormData) {
+        try {
+            await createData<FormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Users`);
+            navigate("/Admin/Users");
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
+    }
 
 
 }

@@ -1,5 +1,6 @@
 ﻿
 using ReactType1.Server.Models;
+using System.IO;
 
 namespace ReactType1.Server.Code
 {
@@ -14,75 +15,96 @@ namespace ReactType1.Server.Code
         /// <param name="numTeams">number of teams in this league</param>
         /// <returns>Generates a list of matches. Each list has a week number, rink number, team 1 number and team 2 number. If the
         /// number of teams are odd, a bye week game is created with a rink of -1 and both teams are the same.</returns>
-        public List<CalculatedMatch> RoundRobin(int Weeks, int numTeams)
+
+        /// <summary>
+        /// Generates a round-robin schedule for the provided list of teams.
+        /// For an even number of teams, a complete schedule (all teams playing each other once)
+        /// takes n-1 rounds (here n=8 gives 7 rounds).
+        /// </summary>
+        /// <param name="teams">List of team names</param>
+        /// <returns>A list of rounds; each round is a list of tuple matches (Team A, Team B)</returns>
+        private static List<List<CalculatedMatch>> GenerateRoundRobinSchedule(int numWeeks, int numTeams)
         {
-           
-            List<CalculatedMatch> schedule = new ();
-            // Create a list of teams
             List<int> teams = new List<int>();
             for (int i = 0; i < numTeams; i++)
-            {
                 teams.Add(i);
+            int n = numTeams;
+            if (n % 2 != 0)
+            {
+                // For an odd number of teams, add a dummy "Bye" team.
+                teams.Add(-1);
+                n++;
             }
 
-            // If the number of teams is odd, add a dummy team
-            if (numTeams % 2 != 0)
-            {
-                teams.Add(-1); // Dummy team represented by -1
-                numTeams++;
-            }
+            var rounds = new List<List<CalculatedMatch>>();
 
-            int numofRinks = numTeams / 2;
-            
-            // Generate schedule for each week
-            for (int week = 0; week < Weeks; week++)
+            // Create a copy of the teams list so that we can rotate teams.
+            var teamList = new List<int>(teams);
+
+            // For each round...
+            for (int round = 0; round < numWeeks; round++)
             {
-                int rink = 0;
-                for (int i = 0; i < numofRinks; i++)
+                var roundMatches = new List<CalculatedMatch>();
+
+                for (int i = 0; i < n / 2; i++)
                 {
-                    int team1 = teams[i];
-                    int team2 = teams[numTeams - 1 - i];
+                    // Calculate indices for the paired teams.
+                    int first = (round + i) % (n - 1);
+                    int second = (n - 1 - i + round) % (n - 1);
 
-                    // Skip dummy team matches
+                    // In every round, the last team stays in the same position.
+                    if (i == 0)
+                        second = n - 1;
+
+                    int team1 = teamList[first];
+                    int team2 = teamList[second];
+
+                    // Exclude any matchup involving a "Bye" if present.
                     if (team1 != -1 && team2 != -1)
-                    {
-                        schedule.Add(new CalculatedMatch()
+                        roundMatches.Add(new CalculatedMatch()
                         {
-                            Week = week,
-                            Rink = (week + rink) % numofRinks,
-                            Team1 = team1,
-                            Team2 = team2
+                            Week = round,
+                            Rink = i,
+                            Team1 = team1 > team2 ? team2 : team1,
+                            Team2 = team2 < team1 ? team1 : team2
                         });
+                    else
+                        roundMatches.Add(new CalculatedMatch()
+                        {
+                            Week = round,
+                            Rink = -1,
+                            Team1 = team1 == -1 ? team2 : team1,
+                            Team2 = team2 == -1 ? team1: team2
+                        });
+
+                }
+                rounds.Add(roundMatches);
+            }
+            return rounds;
+        }
+
+        public List<CalculatedMatch> RoundRobin(int numWeeks, int numTeams)
+        {
+            List<CalculatedMatch> list = new List<CalculatedMatch>();
+            int numRinks = numTeams / 2;
+            var schedule = GenerateRoundRobinSchedule(numWeeks, numTeams);
+            Random rnd = new Random();
+            foreach (List<CalculatedMatch> round in schedule)
+            {
+                int rink = rnd.Next(0, numRinks - 1);
+                foreach (CalculatedMatch week in round)
+                {
+                    if (week.Rink != -1)
+                    {
+                        week.Rink = rink % numRinks;
                         rink++;
                     }
-                    else if (team1 == -1)
-                    {
-                        schedule.Add(new CalculatedMatch()
-                        {
-                            Week = week,
-                            Rink = -1,
-                            Team1 = team2,
-                            Team2 = team2
-                        });
-                    }
-                    else
-                    {
-                        schedule.Add(new CalculatedMatch()
-                        {
-                            Week = week,
-                            Rink = -1,
-                            Team1 = team1,
-                            Team2 = team1
-                        });
-                    }
+                    list.Add(week);
                 }
-
-                // Rotate teams for next week
-                teams.Insert(1, teams[numTeams - 1]);
-                teams.RemoveAt(numTeams);
             }
-            return schedule;
+            return list;
         }
+  
 
         public List<CalculatedMatch> matchesWithDivisions(int weeks, DbLeagueApp db, int leagueid)
         {
@@ -101,14 +123,7 @@ namespace ReactType1.Server.Code
             return x1;
         }
 
-        /// <summary>
-        /// This is called to generate matches for leagues with multiple divisions. It will fill in weeks after the week robin play with
-        /// inter divisional matches. If the number of teams is not divisible by 4, it will schedule inter divisional matches on bye weeks.
-        /// </summary>
-        /// <param name="weeks">number of weeks not counting playoffs</param>
-        /// <param name="numberOfTeams">number of teams in the league. It must be divisible by 2</param>
-        /// <returns>Generates a list of matches. Each list has a week number, rink number, team 1 number and team 2 number.
-        /// </returns>
+      
         
     }
 

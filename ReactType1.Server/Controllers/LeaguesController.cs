@@ -49,7 +49,7 @@ namespace ReactType1.Server.Controllers
 
         // GET: Leagues/Create
         [HttpPost]
-        public async Task<IActionResult> Create(League item)
+        public async Task<ActionResult<League>> Create(League item)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace ReactType1.Server.Controllers
             {
                 return StatusCode(500, ex.Message); ;
             }
-            return Ok();
+            return Ok(item);
 
         }
 

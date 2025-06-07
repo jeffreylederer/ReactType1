@@ -30,7 +30,7 @@ namespace ReactType1.Server.Controllers
 
         // GET: Matches
         [HttpGet("GetAllMatches/{id}")]
-        public int GetAllMatches(int id)
+        public async Task<int> GetAllMatches(int id)
         {
             var query =from m in _context.Matches
             join s in _context.Schedules 
@@ -40,8 +40,9 @@ namespace ReactType1.Server.Controllers
             {
                m.Id
             };
-            var count =  query.ToList().Count;
-            return count;
+            var list = query.ToListAsync();
+            var list1 = list.Result;
+            return list1.Count;
         }
 
         // GET: Matches
@@ -115,7 +116,7 @@ namespace ReactType1.Server.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, MatchType item)
+        public async Task<ActionResult<MatchType>> Edit(int id, MatchType item)
         {
             if (id != item.Id)
             {
@@ -137,7 +138,7 @@ namespace ReactType1.Server.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-                return Ok();
+                return Ok(item);
             }
             catch (DbUpdateConcurrencyException)
             {

@@ -15,7 +15,7 @@ const PlayersDelete = () => {
 
     const navigate = useNavigate();
 
-    const { data, isLoading, error } = useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/players/{id}`);
+    const { data, isLoading, error } = useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/players/GetOne/${id}`);
 
     if (error)
         return (

@@ -3,8 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from 'react';
 import { TextInput, Button } from "flowbite-react";
-import axios from "axios";
+import createData from '@components/CreateData.tsx';
 import UserClass, { UserType } from "@components/UserClass";
+import { SetCount } from '@components/CountMatches.tsx';
 
 import { LoginType, LoginTypeSchema } from './LoginDataTypes.tsx';
 
@@ -21,29 +22,12 @@ function Login() {
 
    
 
-    const onSubmit: SubmitHandler<LoginType> = (data) => LoginData(data)
+    const onSubmit: SubmitHandler<LoginType> = (data) => create(data)
     const [errorMsg, setErrorMsg] = useState('');
 
    
 
-    function LoginData(data: LoginType) {
-        axios.post(import.meta.env.VITE_SERVER_URL+ 'api/Admin', data)
-            .then((response) => {
-                if (response.data == '') {
-                    setErrorMsg("Login not successful");
-                 }
-                else {
-                    const data: UserType = response.data;
-                    const user = new UserClass();
-                    user.Initialize(data);
-                    
-                    navigate("/");
-                }
-            })
-            .catch(error => {
-                setErrorMsg("Login not successful, ".concat(error));
-            });
-    }
+      
 
 
     return (
@@ -82,6 +66,19 @@ function Login() {
             </form>
         </>
     );
+
+    async function create(data: LoginType) {
+        try {
+            const returnData: UserType = await createData<LoginType>(data, `${import.meta.env.VITE_SERVER_URL}api/Admin`) as UserType;
+            const user = new UserClass();
+            user.Initialize(returnData);
+            SetCount(0);
+            navigate("/")
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
+        }
+    }
 
 
 }

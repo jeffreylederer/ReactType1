@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
@@ -9,22 +9,21 @@ import { Membership } from "./Membership.tsx";
 import Layout from '@layouts/Layout.tsx';
 import SubmitButton from '@components/Buttons.tsx';
 import { TeamType } from './TeamType.ts';
-
+import { GetCount } from '@components/CountMatches.tsx';
+import useFetch from '@hooks/useFetch.tsx';
+import updateData from '@components/UpdateData.tsx';
 
 
 const TeamUpdate = () => {
     const league = new LeagueClass();
-    
-    const [team, setTeam] = useState<TeamType>();
-    const [errorMsg, SeterrorMsg] = useState("");
- 
+
+    const [errorMsg, setErrorMsg] = useState("");
+
     const [membership, setMembership] = useState<Membership[]>();
     const location = useLocation();
     const id: string = location.state;
-    const count: string = location.search.substring(9);
 
-    const matches: number = Number(count);
-   
+
     const {
         register,
         handleSubmit,
@@ -34,143 +33,157 @@ const TeamUpdate = () => {
         resolver: zodResolver(UpdateFormDataSchema),
     });
 
-    const onSubmit: SubmitHandler<UpdateFormData> = (data) =>updateData(data)
+    const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data)
 
     const navigate = useNavigate();
-   
 
     useEffect(() => {
-        GetData();
         GetMembers();
-        
-    });
+    },[])
 
-    const contents = team === undefined
-        ? <p><em>Loading ...</em></p> :
-        <>
-            <h3>Update Team {team.teamNo} for league {league.leagueName}</h3>
-
-            <form onSubmit={handleSubmit(onSubmit, (errors) => console.log(errors))} >
-                <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={team.id} />
-                <input type="hidden" {...register("leagueid", { valueAsNumber: true })} defaultValue={team.leagueid} />
-                <input type="hidden" {...register("teamNo", { valueAsNumber: true })} defaultValue={team.teamNo} />
+    const { data, isLoading, error } = useFetch<TeamType>(`${import.meta.env.VITE_SERVER_URL}api/Teams/getOne/${id}`);
 
 
-                <table>
-                    <tr>
-                        <td className="Label">Skip:</td>
-                        <td>
-                            <select  defaultValue={team.skipid} {...register("skip")}>
-                                <option value="0" key="0">Select member</option>
-                                <option value={team.skipid} key={team.skipid}>{team.skip}</option>
-                                <option value={team.viceSkipid} key={team.viceSkipid == null ? "viceSkip" : team.viceSkipid} hidden={league.divisions > 1}>{team.viceSkip}</option>
-                                <option value={team.leadid} key={team.leadid == null ? "lead" : team.leadid} hidden={league.divisions > 2}>{team.lead}</option>
-                                {membership?.map((item) => (
-                                    <option value={item.id} key={item.id}>{item.fullName}</option>
-                                ))}
-                                )
-                            </select></td>
-                    </tr>
+    if (error)
+        return <p>{error}</p>;
 
-                    <tr hidden={league.teamSize < 3}>
-                        <td className="Label">Vice Skip:</td>
-                        <td>
-                            <select  defaultValue={team.viceSkipid} {...register("viceSkip")}>
-                                <option value="0" key="0">Select member</option>
-                                <option value={team.skipid} key={team.skipid}>{team.skip}</option>
-                                <option value={team.viceSkipid} key={team.viceSkipid == null ? "viceSkip" : team.viceSkipid} hidden={league.divisions > 1}>{team.viceSkip}</option>
-                                <option value={team.leadid} key={team.leadid == null ? "lead" : team.leadid} hidden={league.divisions > 2}>{team.lead}</option>
-                                {membership?.map((item) => (
-                                    <option value={item.id} key={item.id}>{item.fullName}</option>
-                                ))}
-                                )
-                            </select></td>
-                    </tr>
+    if (isLoading)
+        return <p>Loading...</p>;
 
-                    <tr hidden={league.teamSize < 2}>
-                        <td className="Label">Lead:</td>
-                        <td>
-                            <select  {...register("lead")} defaultValue={team.leadid}>
-                                <option value="0" key="0">Select member</option>
-                                <option value={team.skipid} key={team.skipid}>{team.skip}</option>
-                                <option value={team.viceSkipid} key={team.viceSkipid == null ? "viceSkip" : team.viceSkipid} hidden={league.divisions > 1}>{team.viceSkip}</option>
-                                <option value={team.leadid} key={team.leadid == null ? "lead" : team.leadid} hidden={league.divisions > 2}>{team.lead}</option>
-                                {membership?.map((item) => (
-                                    <option value={item.id} key={item.id}>{item.fullName}</option>
-                                ))}
-                                )
-                            </select></td>
-                    </tr>
-                    <tr hidden={matches>0 } >
-                        <td className="Label">Division:</td>
-                        <td>
-                            <select  defaultValue={team.division} {...register("divisionId")}>
-                                <option value="0" key="0">Select Devision</option>
-                                <option value="1" key="1">1</option>
-                                <option value="2" key="2" hidden={league.divisions < 2}>2</option>
-                                <option value="3" key="3" hidden={league.divisions < 3}>3</option>
-                            </select></td>
-                    </tr>
-                    <tr hidden={matches == 0} >
-                        <input type="hidden" value={team.division} {...register("divisionId")} />
-                    </tr>
-                   
-                    <tr>
-                        <td colSpan={2}>
-                            <SubmitButton />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colSpan={1}>
-                            {errors.skip && <p className="errorMessage">skip: {errors.skip.message}</p>}
-                            {errors.viceSkip && <p className="errorMessage">viceskip: {errors.viceSkip.message}</p>}
-                            {errors.lead && <p className="errorMessage">lead: {errors.lead.message}</p>}
-                            {errors.divisionId && <p className="errorMessage">{errors.divisionId.message}</p>}
-                            {errors.id && <p className="errorMessage">id: {errors.id.message}</p>}
-                            {errors.teamNo && <p className="errorMessage">teamNo: {errors.teamNo.message}</p>}
-                            {errors.leagueid && <p className="errorMessage">leagueid:  {errors.leagueid.message}</p>}
-                        </td>
-                    </tr>
-                </table>
-                {
-                    matches > 0 && <input type="hidden" defaultValue={team.division} {...register("divisionId")} />
-                }
-                
-                {
-                    league.teamSize < 3 && <input type="hidden" defaultValue="0" {...register("viceSkip")} />
-                }
-                {
-                    league.teamSize < 2 && <input type="hidden" defaultValue="0" {...register("lead")} />
-                }
-            </form>
-        </>;            ;
-    
-    return (
-        <Layout>
-           
-            {contents}
-            <p className="errorMessage">{errorMsg}</p>
-            
-        </Layout>
-    );
+    if (data) {
+
+        return (
+            <Layout>
+
+                <h3>Update Team {data.teamNo} for league {league.leagueName}</h3>
+
+                <form onSubmit={handleSubmit(onSubmit, (errors) => console.log(errors))} >
+                    <input type="hidden" {...register("id", { valueAsNumber: true })} defaultValue={data.id} />
+                    <input type="hidden" {...register("leagueid", { valueAsNumber: true })} defaultValue={data.leagueid} />
+                    <input type="hidden" {...register("teamNo", { valueAsNumber: true })} defaultValue={data.teamNo} />
 
 
-    async function GetData() {
-        if (team === undefined) {
-            const url: string = import.meta.env.VITE_SERVER_URL + 'api/Teams/getOne/';
-            const num: string = id;
-            const fullUrl = url.concat(num);
-            axios.get(fullUrl)
-                .then(response => {
+                    <table>
+                        <tr>
+                            <td className="Label">Skip:</td>
+                            <td>
+                                <select defaultValue={data.skipid} {...register("skip")}>
+                                    <option value="0" key="0">Select member</option>
+                                    <option value={data.skipid} key={data.skipid}>{data.skip}</option>
+                                    <option value={data.viceSkipid} key={data.viceSkipid == null ? "viceSkip" : data.viceSkipid} hidden={league.divisions > 1}>{data.viceSkip}</option>
+                                    <option value={data.leadid} key={data.leadid == null ? "lead" : data.leadid} hidden={league.divisions > 2}>{data.lead}</option>
+                                    {membership?.map((item) => (
+                                        <option value={item.id} key={item.id}>{item.fullName}</option>
+                                    ))}
+                                    )
+                                </select></td>
+                        </tr>
 
-                    setTeam(response.data);
+                        <tr hidden={league.teamSize < 3}>
+                            <td className="Label">Vice Skip:</td>
+                            <td>
+                                <select defaultValue={data.viceSkipid} {...register("viceSkip")}>
+                                    <option value="0" key="0">Select member</option>
+                                    <option value={data.skipid} key={data.skipid}>{data.skip}</option>
+                                    <option value={data.viceSkipid} key={data.viceSkipid == null ? "viceSkip" : data.viceSkipid} hidden={league.divisions > 1}>{data.viceSkip}</option>
+                                    <option value={data.leadid} key={data.leadid == null ? "lead" : data.leadid} hidden={league.divisions > 2}>{data.lead}</option>
+                                    {membership?.map((item) => (
+                                        <option value={item.id} key={item.id}>{item.fullName}</option>
+                                    ))}
+                                    )
+                                </select></td>
+                        </tr>
+
+                        <tr hidden={league.teamSize < 2}>
+                            <td className="Label">Lead:</td>
+                            <td>
+                                <select  {...register("lead")} defaultValue={data.leadid}>
+                                    <option value="0" key="0">Select member</option>
+                                    <option value={data.skipid} key={data.skipid}>{data.skip}</option>
+                                    <option value={data.viceSkipid} key={data.viceSkipid == null ? "viceSkip" : data.viceSkipid} hidden={league.divisions > 1}>{data.viceSkip}</option>
+                                    <option value={data.leadid} key={data.leadid == null ? "lead" : data.leadid} hidden={league.divisions > 2}>{data.lead}</option>
+                                    {membership?.map((item) => (
+                                        <option value={item.id} key={item.id}>{item.fullName}</option>
+                                    ))}
+                                    )
+                                </select></td>
+                        </tr>
+                        <tr hidden={GetCount() > 0} >
+                            <td className="Label">Division:</td>
+                            <td>
+                                <select defaultValue={data.division} {...register("divisionId")}>
+                                    <option value="0" key="0">Select Devision</option>
+                                    <option value="1" key="1">1</option>
+                                    <option value="2" key="2" hidden={league.divisions < 2}>2</option>
+                                    <option value="3" key="3" hidden={league.divisions < 3}>3</option>
+                                </select></td>
+                        </tr>
+                        <tr hidden={GetCount() == 0} >
+                            <input type="hidden" value={data.division} {...register("divisionId")} />
+                        </tr>
+
+                        <tr>
+                            <td colSpan={2}>
+                                <SubmitButton />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan={1}>
+                                {errors.skip && <p className="errorMessage">skip: {errors.skip.message}</p>}
+                                {errors.viceSkip && <p className="errorMessage">viceskip: {errors.viceSkip.message}</p>}
+                                {errors.lead && <p className="errorMessage">lead: {errors.lead.message}</p>}
+                                {errors.divisionId && <p className="errorMessage">{errors.divisionId.message}</p>}
+                                {errors.id && <p className="errorMessage">id: {errors.id.message}</p>}
+                                {errors.teamNo && <p className="errorMessage">teamNo: {errors.teamNo.message}</p>}
+                                {errors.leagueid && <p className="errorMessage">leagueid:  {errors.leagueid.message}</p>}
+                            </td>
+                        </tr>
+                    </table>
+                    {
+                        league.teamSize < 3 && <input type="hidden" defaultValue="0" {...register("viceSkip")} />
+                    }
+                    {
+                        league.teamSize < 2 && <input type="hidden" defaultValue="0" {...register("lead")} />
+                    }
+                </form>
+                <p className="errorMessage">{errorMsg}</p>
+
+            </Layout>
+        );
+    }
 
 
-                    console.log('Record aquired successfully: ', response.data);
-                })
-                .catch(error => {
-                    console.error('Error aquiring record: ', error);
-                });
+    async function update(data: UpdateFormData) {
+        try {
+            switch (league.teamSize) {
+                case 1:
+                    break;
+                case 2:
+                    if (data.skip != 0 && data.lead != 0 && data.skip == data.lead) {
+                        setErrorMsg("Skip and Lead have to be different members");
+                        return;
+                    }
+                    break;
+                case 3:
+                    if (data.skip != 0 && data.lead != 0 && data.skip == data.lead) {
+                        setErrorMsg("Skip and Lead have to be different members");
+                        return;
+                    }
+                    if (data.skip != 0 && data.viceSkip != 0 && data.skip == data.viceSkip) {
+                        setErrorMsg("Skip and Vice Skip have to be different members");
+                        return;
+                    }
+                    if (data.viceSkip != 0 && data.lead != 0 && data.viceSkip == data.lead) {
+                        setErrorMsg("Vice Skip and Lead have to be different members");
+                        return;
+                    }
+                    break;
+            }
+            await updateData<UpdateFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Teams/${id}`);
+            navigate("/League/Teams");;
+        }
+        catch (error) {
+            setErrorMsg(`${error}`);
         }
     }
 
@@ -181,47 +194,14 @@ const TeamUpdate = () => {
                 setMembership(response.data);
             })
             .catch(error => {
-                console.error('Error fetching data: ', error);
+                setErrorMsg(`Error fetching data:  ${error}`);
             })
-    }
-
-    function updateData(data: UpdateFormData) {
-        switch (league.teamSize) {
-            case 1:
-                break;
-            case 2:
-                if (data.skip != 0 && data.lead != 0 && data.skip == data.lead) {
-                    SeterrorMsg("Skip and Lead have to be different members");
-                    return;
-                }
-                break;
-            case 3:
-                if (data.skip != 0 && data.lead != 0 && data.skip == data.lead) {
-                    SeterrorMsg("Skip and Lead have to be different members");
-                    return;
-                }
-                if (data.skip != 0 && data.viceSkip != 0 && data.skip == data.viceSkip) {
-                    SeterrorMsg("Skip and Vice Skip have to be different members");
-                    return;
-                }
-                if (data.viceSkip != 0 && data.lead != 0 && data.viceSkip == data.lead) {
-                    SeterrorMsg("Vice Skip and Lead have to be different members");
-                    return;
-                }
-                break;
-        }
-        SeterrorMsg("");
-        const url: string = import.meta.env.VITE_SERVER_URL+'api/Teams/'.concat(id);
-        axios.put(url, data)
-            .then(response => {
-                console.log('Record updated successfully: ', response.data);
-                navigate("/League/Teams");
-            })
-            .catch(error => {
-                console.error('Error updating record: ', error);
-            });
     }
 }
+
+   
+
+   
 
 
 
