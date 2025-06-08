@@ -10,6 +10,7 @@ import convertDate from '@components/convertDate.tsx';
 import LeagueClass from "@components/LeagueClass";
 import UserClass from "@components/UserClass";
 import useFetch from '@hooks/useFetch.tsx';
+import { GetCount } from '@components/CountMatches.tsx';
 
 
 function Matches() {
@@ -106,7 +107,7 @@ function Matches() {
         return (
             <Layout>
                 <h3>Games in {league.leagueName} league</h3>
-                <div className="toLeft">
+                <div className="toLeft" hidden={GetCount() == 0 }>
                     <p className="toLeft">Date: <select onChange={selectChange} defaultValue={weekid}>
                         <option value="0" key="0" disabled>Select date</option>
                         {data?.map(item =>
@@ -117,7 +118,7 @@ function Matches() {
                         <a href={scoreUrl} target='blank' hidden={weekid == 0}>This week's score card</a>
                     </p>
                 </div>
-               
+                <p hidden={GetCount() > 0 }>No matches have been created</p>
             </Layout>
         );
 
