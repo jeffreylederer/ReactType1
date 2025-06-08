@@ -10,8 +10,8 @@ function Home() {
 
     const navigate = useNavigate();
     const [data, setData] = useState<LeagueType[] | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [ error, setError ] = useState<string>('');
+    
 
     const selected = (data: LeagueType) => {
         const league = new LeagueClass();
@@ -28,15 +28,13 @@ function Home() {
                 }
                 const json = (await response.json()) as LeagueType[];
                 setData(json);
-                setLoading(false);
-            } catch (error) {
+             } catch (error) {
                 let message: string;
                 if (error instanceof Error)
                     message = error.message
                 else
                     message = String(error)
                 setError(message);
-                setLoading(false);
             }
         }
     }
@@ -50,15 +48,11 @@ function Home() {
         league.Remove();
         SetCount(0);
         fetchData();
-    });
+    },[]);
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-    if (error)
-        return <p>Error: {error}</p>;
+    
 
-    if (!data)
+    if (data && data.length==0)
         return (
 
             <Layout>
@@ -66,7 +60,7 @@ function Home() {
                 <p>No leagues specified</p>
             </Layout>
         )
-    else {
+    if(data) {
         const leagues: LeagueType[] = data.filter((word) => word.active)
         const league = new LeagueClass();
         league.Remove();
@@ -99,7 +93,7 @@ function Home() {
                         )}
                     </tbody>
                 </table>
-
+                <p>{error}</p>
             </Layout>
         );
     }
