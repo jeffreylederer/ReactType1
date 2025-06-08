@@ -33,7 +33,7 @@ const UsersUpdate = () => {
 
     const navigate = useNavigate();
 
-    const { data, isLoading, error } = useFetch<PasswordType>(`${import.meta.env.VITE_SERVER_URL}api/Users/${id}`);
+    const { data, isLoading, error } = useFetch<PasswordType>(`/api/Users/${id}`);
 
 
     if (error)
@@ -127,7 +127,7 @@ const UsersUpdate = () => {
 
     async function update(data: UpdateFormData) {
         try {
-            await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Users/${id}`);
+            await updateData(data, `/api/Users/${id}`);
             navigate("/Admin/Users");
         }
         catch (error) {

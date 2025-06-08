@@ -4,7 +4,7 @@ import useFetchPDF from '@hooks/useFetchPDF'
 
 function TeamReport() {
     const league = new LeagueClass();
-    const { data, isLoading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Teams/TeamReport/${league.id}`);
+    const { data, isLoading, error } = useFetchPDF(`/api/Teams/TeamReport/${league.id}`);
 
     if (isLoading) {
         return;

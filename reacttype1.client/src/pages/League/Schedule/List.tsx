@@ -17,7 +17,7 @@ function Schedule() {
     const allowed: boolean = updateAllowed && GetCount() == 0;
 
 
-    const { data, isLoading, error } = useFetch<UpdateFormData[]>(`${import.meta.env.VITE_SERVER_URL}api/schedules/${league.id}`);
+    const { data, isLoading, error } = useFetch<UpdateFormData[]>(`/api/schedules/${league.id}`);
 
     if (isLoading)
         return <p aria-label="Loading">Loading...</p>;

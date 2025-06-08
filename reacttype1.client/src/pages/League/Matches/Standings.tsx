@@ -6,7 +6,7 @@ function Standings() {
     const location = useLocation();
     const id: string = location.search.substring(4);
 
-    const { data, isLoading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Matches/Standings/${id}`);
+    const { data, isLoading, error } = useFetchPDF(`/api/Matches/Standings/${id}`);
 
     if (isLoading) {
         return;

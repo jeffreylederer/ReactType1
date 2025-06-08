@@ -69,7 +69,7 @@ function Login() {
 
     async function create(data: LoginType) {
         try {
-            const returnData: UserType = await createData<LoginType>(data, `${import.meta.env.VITE_SERVER_URL}api/Admin`) as UserType;
+            const returnData: UserType = await createData<LoginType>(data, `/api/Admin`) as UserType;
             const user = new UserClass();
             user.Initialize(returnData);
             SetCount(0);

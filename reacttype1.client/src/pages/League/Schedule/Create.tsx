@@ -43,7 +43,7 @@ const ScheduleCreate = () => {
 
     async function create(data: FormData) {
         try {
-            await createData(data, `${import.meta.env.VITE_SERVER_URL}api/Schedules`);
+            await createData(data, `/api/Schedules`);
             navigate("/League/Schedule");
         }
         catch (error) {

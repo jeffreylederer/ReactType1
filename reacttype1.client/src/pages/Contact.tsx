@@ -6,7 +6,7 @@ const Contact = () => {
     
 
 
-    const { data, isLoading, error } = useFetch<SiteInfoType>(`${import.meta.env.VITE_SERVER_URL}api/Home`);
+    const { data, isLoading, error } = useFetch<SiteInfoType>(`/api/Home`);
 
     if (error)
         return (

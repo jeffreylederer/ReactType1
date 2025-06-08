@@ -4,7 +4,7 @@ import LeagueClass from "@components/LeagueClass.tsx";
 
 function ScheduleReport() {
     const league = new LeagueClass();
-    const { data, isLoading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Matches/ScheduleReport/${league.id}`);
+    const { data, isLoading, error } = useFetchPDF(`/api/Matches/ScheduleReport/${league.id}`);
 
     if (isLoading) {
         return;

@@ -151,7 +151,7 @@ const MatchUpdate = () => {
             data.team2Score = 0;
         }
         try {
-            await updateData<UpdateFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Matches/${id}`);
+            await updateData<UpdateFormData>(data, `/api/Matches/${id}`);
             const url: string = match ? `/League/Matches?id=${match.weekId}` : "/League/Matches";
             navigate(url);
         }

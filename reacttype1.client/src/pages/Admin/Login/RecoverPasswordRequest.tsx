@@ -62,7 +62,7 @@ function RecoverPasswordRequest() {
     );
 
     function SendData(data: RecoverPasswordRequestData) {
-        axios.post(import.meta.env.VITE_SERVER_URL + 'api/Admin/RecoverPasswordRequest', data)
+        axios.post('/api/Admin/RecoverPasswordRequest', data)
             .then((response) => {
                 setErrorMsg(response.data);
             })

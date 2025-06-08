@@ -5,7 +5,7 @@ import useFetch from '@hooks/useFetch.tsx';
 
 function League() {
 
-    const { data, isLoading, error } = useFetch<UpdateFormData[]>(`${import.meta.env.VITE_SERVER_URL}api/leagues`);
+    const { data, isLoading, error } = useFetch<UpdateFormData[]>(`/api/leagues`);
 
     if (isLoading)
         return <p aria-label="Loading">Loading...</p>;

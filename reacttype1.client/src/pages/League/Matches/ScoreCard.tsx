@@ -9,7 +9,7 @@ function ScoreCard() {
 
 
 
-    const { data, isLoading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Matches/ScoreCard/${id}`);
+    const { data, isLoading, error } = useFetchPDF(`/api/Matches/ScoreCard/${id}`);
 
     if (isLoading) {
         return;

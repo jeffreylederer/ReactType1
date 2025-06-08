@@ -15,7 +15,7 @@ const UsersDelete = () => {
 
     const navigate = useNavigate();
 
-    const { data, isLoading, error } = useFetch<DetailsType>(`${import.meta.env.VITE_SERVER_URL}api/Users/${id}`);
+    const { data, isLoading, error } = useFetch<DetailsType>(`/api/Users/${id}`);
 
     if (error)
         return (
@@ -71,7 +71,7 @@ const UsersDelete = () => {
     async function deleteItem() {
 
         try {
-            await deleteData(`${import.meta.env.VITE_SERVER_URL}api/Users/${id}`);
+            await deleteData(`/api/Users/${id}`);
             navigate("/Admin/Users");
         }
         catch (error) {

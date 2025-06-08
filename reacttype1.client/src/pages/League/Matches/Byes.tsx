@@ -4,7 +4,7 @@ import useFetchPDF from '@hooks/useFetchPDF';
 function Standings() {
    
     const league = new LeagueClass();
-    const { data, isLoading, error } = useFetchPDF(`${import.meta.env.VITE_SERVER_URL}api/Matches/Byes/${league.id}`);
+    const { data, isLoading, error } = useFetchPDF(`/api/Matches/Byes/${league.id}`);
 
     if (isLoading) {
         return;

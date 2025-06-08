@@ -61,7 +61,7 @@ const ScheduleDelete = () => {
     async function deleteItem() {
 
         try {
-            await deleteData(`${import.meta.env.VITE_SERVER_URL}api/Schedules/${id}`);
+            await deleteData(`/api/Schedules/${id}`);
             navigate("/League/Schedule");
         }
         catch (error) {

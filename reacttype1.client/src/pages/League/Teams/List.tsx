@@ -19,7 +19,7 @@ function Teams() {
     
 
    
-    const { data, isLoading, error } = useFetch<TeamMember[]>(`${import.meta.env.VITE_SERVER_URL}api/Teams/${league.id}`);
+    const { data, isLoading, error } = useFetch<TeamMember[]>(`/api/Teams/${league.id}`);
 
     if (isLoading)
         return <p aria-label="Loading">Loading...</p>;

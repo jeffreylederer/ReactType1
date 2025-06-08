@@ -26,7 +26,7 @@ const PlayersCreate = () => {
         resolver: zodResolver(PlayerFormDataSchema),
     });
 
-    const { data, isLoading, error } = useFetch<UpdateFormData[]>(`${import.meta.env.VITE_SERVER_URL}api/players/getMembers/${league.id}`);
+    const { data, isLoading, error } = useFetch<UpdateFormData[]>(`/api/players/getMembers/${league.id}`);
 
     if (error)
         return (
@@ -89,7 +89,7 @@ const PlayersCreate = () => {
 
     async function create(data: PlayerFormData) {
         try {
-            await createData<PlayerFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/players`);
+            await createData<PlayerFormData>(data, `/api/players`);
             navigate("/League/Players");
         }
         catch (error) {

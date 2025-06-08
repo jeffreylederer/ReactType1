@@ -32,7 +32,7 @@ const LeagueUpdate = () => {
 
     const navigate = useNavigate();
 
-    const { data, isLoading, error } = useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/leagues/${id}`);
+    const { data, isLoading, error } = useFetch<UpdateFormData>(`/api/leagues/${id}`);
 
     if (error)
         return (
@@ -184,7 +184,7 @@ const LeagueUpdate = () => {
 
     async function update(data: UpdateFormData) {
         try {
-            await updateData<UpdateFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/leagues/${id}`);
+            await updateData<UpdateFormData>(data, `/api/leagues/${id}`);
             navigate("/Admin/Leagues");;
         }
         catch (error) {

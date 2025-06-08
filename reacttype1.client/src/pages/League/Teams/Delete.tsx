@@ -77,7 +77,7 @@ const TeamsDelete = () => {
     async function DeleteItem() {
 
         try {
-            await deleteData(`${import.meta.env.VITE_SERVER_URL}api/Teams/${id}`);
+            await deleteData(`/api/Teams/${id}`);
             navigate("/League/Teams");
         }
         catch (error) {

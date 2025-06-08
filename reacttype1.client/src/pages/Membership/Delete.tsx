@@ -14,7 +14,7 @@ const MembershipDelete = () => {
    
     const navigate = useNavigate();
 
-    const { data, isLoading, error } = useFetch<ListData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
+    const { data, isLoading, error } = useFetch<ListData>(`/api/Memberships/${id}`);
 
     if (error)
         return (
@@ -71,7 +71,7 @@ const MembershipDelete = () => {
         async function deleteItem() {
 
             try {
-                await deleteData(`${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
+                await deleteData(`/api/Memberships/${id}`);
                 navigate("/Membership");
             }
             catch (error) {

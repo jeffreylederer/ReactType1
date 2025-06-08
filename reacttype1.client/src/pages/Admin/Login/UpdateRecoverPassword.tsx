@@ -32,7 +32,7 @@ const UpdateRecoverPassword = () => {
 
     const navigate = useNavigate();
 
-    const { data, isLoading, error } = useFetch<number>(`${import.meta.env.VITE_SERVER_URL}api/Admin/UpdatePassword/${id}`);
+    const { data, isLoading, error } = useFetch<number>(`/api/Admin/UpdatePassword/${id}`);
 
     if (isLoading)
         return <p aria-label="Loading">Loading...</p>;
@@ -102,7 +102,7 @@ const UpdateRecoverPassword = () => {
 
     async function update(data: UpdatePasswordData) {
         try {
-            await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Admin/${data.id}`);
+            await updateData(data, `/api/Admin/${data.id}`);
             navigate("/Login");
         }
         catch (error) {

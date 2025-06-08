@@ -9,7 +9,7 @@ function Welcome() {
     const league = new LeagueClass();
     const user = new UserClass();
 
-    const { data, isLoading, error } = useFetch<number>(`${import.meta.env.VITE_SERVER_URL}api/matches/GetAllMatches/${league.id}`);
+    const { data, isLoading, error } = useFetch<number>(`api/matches/GetAllMatches/${league.id}`);
 
     if (isLoading)
         return <p aria-label="Loading">Loading...</p>;

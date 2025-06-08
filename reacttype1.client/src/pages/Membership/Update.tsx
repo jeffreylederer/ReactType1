@@ -30,7 +30,7 @@ const MembershipUpdate = () => {
 const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data)
  
    
-    const { data, isLoading, error } =useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
+    const { data, isLoading, error } =useFetch<UpdateFormData>(`/api/Memberships/${id}`);
 
     if (error)
         return (
@@ -111,7 +111,7 @@ const onSubmit: SubmitHandler<UpdateFormData> = (data) => update(data)
 
     async function update(data: UpdateFormData) {
         try {
-            await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Memberships/${id}`);
+            await updateData(data, `/api/Memberships/${id}`);
             navigate("/Membership");;
         }
         catch (error) {

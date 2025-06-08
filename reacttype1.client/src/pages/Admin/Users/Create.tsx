@@ -96,7 +96,7 @@ const UserCreate = () => {
 
     async function create(data: FormData) {
         try {
-            await createData<FormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Users`);
+            await createData<FormData>(data, `/api/Users`);
             navigate("/Admin/Users");
         }
         catch (error) {

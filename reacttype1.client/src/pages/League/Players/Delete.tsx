@@ -15,7 +15,7 @@ const PlayersDelete = () => {
 
     const navigate = useNavigate();
 
-    const { data, isLoading, error } = useFetch<UpdateFormData>(`${import.meta.env.VITE_SERVER_URL}api/players/GetOne/${id}`);
+    const { data, isLoading, error } = useFetch<UpdateFormData>(`/api/players/GetOne/${id}`);
 
     if (error)
         return (
@@ -56,7 +56,7 @@ const PlayersDelete = () => {
 
     async function deleteItem() {
         try {
-            await deleteData(`${import.meta.env.VITE_SERVER_URL}api/players/${id}`);
+            await deleteData(`/api/players/${id}`);
             navigate("/league/players");
         }
         catch (error) {

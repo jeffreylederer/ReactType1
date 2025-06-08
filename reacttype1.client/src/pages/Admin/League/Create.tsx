@@ -151,7 +151,7 @@ const LeagueCreate = () => {
 
     async function create(data: FormData) {
         try {
-            await createData(data, `${import.meta.env.VITE_SERVER_URL}api/leagues`);
+            await createData(data, `/api/leagues`);
             navigate("/Admin/Leagues")
         }
         catch (error) {

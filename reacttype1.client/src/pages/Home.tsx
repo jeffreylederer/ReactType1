@@ -22,7 +22,7 @@ function Home() {
     const fetchData = async () => {
         if (!data) {
             try {
-                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/leagues`);
+                const response = await fetch('/api/leagues');
                 if (!response.ok) {
                     setError(`HTTP error! status: ${response.status}`);
                 }

@@ -41,7 +41,7 @@ const TeamUpdate = () => {
         GetMembers();
     },[])
 
-    const { data, isLoading, error } = useFetch<TeamType>(`${import.meta.env.VITE_SERVER_URL}api/Teams/getOne/${id}`);
+    const { data, isLoading, error } = useFetch<TeamType>(`/api/Teams/getOne/${id}`);
 
 
     if (error)
@@ -179,7 +179,7 @@ const TeamUpdate = () => {
                     }
                     break;
             }
-            await updateData<UpdateFormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Teams/${id}`);
+            await updateData<UpdateFormData>(data, `/api/Teams/${id}`);
             navigate("/League/Teams");;
         }
         catch (error) {
@@ -188,7 +188,7 @@ const TeamUpdate = () => {
     }
 
     async function GetMembers() {
-        const url: string = `${import.meta.env.VITE_SERVER_URL}api/Teams/NotOnTeam/${league.id}`;
+        const url: string = `/api/Teams/NotOnTeam/${league.id}`;
         axios.get(url)
             .then(response => {
                 setMembership(response.data);

@@ -94,7 +94,7 @@ const UserUpdatePassword = () => {
 
     async function update(data: UpdatePasswordData) {
         try {
-            await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Admin/${user.id}`);
+            await updateData(data, `/api/Admin/${user.id}`);
             navigate(-1);
         }
         catch (error) {

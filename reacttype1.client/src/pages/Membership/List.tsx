@@ -9,7 +9,7 @@ function Membership() {
     const user = new UserClass();
     const hideAddButton: boolean = !(user.role == "SiteAdmin" || user.role == "Admin");
   
-    const { data, isLoading, error } = useFetch<ListData[]>(`${import.meta.env.VITE_SERVER_URL}api/memberships`);
+    const { data, isLoading, error } = useFetch<ListData[]>(`/api/memberships`);
 
     if (isLoading)
         return <p aria-label="Loading">Loading...</p>;

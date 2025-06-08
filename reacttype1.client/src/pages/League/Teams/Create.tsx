@@ -24,7 +24,7 @@ const TeamsCreate = () => {
 
     const navigate = useNavigate();
 
-    const { data, isLoading, error } = useFetch<Membership[]>(`${import.meta.env.VITE_SERVER_URL}api/Teams/NotOnTeam/${league.id}`);
+    const { data, isLoading, error } = useFetch<Membership[]>(`/api/Teams/NotOnTeam/${league.id}`);
 
     if (error)
         return <p>{error}</p>;
@@ -146,7 +146,7 @@ const TeamsCreate = () => {
                 break;
         }
         try {
-            await createData < FormData>(data, `${import.meta.env.VITE_SERVER_URL}api/Teams`);
+            await createData < FormData>(data, `/api/Teams`);
             navigate("/League/Teams");
 
         }

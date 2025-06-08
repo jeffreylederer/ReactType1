@@ -15,7 +15,7 @@ const LeagueDelete = () => {
     
 
     
-    const { data, isLoading, error } = useFetch<FormData>(`${import.meta.env.VITE_SERVER_URL}api/leagues/${id}`);
+    const { data, isLoading, error } = useFetch<FormData>(`/api/leagues/${id}`);
 
 
     const navigate = useNavigate();
@@ -105,7 +105,7 @@ const LeagueDelete = () => {
 
     async function DeleteItem() {
         try {
-            await Delete(`${import.meta.env.VITE_SERVER_URL}api/leagues/${id}`);
+            await Delete(`/api/leagues/${id}`);
             navigate("/Admin/leagues");
         }
         catch (error) {

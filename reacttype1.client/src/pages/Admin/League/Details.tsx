@@ -10,7 +10,7 @@ const LeagueDetails = () => {
     const location = useLocation();
     const id: number = location.state;
     const navigate = useNavigate();
-    const { data, isLoading, error } = useFetch<FormData>(`${import.meta.env.VITE_SERVER_URL}api/leagues/${id}`);
+    const { data, isLoading, error } = useFetch<FormData>(`/api/leagues/${id}`);
 
     if (error)
         return (

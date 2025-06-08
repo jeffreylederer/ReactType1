@@ -130,7 +130,7 @@ const ScheduleUpdate = () => {
              data.playOffs = results.checked;
            
             try {
-                await updateData(data, `${import.meta.env.VITE_SERVER_URL}api/Schedules/${id}`);
+                await updateData(data, `/api/Schedules/${id}`);
                 navigate("/League/Schedule");
             }
             catch (error) {

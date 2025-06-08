@@ -33,7 +33,7 @@ function Matches() {
 
     }, [weekid]);
 
-    const { data, isLoading, error } = useFetch <UpdateFormData[]>(`${import.meta.env.VITE_SERVER_URL}api/Schedules/${league.id}`);
+    const { data, isLoading, error } = useFetch <UpdateFormData[]>(`/api/Schedules/${league.id}`);
 
     if (error)
         return (
@@ -65,7 +65,7 @@ function Matches() {
         setMatch(null);
         if (weekid !== undefined && weekid != 0) {
             try {
-                const response = await fetch(`${import.meta.env.VITE_SERVER_URL}api/matches/${weekid}`);
+                const response = await fetch(`/api/matches/${weekid}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -89,7 +89,7 @@ function Matches() {
         event.preventDefault();
         const button: HTMLButtonElement = event.currentTarget;
         const id: string = button.name;
-        const url: string = import.meta.env.VITE_SERVER_URL+"api/Matches/Reorder".concat(id);
+        const url: string = "/api/Matches/Reorder".concat(id);
         axios.get(url)
             .then(response => {
                 GetData(weekid);

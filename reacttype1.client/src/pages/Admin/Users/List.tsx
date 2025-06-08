@@ -9,7 +9,7 @@ function Users() {
     const permission: string = user.role;
     const allowed: boolean = permission !== "SiteAdmin";
 
-    const { data, isLoading, error } = useFetch<DetailsType[]>(`${import.meta.env.VITE_SERVER_URL}api/Users`);
+    const { data, isLoading, error } = useFetch<DetailsType[]>(`/api/Users`);
 
     if (isLoading)
         return <p aria-label="Loading">Loading...</p>;

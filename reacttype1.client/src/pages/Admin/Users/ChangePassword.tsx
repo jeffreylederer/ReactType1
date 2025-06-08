@@ -33,7 +33,7 @@ const ChangePassword = () => {
     const navigate = useNavigate();
     const [errorMsg, setErrorMsg] = useState<string>('');
 
-    const { data, isLoading, error } = useFetch<PasswordType>(`${import.meta.env.VITE_SERVER_URL}api/Users/${id}`);
+    const { data, isLoading, error } = useFetch<PasswordType>(`/api/Users/${id}`);
 
     if (error)
         return (
@@ -111,7 +111,7 @@ const ChangePassword = () => {
 
     async function update(data: ChangePasswordType) {
         try {
-            await updateData<ChangePasswordType>(data, `${import.meta.env.VITE_SERVER_URL}api/Users/ChangePassword${id}`);
+            await updateData<ChangePasswordType>(data, `/api/Users/ChangePassword${id}`);
             navigate("/Admin/Users");
         }
         catch (error) {

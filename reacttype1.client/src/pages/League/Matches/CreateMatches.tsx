@@ -19,7 +19,7 @@ const CreateMatches = () => {
     );
 
     async function GetData() {
-        const url: string = import.meta.env.VITE_SERVER_URL + "api/Matches/CreateSchedule/".concat(league.id.toString());
+        const url: string = "/api/Matches/CreateSchedule/".concat(league.id.toString());
         axios.get(url)
             .then(response => {
                 SetCount(1);
