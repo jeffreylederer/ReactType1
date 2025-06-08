@@ -32,44 +32,48 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
 
 const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
     env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7057';
-const url = `${import.meta.env.VITE_SERVER_URL}`;
+
 
 // https://vitejs.dev/config/
-export default defineConfig({
-    plugins: [plugin(), CssModuleTypes()],
-    test: {
-        globals: true,
-        environment: 'happy-dom'
-    },
-    envDir: './environment',
-    resolve: {
-        alias: {
-            '@components': "/src/components",
-            '@images': "/src/images",
-            '@layouts': "/src/layouts",
-            '@pages': "/src/pages",
-            '@hooks': "/src/hooks",
-            '@styles': "/src/styles",
+export default defineConfig(({ command }) => {
+    
+
+    return {
+        plugins: [plugin(), CssModuleTypes()],
+        test: {
+            globals: true,
+            environment: 'happy-dom'
         },
-    },
-    server: {
-        proxy: {
-            '^/weatherforecast': {
-                target,
-                secure: false
+        envDir: './environment',
+        resolve: {
+            alias: {
+                '@components': "/src/components",
+                '@images': "/src/images",
+                '@layouts': "/src/layouts",
+                '@pages': "/src/pages",
+                '@hooks': "/src/hooks",
+                '@styles': "/src/styles",
             },
-            '/api': {
-                target: url,
-                changeOrigin: true,
-                secure: false,
-                ws: true,
-            }
-            
         },
-        port: 5173,
-        //https: {
-        //    key: fs.readFileSync(keyFilePath),
-        //    cert: fs.readFileSync(certFilePath),
-        //}
+        server: {
+            proxy: {
+                '^/weatherforecast': {
+                    target,
+                    secure: false
+                },
+                '/api': {
+                    target: command === 'serve'? 'http://localhost:5164': 'http://frickpark-001-site1.dtempurl.com',
+                    changeOrigin: true,
+                    secure: false,
+                    ws: true,
+                }
+
+            },
+            port: 5173,
+            //https: {
+            //    key: fs.readFileSync(keyFilePath),
+            //    cert: fs.readFileSync(certFilePath),
+            //}
+        }
     }
 })
