@@ -235,7 +235,7 @@ namespace ReactType1.Server.Controllers
         }
 
         [HttpGet("ClearSchedule/{id}")]
-        public async Task<IActionResult> ClearSchedule(int? id)
+        public async Task<ActionResult<string>> ClearSchedule(int? id)
         {
             if (id == null)
             {
@@ -286,11 +286,11 @@ namespace ReactType1.Server.Controllers
                  return StatusCode(500, $"Matches were not removed, Error: {e.Message}"); ;
             }
 
-            return Ok();
+            return Ok("Cleared matches");
         }
 
         [HttpGet("CreateSchedule/{id}")]
-        public async Task<IActionResult> CreateSchedule(int? id)
+        public async Task<ActionResult<string>> CreateSchedule(int? id)
         {
             if (id == null)
             {
@@ -354,7 +354,7 @@ namespace ReactType1.Server.Controllers
                 {
                     return StatusCode(500, $"Could not create matches: {e.Message}");
                 }
-                return Ok();
+                return Ok("Created matches");
             }
             return BadRequest();
         }
