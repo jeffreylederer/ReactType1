@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import axios from "axios";
 import Layout from '@layouts/Layout.tsx';
 import LeagueClass from "@components/LeagueClass";;
 
 import { SetCount } from '@components/CountMatches.tsx';
 
 const CreateMatches = () => {
-    const [errorMsg, setErrorMsg] = useState('Matches created');
+    const [errorMsg, setErrorMsg] = useState('Created matches');
     const league = new LeagueClass();
     useEffect(() => {
         GetData();
@@ -18,19 +17,23 @@ const CreateMatches = () => {
         </Layout>
     );
 
+    
+
     async function GetData() {
-        const url: string = "/api/Matches/CreateSchedule/".concat(league.id.toString());
-        axios.get(url)
-            .then(response => {
+        try {
+            const response = await fetch(`/api/Matches/CreateSchedule/${league.id}`);
+            if (!response.ok) {
+                setErrorMsg(`HTTP error! Status: ${response.status}`);
+                return;
+            }
+            const json = await response.text();
+            if (json === "Created matches")
                 SetCount(1);
-                console.log(response.data);
-            })
-            .catch(error => {
-                if (error.response.status === 404)
-                    setErrorMsg("Could not find service")
-                else
-                    setErrorMsg(error.response.data);
-            })
+            else
+                setErrorMsg(json);
+        } catch (error) {
+            setErrorMsg(`Error:, ${error}`);
+        }
     }
 }
 

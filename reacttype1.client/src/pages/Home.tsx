@@ -21,6 +21,7 @@ function Home() {
 
     const fetchData = async () => {
         if (!data) {
+            await timeout(1000); //for 1 sec delay
             try {
                 const response = await fetch('/api/leagues');
                 if (!response.ok) {
@@ -39,6 +40,10 @@ function Home() {
         }
     }
 
+    function timeout(delay: number) {
+        return new Promise(res => setTimeout(res, delay));
+    }
+
 
     useEffect(() => {
         const user = new UserClass();
@@ -48,8 +53,10 @@ function Home() {
         league.Remove();
         SetCount(0);
         fetchData();
+        
     },[]);
 
+    
     
 
     if (data && data.length==0)

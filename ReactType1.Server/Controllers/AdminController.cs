@@ -99,13 +99,13 @@ namespace ReactType1.Server.Controllers
 
         // RecoverPasswordRequest.tsx
         [HttpPost("RecoverPasswordRequest")]
-        public async Task<string> RecoverPasswordRequest(RecoverPasswordRequestDto item)
+        public async Task<ActionResult<string>> RecoverPasswordRequest(RecoverPasswordRequestDto item)
         {
             
             var user = await _context.Users.Where(x=>x.Username == item.UserName).FirstOrDefaultAsync();
             if (user == null)
             {
-                return "User not found";
+                return Ok("User not found");
             }
 
             var rp = new RecoverPassword()
@@ -128,7 +128,7 @@ namespace ReactType1.Server.Controllers
                     stringBuilder.Append("; ");
                     ex = ex.InnerException;
                 } 
-                return stringBuilder.ToString();
+                return Ok(stringBuilder.ToString());
 
             }
 
@@ -169,13 +169,13 @@ namespace ReactType1.Server.Controllers
                             stringBuilder.Append("; ");
                             ex = ex.InnerException;
                         }
-                        return stringBuilder.ToString();
+                        return Ok(stringBuilder.ToString());
 
                     }
                 }
             }
 
-            return "email sent";
+            return Ok("email sent");
             
         }
 

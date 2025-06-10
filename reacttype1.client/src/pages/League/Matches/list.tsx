@@ -1,6 +1,5 @@
 import { useState, useEffect  } from 'react';
 import  MatchFormData  from "./MatchFormData.tsx";
-import axios from "axios";
 import { UpdateFormData } from "../Schedule/UpdateFormData.tsx";
 import { Link } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
@@ -15,8 +14,9 @@ import { GetCount } from '@components/CountMatches.tsx';
 
 function Matches() {
     const user = new UserClass();
-    const league = new LeagueClass();
     const [match, setMatch] = useState<MatchFormData[] | null>();
+    const [errorMsg, setErrorMsg] = useState('Matches created');
+    const league = new LeagueClass();
     const permission: string = user.role;
     const allowed: boolean = (permission == "SiteAdmin" || permission == "Admin" || permission == "Scorer") ? false : true;
     const admin: boolean = (permission == "SiteAdmin" || permission == "Admin" )? false : true;
@@ -27,6 +27,7 @@ function Matches() {
     const [weekid, setWeekid] = useState(+id);
     const standingUrl: string = "/League/Matches/Standings?id=".concat(weekid.toString());
     const scoreUrl: string = "/league/matches/ScoreCard?id=".concat(weekid.toString());
+    
 
     useEffect(() => {
 
@@ -68,7 +69,8 @@ function Matches() {
             try {
                 const response = await fetch(`/api/matches/${weekid}`);
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    setErrorMsg(`HTTP error! status: ${response.status}`);
+                    return;
                 }
                 const json = (await response.json()) as MatchFormData[];
                 setMatch(json);
@@ -79,27 +81,29 @@ function Matches() {
                     message = error.message
                 else
                     message = String(error)
-                console.log(message);
+                setErrorMsg(message);
             }
         }
         
             
     }
 
-    const Reorder =  (event: React.MouseEvent<HTMLButtonElement>) => {
+    async function Reorder(event: React.MouseEvent<HTMLButtonElement>) {
         event.preventDefault();
         const button: HTMLButtonElement = event.currentTarget;
         const id: string = button.name;
-        const url: string = "/api/Matches/Reorder".concat(id);
-        axios.get(url)
-            .then(response => {
-                GetData(weekid);
-                console.log(response.data);
-
-            })
-            .catch(error => {
-                console.error('Error fetching data: ', error);
-            })
+       
+        try {
+            const response = await fetch(`/api/Matches/Reorder${id}`);
+            if (!response.ok) {
+                setErrorMsg(`HTTP error! Status: ${response.status}`);
+                return;
+            }
+            GetData(weekid);
+        } catch (error) {
+            setErrorMsg(`Error:, ${error}`);
+        }
+        
     };
 
 
@@ -203,6 +207,7 @@ function Matches() {
                     </tbody>
                 </table>
                 <p style={{ color: 'red', textAlign: 'left' }} hidden={weekid == 0}>Teams with wheel chair members are in red</p>
+                <p style={{ textAlign: "center" }}>{errorMsg}</p>
                
         
          </Layout>

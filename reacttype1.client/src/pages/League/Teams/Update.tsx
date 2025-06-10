@@ -1,7 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
 import { UpdateFormData, UpdateFormDataSchema } from "./UpdateFormData.tsx";
 import { zodResolver } from '@hookform/resolvers/zod';
 import LeagueClass from '@components/LeagueClass.tsx';;
@@ -187,16 +186,28 @@ const TeamUpdate = () => {
         }
     }
 
+    
+    
     async function GetMembers() {
-        const url: string = `/api/Teams/NotOnTeam/${league.id}`;
-        axios.get(url)
-            .then(response => {
-                setMembership(response.data);
-            })
-            .catch(error => {
-                setErrorMsg(`Error fetching data:  ${error}`);
-            })
+        try {
+            const response = await fetch(`/api/Teams/NotOnTeam/${league.id}`);
+            if (!response.ok) {
+                setErrorMsg(`HTTP error! Status: ${response.status}`);
+                return;
+            }
+            const data = await response.json() as Membership[];
+            setMembership(data);
+        } catch (error) {
+            setErrorMsg(`Error:, ${error}`);
+        }
     }
+
+
+
+
+
+
+
 }
 
    

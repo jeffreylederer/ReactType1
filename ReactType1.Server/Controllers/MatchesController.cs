@@ -258,12 +258,12 @@ namespace ReactType1.Server.Controllers
               .Where(x => x.Leagueid == id )
              .ToList();
 
-            if(list.Count == 0)
-                return Ok();
-        
+            if (list.Count == 0)
+                return Ok("Cleared matches");
+
             if (list.Any(x => x.score > 0))
             {
-                return  StatusCode(500, "Matches cannot be delete, some matches have scores");
+                return  "Matches cannot be delete, some matches have scores";
             }
             
             try
@@ -283,7 +283,7 @@ namespace ReactType1.Server.Controllers
             }
             catch (Exception e)
             {
-                 return StatusCode(500, $"Matches were not removed, Error: {e.Message}"); ;
+                 return  $"Matches were not removed, Error: {e.Message}"; 
             }
 
             return Ok("Cleared matches");
@@ -302,18 +302,18 @@ namespace ReactType1.Server.Controllers
             var teams = _context.Teams.Where(x => x.Leagueid == id).ToList();
             if (weeks.Count == 0)
             {
-                return StatusCode(500, "No weeks scheduled");
+                return "No weeks scheduled";
             }
             if (teams.Count == 0)
             {
-                return StatusCode(500, "No teams have been created");
+                return "No teams have been created";
             }
             var list = await _context.TotalScoreViews
                     .FromSql($"EXEC TotalScore {id}")
                    .ToListAsync();
             if (list.Count > 0)
             {
-                return StatusCode(500, "Matches exist, clear schedule first");
+                return  "Matches exist, clear schedule first";
             }
 
             var sl = new CreateScheduleList();
@@ -326,37 +326,36 @@ namespace ReactType1.Server.Controllers
             {
                 matches = sl.matchesWithDivisions(weeks.Count, _context, id.Value);
             }
-            if (teams != null)
-            { 
-                foreach (var item in matches)
+            
+            
+            foreach (var item in matches)
+            {
+                var TeamNo1 = teams.Find(x => x.TeamNo == item.Team1 + 1);
+                var TeamNo2 = teams.Find(x => x.TeamNo == item.Team2 + 1);
+                var match = new Match()
                 {
-                    var TeamNo1 = teams.Find(x => x.TeamNo == item.Team1 + 1);
-                    var TeamNo2 = teams.Find(x => x.TeamNo == item.Team2 + 1);
-                    var match = new Match()
-                    {
-                        WeekId = weeks[item.Week].Id,
-                        Rink = item.Rink,
-                        TeamNo1 = TeamNo1== null ? 0 : TeamNo1.Id,
-                        TeamNo2 = TeamNo2 == null? 0 : TeamNo2.Id,
-                        Team1Score = 0,
-                        Team2Score = 0,
-                        ForFeitId = 0
-                    };
-                    _context.Matches.Add(match);
-                }
-
-
-                try
-                {
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(500, $"Could not create matches: {e.Message}");
-                }
-                return Ok("Created matches");
+                    WeekId = weeks[item.Week].Id,
+                    Rink = item.Rink,
+                    TeamNo1 = TeamNo1== null ? 0 : TeamNo1.Id,
+                    TeamNo2 = TeamNo2 == null? 0 : TeamNo2.Id,
+                    Team1Score = 0,
+                    Team2Score = 0,
+                    ForFeitId = 0
+                };
+                _context.Matches.Add(match);
             }
-            return BadRequest();
+
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return  $"Could not create matches: {e.Message}";
+            }
+            return Ok("Created matches");
+            
         }
 
 

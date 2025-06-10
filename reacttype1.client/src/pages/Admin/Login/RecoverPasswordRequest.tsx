@@ -3,7 +3,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from 'react';
 import { TextInput, Button } from "flowbite-react";
-import axios from 'axios';
 
 
 
@@ -61,14 +60,31 @@ function RecoverPasswordRequest() {
         </>
     );
 
-    function SendData(data: RecoverPasswordRequestData) {
-        axios.post('/api/Admin/RecoverPasswordRequest', data)
-            .then((response) => {
-                setErrorMsg(response.data);
-            })
-            .catch(error => {
-                setErrorMsg("Send data not successful" + error);
+    
+    async function SendData(data: RecoverPasswordRequestData) {
+        try {
+            const response = await fetch('/api/Admin/RecoverPasswordRequest', {
+                method: 'POST', // HTTP method
+                headers: {
+                    'Content-Type': 'application/json', // Specify JSON format
+                },
+                body: JSON.stringify(data), // Convert data to JSON string
             });
+
+            if (!response.ok) {
+                // Handle HTTP errors (e.g., 4xx or 5xx status codes)
+                setErrorMsg(`HTTP error! Status: ${response.status}`);
+                return;
+            }
+
+            const result = await response.text();
+            
+            return setErrorMsg(result);
+        } catch (error) {
+            // Catch and handle network or other errors
+            setErrorMsg( `Error occurred: ${error}`);
+        }
+        
     }
 
    
