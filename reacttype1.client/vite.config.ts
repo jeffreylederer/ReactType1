@@ -35,10 +35,10 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command }) => {
+export default defineConfig(({
     
 
-    return {
+   
         plugins: [plugin(), CssModuleTypes()],
         test: {
             globals: true,
@@ -62,10 +62,10 @@ export default defineConfig(({ command }) => {
                     secure: false
                 },
                 '/api': {
-                    target: command === 'serve'? 'http://localhost:5164': 'http://frickpark-001-site1.dtempurl.com',
-                    changeOrigin: true,
-                    secure: false,
-                    ws: true,
+                    target,
+                    
+                    secure: false
+                   
                 }
 
             },
@@ -75,5 +75,5 @@ export default defineConfig(({ command }) => {
             //    cert: fs.readFileSync(certFilePath),
             //}
         }
-    }
+   
 })
