@@ -35,7 +35,7 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 
 
 // https://vitejs.dev/config/
-export default defineConfig(({
+export default defineConfig({
     
 
    
@@ -62,10 +62,10 @@ export default defineConfig(({
                     secure: false
                 },
                 '/api': {
-                    target,
-                    
-                    secure: false
-                   
+                    target: 'http://localhost:5164',
+                    changeOrigin: true,
+                    secure: false,
+                    ws: true,
                 }
 
             },

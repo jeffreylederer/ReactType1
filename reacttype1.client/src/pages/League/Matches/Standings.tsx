@@ -16,13 +16,10 @@ function Standings() {
         return;
     }
 
-    if (data === "") {
-        alert(`Error: No PDF generated`);
-        return;
-    }
+    
 
     return (
-        <embed src={data} type="application/pdf" width='1000' height='800' />
+        <embed src={!data  ? 'No data generated' : data} type="application/pdf" width='1000' height='800' />
 
     );
 }

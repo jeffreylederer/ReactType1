@@ -3,7 +3,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from 'react';
 import { TextInput, Button } from "flowbite-react";
-import createData from '@components/CreateData.tsx';
 import UserClass, { UserType } from "@components/UserClass";
 import { SetCount } from '@components/CountMatches.tsx';
 
@@ -69,7 +68,7 @@ function Login() {
 
     async function create(data: LoginType) {
         try {
-            const returnData: UserType = await createData<LoginType>(data, `/api/Admin`) as UserType;
+            const returnData = await createData(data, `/api/Admin`);
             const user = new UserClass();
             user.Initialize(returnData);
             SetCount(0);
@@ -78,6 +77,21 @@ function Login() {
         catch (error) {
             setErrorMsg(`${error}`);
         }
+    }
+
+    async function createData(data: LoginType, url: string): Promise<UserType> {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! status: ${response.status} - ${errorText} `);
+        }
+
+        return response.json() as Promise<UserType>;
     }
 
 
